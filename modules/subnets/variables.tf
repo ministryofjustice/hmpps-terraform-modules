@@ -19,9 +19,7 @@ variable "project" {
   description = "The name of our project"
 }
 
-variable "subnet_cidr_block" {
-  default = ["192.168.0.0/24"]
-}
+variable "subnet_cidr_block" {}
 
 variable "availability_zone" {}
 variable "subnet_name" {}

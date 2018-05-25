@@ -16,7 +16,7 @@ resource "aws_vpc_dhcp_options" "environment" {
   domain_name         = "${var.route53_domain_private}"
 
   tags {
-    Name          = "tf-${var.project}-${var.environment}-dhcp"
+    Name          = "tf-${var.business_unit}-${var.project}-${var.environment}-dhcp-options"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"
