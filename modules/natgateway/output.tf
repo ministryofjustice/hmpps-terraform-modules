@@ -1,3 +1,3 @@
 output natid {
-  value = "${aws_nat_gateway.environment.*.id}"
+  value = "${aws_nat_gateway.environment.id}"
 }

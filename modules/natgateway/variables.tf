@@ -1,6 +1,4 @@
-variable "subnets" {
-  type = "list"
-}
+variable "subnet" {}
 
 variable "region" {
   description = "The AWS region."
@@ -16,4 +14,8 @@ variable "environment" {
 
 variable "business_unit" {
   description = "The name of our business unit, i.e. development."
+}
+
+variable "az" {
+  description = "Availability zone"
 }

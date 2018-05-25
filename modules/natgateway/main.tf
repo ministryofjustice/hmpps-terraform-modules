@@ -1,9 +1,8 @@
 resource "aws_eip" "environment" {
-  count = "${length(var.subnets)}"
-  vpc   = true
+  vpc = true
 
   tags {
-    Name          = "tf-${var.region}-${var.business_unit}-${var.project}-${var.environment}-nat-gateway-eip"
+    Name          = "tf-${var.region}-${var.business_unit}-${var.project}-${var.environment}-${var.az}-nat-gateway-eip"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"
@@ -11,12 +10,11 @@ resource "aws_eip" "environment" {
 }
 
 resource "aws_nat_gateway" "environment" {
-  count         = "${length(var.subnets)}"
-  allocation_id = "${element(aws_eip.environment.*.id, count.index)}"
-  subnet_id     = "${element(var.subnets, count.index)}"
+  allocation_id = "${aws_eip.environment.id}"
+  subnet_id     = "${var.subnet}"
 
   tags {
-    Name          = "tf-${var.region}-${var.business_unit}-${var.project}-${var.environment}-nat-gateway"
+    Name          = "tf-${var.region}-${var.business_unit}-${var.project}-${var.environment}-${var.az}-nat-gateway"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"
