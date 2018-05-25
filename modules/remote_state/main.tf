@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_s3_bucket" "remote_state" {
-  bucket = "tf-${var.region}-terraform-${var.business_unit}-${var.project}-${var.environment}"
+  bucket = "tf-${var.region}-terraform-${var.business_unit}-${var.project}-${var.environment}-remote-state"
   acl    = "private"
 
   versioning {
