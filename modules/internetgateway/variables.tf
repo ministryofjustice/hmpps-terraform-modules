@@ -15,3 +15,5 @@ variable "vpc_id" {}
 variable "business_unit" {
   description = "The name of our business unit, i.e. development."
 }
+
+variable "gateway_name" {}
