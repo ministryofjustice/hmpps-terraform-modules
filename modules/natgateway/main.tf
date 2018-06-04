@@ -2,7 +2,7 @@ resource "aws_eip" "environment" {
   vpc = true
 
   tags {
-    Name          = "tf-${var.region}-${var.business_unit}-${var.project}-${var.environment}-${var.az}-nat-gateway-eip"
+    Name          = "tf-${var.az}-nat-gateway-eip"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"
@@ -14,7 +14,7 @@ resource "aws_nat_gateway" "environment" {
   subnet_id     = "${var.subnet}"
 
   tags {
-    Name          = "tf-${var.region}-${var.business_unit}-${var.project}-${var.environment}-${var.az}-nat-gateway"
+    Name          = "tf-${var.az}-nat-gateway"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"
