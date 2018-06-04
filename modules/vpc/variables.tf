@@ -1,3 +1,7 @@
+variable "prefix" {
+  description = "resource label or name"
+}
+
 variable "region" {
   description = "The AWS region."
 }

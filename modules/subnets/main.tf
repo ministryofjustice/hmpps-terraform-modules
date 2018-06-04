@@ -5,7 +5,7 @@ resource "aws_subnet" "environment" {
   map_public_ip_on_launch = "${var.map_public_ip_on_launch}"
 
   tags {
-    Name          = "tf-${var.business_unit}-${var.project}-${var.environment}-${var.subnet_name}-subnet"
+    Name          = "tf-${var.prefix}-${var.subnet_name}-subnet"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"
@@ -17,7 +17,7 @@ resource "aws_route_table" "environment" {
   vpc_id = "${var.vpc_id}"
 
   tags {
-    Name          = "tf-${var.business_unit}-${var.project}-${var.environment}-${var.subnet_name}-rt"
+    Name          = "tf-${var.prefix}-${var.subnet_name}-rt"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"
