@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "environment" {
-  name              = "tf-${var.prefix}/${var.loggroupname}"
+  name              = "tf-${var.log_group_path}/${var.loggroupname}"
   retention_in_days = "${var.cloudwatch_log_retention}"
 
   tags {

@@ -1,4 +1,4 @@
-variable "prefix" {
+variable "vpc_name" {
   description = "resource label or name"
 }
 

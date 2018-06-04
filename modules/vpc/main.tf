@@ -4,7 +4,7 @@ resource "aws_vpc" "environment" {
   enable_dns_support   = "${var.enable_dns_support}"
 
   tags {
-    Name          = "tf-${var.prefix}-vpc"
+    Name          = "tf-${var.vpc_name}-vpc"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"
@@ -16,7 +16,7 @@ resource "aws_vpc_dhcp_options" "environment" {
   domain_name         = "${var.route53_domain_private}"
 
   tags {
-    Name          = "tf-${var.prefix}-dhcp-options"
+    Name          = "tf-${var.vpc_name}-dhcp-options"
     Project       = "${var.project}"
     Environment   = "${var.environment}"
     Business-Unit = "${var.business_unit}"

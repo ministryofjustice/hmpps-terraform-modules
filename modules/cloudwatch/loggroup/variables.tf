@@ -1,4 +1,4 @@
-variable "prefix" {
+variable "log_group_path" {
   description = "resource label or name"
 }
 

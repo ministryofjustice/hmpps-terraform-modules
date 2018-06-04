@@ -2,7 +2,7 @@ variable "region" {}
 variable "environment" {}
 variable "project" {}
 
-variable "prefix" {
+variable "table_name" {
   description = "resource label or name"
 }
 
