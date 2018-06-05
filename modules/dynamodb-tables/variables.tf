@@ -1,7 +1,3 @@
-variable "region" {}
-variable "environment" {}
-variable "project" {}
-
 variable "table_name" {
   description = "resource label or name"
 }
@@ -14,4 +10,8 @@ variable "read_capacity" {
 
 variable "write_capacity" {
   default = "5"
+}
+
+variable "tags" {
+  type = "map"
 }

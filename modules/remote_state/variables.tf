@@ -1,3 +1,3 @@
-variable "s3_bucket_name" {
+variable "remote_state_bucket_name" {
   description = "resource label or name"
 }

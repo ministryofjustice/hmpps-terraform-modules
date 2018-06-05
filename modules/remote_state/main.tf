@@ -1,5 +1,5 @@
 resource "aws_iam_role_policy" "remote_state" {
-  name = "tf-${var.s3_bucket_name}-remote-state-policy"
+  name = "${var.remote_state_bucket_name}-policy"
   role = "terraform"
 
   policy = <<EOF
@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_s3_bucket" "remote_state" {
-  bucket = "tf-${var.s3_bucket_name}-remote-state"
+  bucket = "${var.remote_state_bucket_name}"
   acl    = "private"
 
   versioning {

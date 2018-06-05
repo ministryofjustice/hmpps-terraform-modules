@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "table" {
-  name           = "tf-${var.table_name}-lock-table"
+  name           = "${var.table_name}"
   read_capacity  = "${var.read_capacity}"
   write_capacity = "${var.write_capacity}"
   hash_key       = "${var.hash_key}"
@@ -8,10 +8,5 @@ resource "aws_dynamodb_table" "table" {
     name = "${var.hash_key}"
     type = "S"
   }
-
-  tags {
-    Name        = "tf-${var.table_name}-lock-table"
-    Project     = "${var.project}"
-    Environment = "${var.environment}"
-  }
+  tags = "${merge(var.tags, map("name", "${var.table_name}"))}"
 }
