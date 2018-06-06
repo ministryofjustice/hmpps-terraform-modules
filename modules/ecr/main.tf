@@ -1,7 +1,7 @@
 # app repository
 
 resource "aws_ecr_repository" "repo" {
-  name = "tf-${var.app_name}-ecr-repo"
+  name = "${var.app_name}-ecr-repo"
 }
 
 resource "aws_ecr_repository_policy" "repo" {
