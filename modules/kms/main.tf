@@ -14,7 +14,7 @@ resource "aws_kms_key" "kms" {
   is_enabled              = "${var.is_enabled}"
   enable_key_rotation     = "${var.enable_key_rotation}"
   policy                  = "${data.template_file.kms_policy.rendered}"
-  tags                    = "${merge(var.tags, map("name", "${var.kms_key_name}"))}"
+  tags                    = "${merge(var.tags, map("Name", "${var.kms_key_name}"))}"
 }
 
 resource "aws_kms_alias" "kms" {

@@ -8,5 +8,5 @@ resource "aws_dynamodb_table" "table" {
     name = "${var.hash_key}"
     type = "S"
   }
-  tags = "${merge(var.tags, map("name", "${var.table_name}"))}"
+  tags = "${merge(var.tags, map("Name", "${var.table_name}"))}"
 }
