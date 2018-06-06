@@ -1,10 +1,4 @@
 resource "aws_internet_gateway" "environment" {
   vpc_id = "${var.vpc_id}"
-
-  tags {
-    Name          = "tf-${var.business_unit}-${var.project}-${var.environment}-internet-gateway"
-    Project       = "${var.project}"
-    Environment   = "${var.environment}"
-    Business-Unit = "${var.business_unit}"
-  }
+  tags   = "${merge(var.tags, map("name", "${var.gateway_name}-internet-gateway"))}"
 }

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "environment" {
-  bucket = "tf-${var.region}-terraform-${var.business_unit}-${var.project}-${var.environment}-${var.s3_bucket_name}"
+  bucket = "${var.s3_bucket_name}-s3bucket"
   acl    = "${var.acl}"
 
   versioning {
@@ -10,10 +10,5 @@ resource "aws_s3_bucket" "environment" {
     prevent_destroy = false
   }
 
-  tags {
-    Name          = "tf-${var.region}-terraform-${var.business_unit}-${var.project}-${var.environment}-${var.s3_bucket_name}"
-    Project       = "${var.project}"
-    Environment   = "${var.environment}"
-    Business-Unit = "${var.business_unit}"
-  }
+  tags          = "${merge(var.tags, map("name", "${var.s3_bucket_name}-s3-bucket"))}"
 }

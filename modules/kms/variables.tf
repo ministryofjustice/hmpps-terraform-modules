@@ -1,6 +1,3 @@
-variable "environment" {}
-variable "region" {}
-variable "project" {}
 variable "kms_key_name" {}
 
 variable "deletion_window_in_days" {
@@ -15,6 +12,6 @@ variable "enable_key_rotation" {
   default = "true"
 }
 
-variable "business_unit" {
-  description = "The name of our business unit, i.e. development."
+variable "tags" {
+  type = "map"
 }

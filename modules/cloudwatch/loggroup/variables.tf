@@ -1,12 +1,11 @@
-variable "environment" {}
-variable "project" {}
-variable "loggroupname" {}
-variable "cloudwatch_log_retention" {}
-
-variable "business_unit" {
-  description = "The name of our business unit, i.e. development."
+variable "log_group_path" {
+  description = "resource label or name"
 }
 
-variable "region" {
-  description = "The AWS region."
+variable "loggroupname" {}
+
+variable "cloudwatch_log_retention" {}
+
+variable "tags" {
+  type = "map"
 }

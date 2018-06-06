@@ -1,9 +1,5 @@
-variable "region" {
-  description = "The AWS region."
-}
-
-variable "environment" {
-  description = "The name of our environment"
+variable "vpc_name" {
+  description = "resource label or name"
 }
 
 variable "enable_dns_hostnames" {
@@ -20,16 +16,12 @@ variable "vpc_dns_hosts" {
   description = "A list of Availability zones in the region"
 }
 
-variable "project" {
-  description = "The name of the project"
-}
-
-variable "business_unit" {
-  description = "The name of our business unit, i.e. development."
-}
-
 variable "route53_domain_private" {}
 
 variable "cidr_block" {
   description = "The CIDR of the VPC."
+}
+
+variable "tags" {
+  type = "map"
 }
