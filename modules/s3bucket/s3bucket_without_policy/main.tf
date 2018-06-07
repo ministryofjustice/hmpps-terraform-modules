@@ -10,5 +10,5 @@ resource "aws_s3_bucket" "environment" {
     prevent_destroy = false
   }
 
-  tags          = "${merge(var.tags, map("name", "${var.s3_bucket_name}-s3-bucket"))}"
+  tags   = "${merge(var.tags, map("Name", "${var.s3_bucket_name}-s3-bucket"))}"
 }
