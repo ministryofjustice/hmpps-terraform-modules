@@ -21,6 +21,16 @@ EOF
 resource "aws_s3_bucket" "remote_state" {
   bucket = "${var.remote_state_bucket_name}"
   acl    = "private"
+  tags   = "${merge(var.tags, map("Name", "${var.remote_state_bucket_name}"))}"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = "${var.kms_key_arn}"
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 
   versioning {
     enabled = true
