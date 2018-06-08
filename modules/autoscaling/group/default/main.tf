@@ -6,6 +6,10 @@ resource "aws_autoscaling_group" "environment" {
   desired_capacity     = "${var.asg_desired}"
   launch_configuration = "${var.launch_configuration}"
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = [
     {
       key                 = "Name"
