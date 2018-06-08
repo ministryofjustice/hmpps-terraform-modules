@@ -1,4 +1,5 @@
 resource "aws_launch_configuration" "environment" {
+  name                        = "${var.launch_configuration_name}_lcfg"
   image_id                    = "${var.image_id}"
   instance_type               = "${var.instance_type}"
   iam_instance_profile        = "${var.instance_profile}"
