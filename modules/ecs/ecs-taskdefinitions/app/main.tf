@@ -4,6 +4,6 @@ resource "aws_ecs_task_definition" "environment" {
 
   volume {
     name      = "log"
-    host_path = "/var/log/${var.app_name}"
+    host_path = "/var/log/${var.container_name}"
   }
 }
