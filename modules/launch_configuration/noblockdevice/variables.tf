@@ -1,4 +1,3 @@
-variable "appname" {}
 variable "image_id" {}
 variable "instance_type" {}
 variable "instance_profile" {}
@@ -20,4 +19,16 @@ variable "enable_monitoring" {
 
 variable "ebs_optimized" {
   default = "false"
+}
+
+variable "volume_type" {
+  default = "standard"
+}
+
+variable "volume_size" {
+  default = "10"
+}
+
+variable "launch_configuration_name" {
+  description = "launch configuration name"
 }
