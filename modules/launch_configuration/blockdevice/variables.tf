@@ -37,3 +37,6 @@ variable "ebs_device_name" {}
 variable "ebs_volume_type" {}
 variable "ebs_volume_size" {}
 variable "ebs_encrypted" {}
+variable "ebs_delete_on_termination" {
+  default = true
+}
