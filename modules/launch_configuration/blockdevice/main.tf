@@ -1,5 +1,5 @@
 resource "aws_launch_configuration" "environment" {
-  name                        = "${var.launch_configuration_name}-launch-cfg"
+  name_prefix                 = "${var.launch_configuration_name}-launch-cfg-"
   image_id                    = "${var.image_id}"
   instance_type               = "${var.instance_type}"
   iam_instance_profile        = "${var.instance_profile}"
@@ -24,5 +24,6 @@ resource "aws_launch_configuration" "environment" {
     volume_type = "${var.ebs_volume_type}"
     volume_size = "${var.ebs_volume_size}"
     encrypted   = "${var.ebs_encrypted}"
+    delete_on_termination = false
   }
 }
