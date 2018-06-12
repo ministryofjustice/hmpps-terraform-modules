@@ -4,10 +4,11 @@ variable "lb_protocol" {}
 
 variable "lb_arn" {}
 
-# variable "ssl_policy" {
-#   default = "ELBSecurityPolicy-TLS-1-2-2017-01"
-# }
-# variable "cert_arn" {
-#   type = "list"
-# }
+variable "ssl_policy" {
+  default = "ELBSecurityPolicy-TLS-1-2-2017-01"
+}
+variable "certificate_arn" {
+  type = "list"
+}
+
 variable "target_group_arn" {}
