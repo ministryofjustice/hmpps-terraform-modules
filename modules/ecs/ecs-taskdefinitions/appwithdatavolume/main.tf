@@ -11,4 +11,9 @@ resource "aws_ecs_task_definition" "environment" {
     name = "${var.data_volume_name}"
     host_path = "${var.data_volume_host_path}"
   }
+
+  volume {
+    name = "${var.keys_volume_name}"
+    host_path = "${var.keys_volume_host_path}"
+  }  
 }
