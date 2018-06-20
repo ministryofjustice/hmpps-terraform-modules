@@ -14,4 +14,8 @@ resource "aws_lb" "environment" {
   }
 
   tags = "${merge(var.tags, map("Name", "${var.lb_name}-lb"))}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
