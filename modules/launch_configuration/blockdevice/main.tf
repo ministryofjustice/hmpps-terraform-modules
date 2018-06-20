@@ -18,4 +18,12 @@ resource "aws_launch_configuration" "environment" {
   lifecycle {
     create_before_destroy = true
   }
+
+  ebs_block_device {
+    device_name = "${var.ebs_device_name}"
+    volume_type = "${var.ebs_volume_type}"
+    volume_size = "${var.ebs_volume_size}"
+    encrypted   = "${var.ebs_encrypted}"
+    delete_on_termination = "${var.ebs_delete_on_termination}"
+  }
 }
