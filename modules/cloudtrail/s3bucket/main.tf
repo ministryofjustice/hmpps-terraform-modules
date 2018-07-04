@@ -7,7 +7,7 @@ resource "aws_cloudtrail" "environment" {
 
   event_selector {
     read_write_type           = "All"
-    include_management_events = true
+    include_management_events = false
 
     data_resource {
       type = "AWS::S3::Object"
