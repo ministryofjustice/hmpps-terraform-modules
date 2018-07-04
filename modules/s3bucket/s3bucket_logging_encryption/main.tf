@@ -10,10 +10,16 @@ resource "aws_s3_bucket" "environment" {
     prevent_destroy = false
   }
 
+  logging {
+    target_bucket = "${var.target_bucket}"
+    target_prefix = "${var.target_prefix}"
+  }
+
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
+        kms_master_key_id = "${var.kms_master_key_id}"
+        sse_algorithm     = "${var.sse_algorithm}"
       }
     }
   }
