@@ -10,5 +10,13 @@ resource "aws_s3_bucket" "environment" {
     prevent_destroy = false
   }
 
-  tags   = "${merge(var.tags, map("Name", "${var.s3_bucket_name}-s3-bucket"))}"
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  tags = "${merge(var.tags, map("Name", "${var.s3_bucket_name}-s3-bucket"))}"
 }
