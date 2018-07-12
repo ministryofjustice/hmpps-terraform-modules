@@ -1,5 +1,5 @@
 resource "aws_lb_target_group" "environment" {
-  name                 = "${var.appname}-tgtgrp"
+  name                 = "${var.appname}-tg"
   port                 = "${var.target_port}"
   protocol             = "${var.target_protocol}"
   vpc_id               = "${var.vpc_id}"
@@ -17,5 +17,5 @@ resource "aws_lb_target_group" "environment" {
     matcher             = "${var.return_code}"
   }
 
-  tags = "${merge(var.tags, map("Name", "${var.appname}-tgtgrp"))}"
+  tags = "${merge(var.tags, map("Name", "${var.appname}-tg"))}"
 }
