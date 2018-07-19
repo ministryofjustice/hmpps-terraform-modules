@@ -1,4 +1,4 @@
-resource "aws_db_instance" "this" {
+resource "aws_db_instance" "inst" {
   # count = "${var.create && !local.is_mssql ? 1 : 0}"
 
   identifier = "${var.identifier}"
