@@ -32,7 +32,7 @@ module "attach_elasticsearch_1_ebs_volume" {
 }
 
 resource "aws_route53_record" "internal_elasticsearch_dns" {
-  name    = "elasticsearch-1.${var.zone_name}"
+  name    = "elasticsearch-${var.instance_id}.${var.zone_name}"
   type    = "A"
   zone_id = "${var.zone_id}"
   ttl     = 300
