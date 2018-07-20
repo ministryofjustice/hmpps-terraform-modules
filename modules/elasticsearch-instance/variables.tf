@@ -34,6 +34,8 @@ variable "volume_availability_zone" {}
 variable "volume_size" {}
 
 #Route53
+variable "instance_id" {}
+
 variable "zone_name" {}
 
 variable "zone_id" {}
