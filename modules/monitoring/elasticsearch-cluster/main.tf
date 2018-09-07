@@ -1,3 +1,13 @@
+terraform {
+  # The configuration for this backend will be filled in by Terragrunt
+  backend "s3" {}
+}
+
+provider "aws" {
+  region  = "${var.region}"
+  version = "~> 1.16"
+}
+
 locals {
   policy_file                   = "ec2_policy.json"
   role_policy_file              = "policies/ec2_role_policy.json"

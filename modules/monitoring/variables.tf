@@ -2,10 +2,6 @@ variable "region" {
   description = "The AWS region."
 }
 
-variable "remote_state_bucket_name" {
-  description = "Terraform remote state bucket name"
-}
-
 variable "environment_identifier" {
   description = "resource label or name"
 }
@@ -19,6 +15,8 @@ variable "availability_zones" {
   type = "map"
   description = "a map of az's we can deploy to"
 }
+
+variable "remote_state_bucket_name" {}
 
 variable "app_name" {}
 
@@ -47,3 +45,13 @@ variable "short_environment_identifier" {
 variable "bastion_client_sg_id" {
   description = "SG to allow ssh access, to come from the shared vpc bastion"
 }
+
+variable "allowed_ssh_cidr" {
+  type = "list"
+}
+
+variable "route53_domain_private" {}
+
+variable "route53_hosted_zone_id" {}
+
+variable "public_ssl_arn" {}
