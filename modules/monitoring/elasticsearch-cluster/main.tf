@@ -51,7 +51,7 @@ module "create_elasticsearch_instance_1" {
   instance_profile            = "${module.create_elasticsearch_iam_instance_profile.iam_instance_name}"
   user_data                   = "${data.template_file.create_elasticsearch_1_user_data.rendered}"
   instance_tags               = "${merge(
-                                    var.tags,
+                                    var.terraform_remote_state_vpc["tags"],
                                     map("Name", "${var.environment_identifier}-es-node"),
                                     map("HMPPS_ROLE", "${var.app_name}"),
                                     map("HMPPS_STACKNAME", "${var.environment_identifier}"),
@@ -65,7 +65,7 @@ module "create_elasticsearch_instance_1" {
     "${aws_security_group.elasticsearch_client_sg.id}",
   ]
   # Volume
-  volume_tags                 = "${var.tags}"
+  volume_tags                 = "${var.terraform_remote_state_vpc["tags"]}"
   volume_availability_zone    = "${var.availability_zones["az1"]}"
   volume_size                 = "${var.ebs_device_volume_size}"
 
@@ -110,7 +110,7 @@ module "create_elasticsearch_instance_2" {
   instance_profile            = "${module.create_elasticsearch_iam_instance_profile.iam_instance_name}"
   user_data                   = "${data.template_file.create_elasticsearch_2_user_data.rendered}"
   instance_tags               = "${merge(
-                                    var.tags,
+                                    var.terraform_remote_state_vpc["tags"],
                                     map("Name", "${var.environment_identifier}-es-node"),
                                     map("HMPPS_ROLE", "${var.app_name}"),
                                     map("HMPPS_STACKNAME", "${var.environment_identifier}"),
@@ -124,7 +124,7 @@ module "create_elasticsearch_instance_2" {
     "${aws_security_group.elasticsearch_client_sg.id}",
   ]
   # Volume
-  volume_tags                 = "${var.tags}"
+  volume_tags                 = "${var.terraform_remote_state_vpc["tags"]}"
   volume_availability_zone    = "${var.availability_zones["az2"]}"
   volume_size                 = "${var.ebs_device_volume_size}"
 
@@ -169,7 +169,7 @@ module "create_elasticsearch_instance_3" {
   instance_profile            = "${module.create_elasticsearch_iam_instance_profile.iam_instance_name}"
   user_data                   = "${data.template_file.create_elasticsearch_3_user_data.rendered}"
   instance_tags               = "${merge(
-                                    var.tags,
+                                    var.terraform_remote_state_vpc["tags"],
                                     map("Name", "${var.environment_identifier}-es-node"),
                                     map("HMPPS_ROLE", "${var.app_name}"),
                                     map("HMPPS_STACKNAME", "${var.environment_identifier}"),
@@ -183,7 +183,7 @@ module "create_elasticsearch_instance_3" {
     "${aws_security_group.elasticsearch_client_sg.id}",
   ]
   # Volume
-  volume_tags                 = "${var.tags}"
+  volume_tags                 = "${var.terraform_remote_state_vpc["tags"]}"
   volume_availability_zone    = "${var.availability_zones["az3"]}"
   volume_size                 = "${var.ebs_device_volume_size}"
 

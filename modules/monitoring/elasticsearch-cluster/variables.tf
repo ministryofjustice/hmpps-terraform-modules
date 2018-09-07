@@ -7,11 +7,6 @@ variable "environment_identifier" {
   description = "resource label or name"
 }
 
-variable "tags" {
-  type = "map"
-  description = "Tags to identify resources"
-}
-
 variable "availability_zones" {
   type = "map"
   description = "a map of az's we can deploy to"

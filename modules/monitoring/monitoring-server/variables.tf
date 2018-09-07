@@ -7,11 +7,6 @@ variable "environment_identifier" {
   description = "resource label or name"
 }
 
-variable "tags" {
-  type = "map"
-  description = "Tags to identify resources"
-}
-
 variable "availability_zones" {
   type = "map"
   description = "a map of az's we can deploy to"
@@ -37,7 +32,7 @@ variable "route53_domain_private" {}
 
 variable "route53_sub_domain" {}
 
-variable "allowed_ssh_cidr" {
+variable "whitelist_monitoring_ips" {
   type = "list"
 }
 

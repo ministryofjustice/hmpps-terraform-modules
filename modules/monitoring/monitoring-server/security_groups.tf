@@ -97,7 +97,7 @@ resource "aws_security_group" "monitoring_sg" {
     description = "all traffic out"
   }
 
-  tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-monitoring-sg"))}"
+  tags = "${merge(var.terraform_remote_state_vpc["tags"], map("Name", "${var.environment_identifier}-monitoring-sg"))}"
 }
 
 resource "aws_security_group" "monitoring_elb_sg" {
@@ -109,7 +109,7 @@ resource "aws_security_group" "monitoring_elb_sg" {
     from_port = "443"
     protocol = "tcp"
     to_port = "443"
-    cidr_blocks = ["${var.allowed_ssh_cidr}"]
+    cidr_blocks = ["${var.whitelist_monitoring_ips}"]
     description = "Https kibana traffic"
   }
 

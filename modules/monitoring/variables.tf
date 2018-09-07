@@ -6,10 +6,6 @@ variable "environment_identifier" {
   description = "resource label or name"
 }
 
-variable "tags" {
-  type = "map"
-  description = "Tags to identify resources"
-}
 
 variable "availability_zones" {
   type = "map"
@@ -46,7 +42,7 @@ variable "bastion_client_sg_id" {
   description = "SG to allow ssh access, to come from the shared vpc bastion"
 }
 
-variable "allowed_ssh_cidr" {
+variable "whitelist_monitoring_ips" {
   type = "list"
 }
 

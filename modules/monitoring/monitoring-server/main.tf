@@ -69,7 +69,10 @@ resource "aws_elb" "monitoring_elb" {
 
   security_groups = ["${aws_security_group.monitoring_elb_sg.id}"]
 
-  tags = "${merge(var.tags, map("Name", "${var.short_environment_identifier}-${var.app_name}-elb"))}"
+  tags = "${merge(
+    var.terraform_remote_state_vpc["tags"],
+    map("Name", "${var.short_environment_identifier}-${var.app_name}-elb"))
+  }"
 }
 
 module "create_monitoring_instance" {
@@ -83,7 +86,7 @@ module "create_monitoring_instance" {
   monitoring                  = true
   user_data                   = "${data.template_file.monitoring_instance_user_data.rendered}"
   CreateSnapshot              = true
-  tags                        = "${var.tags}"
+  tags                        = "${var.terraform_remote_state_vpc["tags"]}"
   key_name                    = "${var.terraform_remote_state_vpc["ssh_deployer_key"]}"
 
   vpc_security_group_ids = [
@@ -102,7 +105,7 @@ resource "aws_elb_attachment" "monitoring_node_attachment" {
 module "create_monitoring_ebs_volume" {
   source            = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ebs//ebs_volume"
   CreateSnapshot    = true
-  tags              = "${var.tags}"
+  tags              = "${var.terraform_remote_state_vpc["tags"]}"
   availability_zone = "${var.availability_zones["az1"]}"
   volume_size       = "${var.ebs_device_volume_size}"
   encrypted         = true

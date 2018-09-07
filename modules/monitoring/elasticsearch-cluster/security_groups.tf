@@ -45,5 +45,5 @@ resource "aws_security_group" "elasticsearch_client_sg" {
     protocol  = -1
   }
 
-  tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-elasticsearch-sg"))}"
+  tags = "${merge(var.terraform_remote_state_vpc["tags"], map("Name", "${var.environment_identifier}-elasticsearch-sg"))}"
 }
