@@ -7,14 +7,14 @@ data "template_file" "create_elasticsearch_instance_role" {
 
   vars {
     ingestion_role_arn = "${module.create_elasticsearch_app_role.iamrole_arn}"
-    s3-config-bucket = "${data.terraform_remote_state.vpc.s3-config-bucket}"
+    s3-config-bucket = "${var.terraform_remote_state_vpc["s3-config-bucket"]}"
   }
 }
 
 module "create_elasticsearch_app_role" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
   rolename   = "${var.environment_identifier}-${var.app_name}-elasticsearch"
-  policyfile = "${var.policy_file}"
+  policyfile = "${local.policy_file}"
 }
 
 module "create_elasticsearch_iam_instance_profile" {

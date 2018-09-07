@@ -2,9 +2,6 @@ variable "region" {
   description = "The AWS region."
 }
 
-variable "remote_state_bucket_name" {
-  description = "Terraform remote state bucket name"
-}
 
 variable "environment_identifier" {
   description = "resource label or name"
@@ -20,19 +17,15 @@ variable "availability_zones" {
   description = "a map of az's we can deploy to"
 }
 
+variable "terraform_remote_state_vpc" {
+  type = "map"
+}
+
+variable "amazon_ami_id" {}
+
 variable "app_name" {}
 
-variable "policy_file" {}
-
-variable "role_policy_file" {}
-
-variable "elasticsearch_root_directory" {}
-
-variable "ebs_device_mount_point" {}
-
 variable "ebs_device_volume_size" {}
-
-variable "docker_registry_url" {}
 
 variable "docker_image_tag" {}
 

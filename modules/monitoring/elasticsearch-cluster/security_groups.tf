@@ -5,13 +5,13 @@
 resource "aws_security_group" "elasticsearch_client_sg" {
   name        = "${var.environment_identifier}-elasticsearch-sg"
   description = "security group for ${var.environment_identifier}-elasticsearch"
-  vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
+  vpc_id      = "${var.terraform_remote_state_vpc["vpc_id"]}"
 
   ingress {
     from_port = "9200"
     to_port   = "9200"
     protocol  = "tcp"
-    security_groups = ["${data.terraform_remote_state.vpc.vpc_sg_id}"]
+    security_groups = ["${var.terraform_remote_state_vpc["vpc_sg_id"]}"]
     description = "${var.environment_identifier}-es-http-traffic"
   }
 
@@ -19,7 +19,7 @@ resource "aws_security_group" "elasticsearch_client_sg" {
     from_port = "9300"
     to_port   = "9300"
     protocol  = "tcp"
-    security_groups = ["${data.terraform_remote_state.vpc.vpc_sg_id}"]
+    security_groups = ["${var.terraform_remote_state_vpc["vpc_sg_id"]}"]
     description = "${var.environment_identifier}-es-https-traffic"
   }
 
