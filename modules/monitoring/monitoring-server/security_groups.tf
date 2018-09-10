@@ -130,21 +130,26 @@ resource "aws_security_group" "monitoring_elb_sg" {
   name = "${var.environment_identifier}-monitoring-elb-sg"
   description = "security group for ${var.environment_identifier}-monitoring-elb"
   vpc_id = "${var.terraform_remote_state_vpc["vpc_id"]}"
+}
 
-  ingress {
-    from_port = "443"
-    protocol = "tcp"
-    to_port = "443"
-    cidr_blocks = [
-      "${var.whitelist_monitoring_ips}"]
-    description = "Https kibana traffic"
-  }
+resource "aws_security_group_rule" "monitoring_elb_sg_https_in" {
+  description       = "Inbound Kibana traffic"
+  from_port         = "443"
+  protocol          = "tcp"
+  security_group_id = "${aws_security_group.monitoring_elb_sg.id}"
+  cidr_blocks       = [
+    "${var.whitelist_monitoring_ips}"
+  ]
+  to_port           = "443"
+  type              = "ingress"
+}
 
-  egress {
-    from_port = "5601"
-    protocol = "tcp"
-    to_port = "5601"
-    security_groups = [
-      "${aws_security_group.monitoring_sg.id}"]
-  }
+resource "aws_security_group_rule" "monitoring_elb_sg_kibana_out" {
+  description               = "Outbound Kibana traffic"
+  from_port                 = "5601"
+  protocol                  = "tcp"
+  security_group_id         = "${aws_security_group.monitoring_elb_sg.id}"
+  to_port                   = "5601"
+  type                      = "egress"
+  source_security_group_id  = "${aws_security_group.monitoring_sg.id}"
 }
