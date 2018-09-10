@@ -3,7 +3,7 @@ output "elasticsearch_cluster_sg_client_id" {
 }
 
 output "elasticsearch_1_internal_dns" {
-  value = "${module.create_elasticsearch_instance_1.elasticsearch_internal_dns}"
+  value = "${module.create_elasticsearch_instance_1.elasticsearch_instance_internal_dns}"
 }
 
 output "elasticsearch_1_internal_ipv4" {
@@ -11,7 +11,7 @@ output "elasticsearch_1_internal_ipv4" {
 }
 
 output "elasticsearch_2_internal_dns" {
-  value = "${module.create_elasticsearch_instance_2.elasticsearch_internal_dns}"
+  value = "${module.create_elasticsearch_instance_2.elasticsearch_instance_internal_dns}"
 }
 
 output "elasticsearch_2_internal_ipv4" {
@@ -19,7 +19,7 @@ output "elasticsearch_2_internal_ipv4" {
 }
 
 output "elasticsearch_3_internal_dns" {
-  value = "${module.create_elasticsearch_instance_3.elasticsearch_internal_dns}"
+  value = "${module.create_elasticsearch_instance_3.elasticsearch_instance_internal_dns}"
 }
 
 output "elasticsearch_3_internal_ipv4" {

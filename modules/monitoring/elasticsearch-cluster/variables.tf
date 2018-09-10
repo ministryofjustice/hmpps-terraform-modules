@@ -12,10 +12,6 @@ variable "availability_zones" {
   description = "a map of az's we can deploy to"
 }
 
-variable "terraform_remote_state_vpc" {
-  type = "map"
-}
-
 variable "amazon_ami_id" {}
 
 variable "app_name" {}
@@ -35,3 +31,24 @@ variable "short_environment_identifier" {
 variable "bastion_client_sg_id" {
   description = "SG to allow ssh access, to come from the shared vpc bastion"
 }
+
+# Vpc defined values
+variable "private_zone_name" {}
+
+variable "private_zone_id" {}
+
+variable "account_id" {}
+
+variable "tags" {
+  type = "map"
+}
+
+variable "subnet_ids" {
+  type = "list"
+}
+
+variable "ssh_deployer_key" {}
+
+variable "vpc_id" {}
+
+variable "s3-config-bucket" {}

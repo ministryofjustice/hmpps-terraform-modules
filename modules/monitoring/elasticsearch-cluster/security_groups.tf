@@ -5,9 +5,9 @@
 resource "aws_security_group" "elasticsearch_client_sg" {
   name        = "${var.environment_identifier}-elasticsearch-sg"
   description = "security group for ${var.environment_identifier}-elasticsearch"
-  vpc_id      = "${var.terraform_remote_state_vpc["vpc_id"]}"
+  vpc_id      = "${var.vpc_id}"
 
-  tags = "${merge(var.terraform_remote_state_vpc["tags"], map("Name", "${var.environment_identifier}-elasticsearch-sg"))}"
+  tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-elasticsearch-sg"))}"
 }
 
 resource "aws_security_group_rule" "elasticsearch_client_sg_es_http_in" {
