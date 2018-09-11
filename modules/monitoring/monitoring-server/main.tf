@@ -78,7 +78,7 @@ module "create_monitoring_instance" {
   app_name                    = "${var.environment_identifier}-${var.app_name}-node"
   ami_id                      = "${var.amazon_ami_id}"
   instance_type               = "${var.instance_type}"
-  subnet_id                   = "${var.availability_zones[0]}"
+  subnet_id                   = "${var.subnet_ids[0]}"
   iam_instance_profile        = "${module.create_monitoring_instance_profile.iam_instance_name}"
   associate_public_ip_address = false
   monitoring                  = true
@@ -88,7 +88,6 @@ module "create_monitoring_instance" {
   key_name                    = "${var.ssh_deployer_key}"
 
   vpc_security_group_ids = [
-    "${var.bastion_client_sg_id}",
     "${var.elasticsearch_cluster_sg_client_id}",
     "${aws_security_group.monitoring_sg.id}"
   ]

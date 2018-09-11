@@ -19,8 +19,8 @@ variable "short_environment_identifier" {
   description = "short resource label or name"
 }
 
-variable "bastion_client_sg_id" {
-  description = "SG to allow ssh access, to come from the shared vpc bastion"
+variable "bastion_origin_cidr" {
+  description = "CIDR to allow ssh access, to come from the shared vpc bastion"
 }
 
 variable "app_name" {}

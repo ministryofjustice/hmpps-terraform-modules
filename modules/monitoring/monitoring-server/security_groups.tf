@@ -10,6 +10,16 @@ resource "aws_security_group" "monitoring_sg" {
   tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-monitoring-sg"))}"
 }
 
+resource "aws_security_group_rule" "bastion_ssh_in" {
+  from_port         = 22
+  protocol          = "tcp"
+  security_group_id = "${aws_security_group.monitoring_sg.id}"
+  to_port           = 22
+  type              = "ingress"
+  description       = "Shared Bastion CIDR ssh in"
+  cidr_blocks       = ["${var.bastion_origin_cidr}"]
+}
+
 resource "aws_security_group_rule" "monitoring_rsyslog_tcp_in" {
   from_port = 2514
   protocol = "tcp"
@@ -121,6 +131,7 @@ resource "aws_security_group_rule" "elasticsearch_client_sg_es_world_out" {
   security_group_id = "${aws_security_group.monitoring_sg.id}"
   to_port = 0
   type = "egress"
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 
