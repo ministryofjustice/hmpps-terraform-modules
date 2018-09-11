@@ -60,7 +60,6 @@ module "create_elasticsearch_instance_1" {
                                     )}"
   ssh_deployer_key            = "${var.ssh_deployer_key}"
   security_groups             = [
-    "${var.bastion_client_sg_id}",
     "${aws_security_group.elasticsearch_client_sg.id}",
   ]
   # Volume
@@ -118,7 +117,6 @@ module "create_elasticsearch_instance_2" {
                                     )}"
   ssh_deployer_key            = "${var.ssh_deployer_key}"
   security_groups             = [
-    "${var.bastion_client_sg_id}",
     "${aws_security_group.elasticsearch_client_sg.id}",
   ]
   # Volume
@@ -176,7 +174,6 @@ module "create_elasticsearch_instance_3" {
                                     )}"
   ssh_deployer_key            = "${var.ssh_deployer_key}"
   security_groups             = [
-    "${var.bastion_client_sg_id}",
     "${aws_security_group.elasticsearch_client_sg.id}",
   ]
   # Volume

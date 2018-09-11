@@ -10,6 +10,16 @@ resource "aws_security_group" "elasticsearch_client_sg" {
   tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-elasticsearch-sg"))}"
 }
 
+resource "aws_security_group_rule" "elasticsearch_bastion_in" {
+  from_port         = 22
+  protocol          = "tcp"
+  security_group_id = "${aws_security_group.elasticsearch_client_sg.id}"
+  to_port           = 22
+  type              = "ingress"
+  cidr_blocks       = ["${var.bastion_origin_cidr}"]
+  description       = "Bastion CIDR block ssh access"
+}
+
 resource "aws_security_group_rule" "elasticsearch_client_sg_es_http_in" {
   from_port = 9200
   protocol = "tcp"
