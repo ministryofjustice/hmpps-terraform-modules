@@ -89,6 +89,7 @@ module "create_monitoring_instance" {
   key_name                    = "${var.ssh_deployer_key}"
 
   vpc_security_group_ids = [
+    "sg-01e37db318a75d51a",
     "${var.elasticsearch_cluster_sg_client_id}",
     "${aws_security_group.monitoring_sg.id}"
   ]
