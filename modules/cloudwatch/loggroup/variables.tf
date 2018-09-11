@@ -6,6 +6,10 @@ variable "loggroupname" {}
 
 variable "cloudwatch_log_retention" {}
 
+variable "kms_key_id" {
+  default = ""
+}
+
 variable "tags" {
   type = "map"
 }
