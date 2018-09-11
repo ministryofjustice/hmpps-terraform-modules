@@ -17,6 +17,7 @@ resource "aws_security_group_rule" "elasticsearch_client_sg_es_http_in" {
   to_port = 9200
   type = "ingress"
   description = "${var.environment_identifier}-es-http-traffic"
+  cidr_blocks = ["${var.vpc_cidr}"]
 }
 
 resource "aws_security_group_rule" "elasticsearch_client_sg_es_https_in" {
@@ -26,6 +27,8 @@ resource "aws_security_group_rule" "elasticsearch_client_sg_es_https_in" {
   to_port = 9300
   type = "ingress"
   description = "${var.environment_identifier}-es-http-traffic"
+  cidr_blocks = ["${var.vpc_cidr}"]
+
 }
 
 resource "aws_security_group_rule" "elasticsearch_client_sg_es_self_in" {
@@ -52,4 +55,5 @@ resource "aws_security_group_rule" "elasticsearch_client_sg_es_world_out" {
   security_group_id = "${aws_security_group.elasticsearch_client_sg.id}"
   to_port = 0
   type = "egress"
+  cidr_blocks = ["0.0.0.0/0"]
 }

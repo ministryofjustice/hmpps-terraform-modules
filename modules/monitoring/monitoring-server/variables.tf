@@ -8,13 +8,10 @@ variable "environment_identifier" {
 }
 
 variable "availability_zones" {
-  type = "map"
+  type = "list"
   description = "a map of az's we can deploy to"
 }
 
-variable "terraform_remote_state_vpc" {
-  type = "map"
-}
 
 variable "amazon_ami_id" {}
 
@@ -38,7 +35,9 @@ variable "whitelist_monitoring_ips" {
 
 variable "route53_hosted_zone_id" {}
 
-variable "elasticsearch_cluster" {}
+variable "elasticsearch_cluster_name" {}
+
+variable "elasticsearch_cluster_sg_client_id" {}
 
 variable "instance_type" {}
 
@@ -46,4 +45,26 @@ variable "ebs_device_volume_size" {}
 
 variable "docker_image_tag" {}
 
+variable "private_zone_name" {}
+
+variable "account_id" {}
+
+variable "subnet_ids" {
+  type = "list"
+}
+
+variable "tags" {
+  type = "map"
+}
+
+variable "vpc_id" {}
+
+variable "vpc_cidr" {}
+
+variable "private_zone_id" {}
+
 variable "public_ssl_arn" {}
+
+variable "ssh_deployer_key" {}
+
+variable "s3-config-bucket" {}

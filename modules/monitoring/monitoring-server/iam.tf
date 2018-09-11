@@ -1,9 +1,9 @@
 data "template_file" "create_monitoring_instance_role" {
-  template = "${file("${var.role_policy_file}")}"
+  template = "${file("${path.module}/${local.role_policy_file}")}"
 
   vars {
     monitoring_role_arn = "${module.create_monitoring_app_role.iamrole_arn}"
-    s3-config-bucket = "${var.terraform_remote_state_vpc["s3-config-bucket"]}"
+    s3-config-bucket = "${var.s3-config-bucket}"
   }
 }
 

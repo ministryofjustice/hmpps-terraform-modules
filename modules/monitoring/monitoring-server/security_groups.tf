@@ -5,9 +5,9 @@
 resource "aws_security_group" "monitoring_sg" {
   name = "${var.environment_identifier}-monitoring-sg"
   description = "security group for ${var.environment_identifier}-monitoring"
-  vpc_id = "${var.terraform_remote_state_vpc["vpc_id"]}"
+  vpc_id = "${var.vpc_id}"
 
-  tags = "${merge(var.terraform_remote_state_vpc["tags"], map("Name", "${var.environment_identifier}-monitoring-sg"))}"
+  tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-monitoring-sg"))}"
 }
 
 resource "aws_security_group_rule" "monitoring_rsyslog_tcp_in" {
@@ -16,7 +16,7 @@ resource "aws_security_group_rule" "monitoring_rsyslog_tcp_in" {
   to_port = 2514
   description = "${var.environment_identifier}-rsyslog-tcp"
   cidr_blocks = [
-    "${var.terraform_remote_state_vpc["vpc_cidr"]}"]
+    "${var.vpc_cidr}"]
   type = "ingress"
   security_group_id = "${aws_security_group.monitoring_sg.id}"
 }
@@ -27,7 +27,7 @@ resource "aws_security_group_rule" "monitoring_rsyslog_udp_in" {
   to_port = 2514
   description = "${var.environment_identifier}-rsyslog-udp"
   cidr_blocks = [
-    "${var.terraform_remote_state_vpc["vpc_cidr"]}"]
+    "${var.vpc_cidr}"]
   type = "ingress"
   security_group_id = "${aws_security_group.monitoring_sg.id}"
 }
@@ -38,7 +38,7 @@ resource "aws_security_group_rule" "monitoring_logstash_tcp_in" {
   to_port = 5000
   description = "${var.environment_identifier}-logstash-tcp"
   cidr_blocks = [
-    "${var.terraform_remote_state_vpc["vpc_cidr"]}"]
+    "${var.vpc_cidr}"]
   type = "ingress"
   security_group_id = "${aws_security_group.monitoring_sg.id}"
 }
@@ -49,7 +49,7 @@ resource "aws_security_group_rule" "monitoring_logstash_udp_in" {
   to_port = 5000
   description = "${var.environment_identifier}-logstash-udp"
   cidr_blocks = [
-    "${var.terraform_remote_state_vpc["vpc_cidr"]}"]
+    "${var.vpc_cidr}"]
   type = "ingress"
   security_group_id = "${aws_security_group.monitoring_sg.id}"
 }
@@ -60,7 +60,7 @@ resource "aws_security_group_rule" "monitoring_kibana_tcp_in" {
   protocol = "tcp"
   description = "${var.environment_identifier}-kibana"
   cidr_blocks = [
-    "${var.terraform_remote_state_vpc["vpc_cidr"]}"]
+    "${var.vpc_cidr}"]
   type = "ingress"
   security_group_id = "${aws_security_group.monitoring_sg.id}"
 }
@@ -69,8 +69,7 @@ resource "aws_security_group_rule" "monitoring_elasticsearch_http_in" {
   from_port = "9200"
   to_port = "9200"
   protocol = "tcp"
-  cidr_blocks = [
-    "${var.terraform_remote_state_vpc["vpc_cidr"]}"]
+  cidr_blocks = ["${var.vpc_cidr}"]
   type = "ingress"
   security_group_id = "${aws_security_group.monitoring_sg.id}"
   description = "${var.environment_identifier}-elasticsearch-http"
@@ -80,8 +79,7 @@ resource "aws_security_group_rule" "monitoring_elasticsearch_https_in" {
   from_port = "9300"
   to_port = "9300"
   protocol = "tcp"
-  cidr_blocks = [
-    "${var.terraform_remote_state_vpc["vpc_cidr"]}"]
+  cidr_blocks = ["${var.vpc_cidr}"]
   type = "ingress"
   security_group_id = "${aws_security_group.monitoring_sg.id}"
   description = "${var.environment_identifier}-elasticsearch-https"
@@ -92,7 +90,7 @@ resource "aws_security_group_rule" "monitoring_elasticsearch_logstash_in" {
   to_port = "9600"
   protocol = "tcp"
   cidr_blocks = [
-    "${var.terraform_remote_state_vpc["vpc_cidr"]}"]
+    "${var.vpc_cidr}"]
   type = "ingress"
   security_group_id = "${aws_security_group.monitoring_sg.id}"
   description = "${var.environment_identifier}-logstash"
@@ -129,7 +127,7 @@ resource "aws_security_group_rule" "elasticsearch_client_sg_es_world_out" {
 resource "aws_security_group" "monitoring_elb_sg" {
   name = "${var.environment_identifier}-monitoring-elb-sg"
   description = "security group for ${var.environment_identifier}-monitoring-elb"
-  vpc_id = "${var.terraform_remote_state_vpc["vpc_id"]}"
+  vpc_id = "${var.vpc_id}"
 }
 
 resource "aws_security_group_rule" "monitoring_elb_sg_https_in" {

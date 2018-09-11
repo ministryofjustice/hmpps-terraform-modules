@@ -22,7 +22,7 @@ locals {
 #####
 
 data "template_file" "monitoring_instance_user_data" {
-   template = "${file("user_data/monitoring_user_data.sh")}"
+   template = "${file("${path.module}/user_data/monitoring_user_data.sh")}"
 
   vars {
     es_home               = "${local.elasticsearch_root_directory}"
@@ -31,11 +31,11 @@ data "template_file" "monitoring_instance_user_data" {
     env_identifier        = "${var.environment_identifier}"
     short_env_identifier  = "${var.short_environment_identifier}"
     route53_sub_domain    = "${var.route53_sub_domain}"
-    private_domain        = "${var.terraform_remote_state_vpc["private_zone_name"]}"
-    account_id            = "${var.terraform_remote_state_vpc["account_id"]}"
-    internal_domain       = "${var.terraform_remote_state_vpc["private_zone_name"]}"
+    private_domain        = "${var.private_zone_name}"
+    account_id            = "${var.account_id}"
+    internal_domain       = "${var.private_zone_name}"
     version               = "${var.docker_image_tag}"
-    aws_cluster           = "${var.elasticsearch_cluster["elasticsearch_cluster_name"]}"
+    aws_cluster           = "${var.elasticsearch_cluster_name}"
     registry_url          = "${local.docker_registry_url}"
   }
 }
@@ -62,15 +62,13 @@ resource "aws_elb" "monitoring_elb" {
   name = "${var.short_environment_identifier}-${var.app_name}-elb"
 
   subnets = [
-    "${var.terraform_remote_state_vpc["public-subnet-az1"]}",
-    "${var.terraform_remote_state_vpc["public-subnet-az2"]}",
-    "${var.terraform_remote_state_vpc["public-subnet-az3"]}"
+    "${var.subnet_ids}"
   ]
 
   security_groups = ["${aws_security_group.monitoring_elb_sg.id}"]
 
   tags = "${merge(
-    var.terraform_remote_state_vpc["tags"],
+    var.tags,
     map("Name", "${var.short_environment_identifier}-${var.app_name}-elb"))
   }"
 }
@@ -80,19 +78,18 @@ module "create_monitoring_instance" {
   app_name                    = "${var.environment_identifier}-${var.app_name}-node"
   ami_id                      = "${var.amazon_ami_id}"
   instance_type               = "${var.instance_type}"
-  subnet_id                   = "${var.terraform_remote_state_vpc["private-subnet-az1"]}"
+  subnet_id                   = "${var.availability_zones[0]}"
   iam_instance_profile        = "${module.create_monitoring_instance_profile.iam_instance_name}"
   associate_public_ip_address = false
   monitoring                  = true
   user_data                   = "${data.template_file.monitoring_instance_user_data.rendered}"
   CreateSnapshot              = true
-  tags                        = "${var.terraform_remote_state_vpc["tags"]}"
-  key_name                    = "${var.terraform_remote_state_vpc["ssh_deployer_key"]}"
+  tags                        = "${var.tags}"
+  key_name                    = "${var.ssh_deployer_key}"
 
   vpc_security_group_ids = [
     "${var.bastion_client_sg_id}",
-    "${var.terraform_remote_state_vpc["vpc_sg_outbound_id"]}",
-    "${var.elasticsearch_cluster["elasticsearch_cluster_sg_client_id"]}",
+    "${var.elasticsearch_cluster_sg_client_id}",
     "${aws_security_group.monitoring_sg.id}"
   ]
 }
@@ -105,8 +102,8 @@ resource "aws_elb_attachment" "monitoring_node_attachment" {
 module "create_monitoring_ebs_volume" {
   source            = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ebs//ebs_volume"
   CreateSnapshot    = true
-  tags              = "${var.terraform_remote_state_vpc["tags"]}"
-  availability_zone = "${var.availability_zones["az1"]}"
+  tags              = "${var.tags}"
+  availability_zone = "${var.availability_zones[0]}"
   volume_size       = "${var.ebs_device_volume_size}"
   encrypted         = true
   app_name          = "${var.environment_identifier}-${var.app_name}-monitoring-volume"
@@ -120,9 +117,9 @@ module "attach_monitoring_volume" {
 }
 
 resource "aws_route53_record" "internal_monitoring_dns" {
-  name    = "${var.app_name}.${var.terraform_remote_state_vpc["private_zone_name"]}"
+  name    = "${var.app_name}.${var.private_zone_name}"
   type    = "A"
-  zone_id = "${var.terraform_remote_state_vpc["private_zone_id"]}"
+  zone_id = "${var.private_zone_id}"
   ttl     = 300
   records = ["${module.create_monitoring_instance.private_ip}"]
 }

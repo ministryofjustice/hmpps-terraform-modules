@@ -8,7 +8,7 @@ variable "environment_identifier" {
 }
 
 variable "availability_zones" {
-  type = "map"
+  type = "list"
   description = "a map of az's we can deploy to"
 }
 
@@ -50,5 +50,7 @@ variable "subnet_ids" {
 variable "ssh_deployer_key" {}
 
 variable "vpc_id" {}
+
+variable "vpc_cidr" {}
 
 variable "s3-config-bucket" {}
