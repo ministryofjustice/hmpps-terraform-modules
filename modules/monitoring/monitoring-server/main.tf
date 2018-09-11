@@ -14,6 +14,7 @@ locals {
   ebs_device_mount_point        = "/dev/xvdb"
   elasticsearch_root_directory  = "/srv"
   docker_registry_url           = "mojdigitalstudio"
+  server_dns                    = "monitoring"
 }
 
 
@@ -116,7 +117,7 @@ module "attach_monitoring_volume" {
 }
 
 resource "aws_route53_record" "internal_monitoring_dns" {
-  name    = "${var.app_name}.${var.private_zone_name}"
+  name    = "${local.server_dns}.${var.private_zone_name}"
   type    = "A"
   zone_id = "${var.private_zone_id}"
   ttl     = 300
@@ -125,7 +126,7 @@ resource "aws_route53_record" "internal_monitoring_dns" {
 
 resource "aws_route53_record" "external_monitoring_dns" {
   zone_id = "${var.route53_hosted_zone_id}"
-  name    = "${var.app_name}.${var.route53_sub_domain}.${var.route53_domain_private}"
+  name    = "${local.server_dns}.${var.route53_sub_domain}.${var.route53_domain_private}"
   type    = "A"
 
   alias {
