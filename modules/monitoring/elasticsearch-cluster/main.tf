@@ -42,7 +42,7 @@ data "template_file" "create_elasticsearch_1_user_data" {
 
 module "create_elasticsearch_instance_1" {
   # Instance
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=refactorMonitoringIntoModule//modules//monitoring/elasticsearch-instance"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//monitoring/elasticsearch-instance"
   app_name                    = "${var.environment_identifier}-${var.app_name}-es-node"
   environment_identifier      = "${var.environment_identifier}"
   ami_id                      = "${var.amazon_ami_id}"
@@ -100,7 +100,7 @@ data "template_file" "create_elasticsearch_2_user_data" {
 
 module "create_elasticsearch_instance_2" {
   # Instance
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=refactorMonitoringIntoModule//modules//monitoring/elasticsearch-instance"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//monitoring/elasticsearch-instance"
   app_name                    = "${var.environment_identifier}-${var.app_name}-es-node"
   environment_identifier      = "${var.environment_identifier}"
   ami_id                      = "${var.amazon_ami_id}"
@@ -161,7 +161,7 @@ data "template_file" "create_elasticsearch_3_user_data" {
 
 module "create_elasticsearch_instance_3" {
   # Instance
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=refactorMonitoringIntoModule//modules//monitoring/elasticsearch-instance"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//monitoring/elasticsearch-instance"
   app_name                    = "${var.environment_identifier}-${var.app_name}-es-node"
   environment_identifier      = "${var.environment_identifier}"
   ami_id                      = "${var.amazon_ami_id}"
