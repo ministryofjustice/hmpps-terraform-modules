@@ -114,7 +114,7 @@ module "create_elasticsearch_instance_2" {
                                     map("HMPPS_ROLE", "${var.app_name}"),
                                     map("HMPPS_STACKNAME", "${var.environment_identifier}"),
                                     map("HMPPS_STACK", "${var.short_environment_identifier}"),
-                                    map("HMPPS_FQDN", "elasticsearch-2${var.private_zone_name}")
+                                    map("HMPPS_FQDN", "elasticsearch-2.${var.private_zone_name}")
                                     )}"
   ssh_deployer_key            = "${var.ssh_deployer_key}"
   security_groups             = [

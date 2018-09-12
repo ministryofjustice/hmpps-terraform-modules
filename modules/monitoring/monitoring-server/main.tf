@@ -63,7 +63,7 @@ resource "aws_elb" "monitoring_elb" {
   name = "${var.short_environment_identifier}-${var.app_name}-elb"
 
   subnets = [
-    "${var.subnet_ids}"
+    "${var.public_subnet_ids}"
   ]
 
   security_groups = ["${aws_security_group.monitoring_elb_sg.id}"]
