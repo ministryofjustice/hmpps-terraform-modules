@@ -19,6 +19,8 @@ variable "tags" {
   type = "map"
 }
 
+variable "monitoring_server_url" {}
+
 variable "db_name" {}
 variable "db_host" {}
 variable "db_username" {}

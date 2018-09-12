@@ -161,15 +161,6 @@ module "create_parameter_ssh_key" {
   tags           = "${local.tags}"
 }
 
-############################################
-# INTERNAL Route53
-############################################
-#Private internal zone for easier lookups
-resource "aws_route53_zone" "internal_zone" {
-  name   = "${local.internal_domain}"
-  vpc_id = "${local.vpc_id}"
-}
-
 ###############################################
 # RDS DB PASSWORD
 ###############################################
