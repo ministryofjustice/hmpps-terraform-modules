@@ -117,10 +117,13 @@ module "create_elasticsearch_instance_2" {
                                     map("HMPPS_FQDN", "elasticsearch-2.${var.private_zone_name}")
                                     )}"
   ssh_deployer_key            = "${var.ssh_deployer_key}"
-  security_groups             = [
-    "sg-01e37db318a75d51a",
-    "${aws_security_group.elasticsearch_client_sg.id}",
-  ]
+  security_groups             =
+    "${concat(
+        var.bastion_origin_sgs,
+        list(aws_security_group.elasticsearch_client_sg.id)
+      )
+    }"
+
   # Volume
   volume_tags                 = "${var.tags}"
   volume_availability_zone    = "${var.availability_zones[1]}"

@@ -54,3 +54,7 @@ variable "vpc_id" {}
 variable "vpc_cidr" {}
 
 variable "s3-config-bucket" {}
+
+variable "bastion_origin_sgs" {
+  type = "list"
+}

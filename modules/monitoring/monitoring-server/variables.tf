@@ -72,3 +72,7 @@ variable "public_ssl_arn" {}
 variable "ssh_deployer_key" {}
 
 variable "s3-config-bucket" {}
+
+variable "bastion_origin_sgs" {
+  type = "list"
+}
