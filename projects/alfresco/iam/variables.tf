@@ -4,6 +4,10 @@ variable "alfresco_app_name" {}
 
 variable "ec2_policy_file" {}
 
+variable "ecs_policy_file" {}
+
+variable "ecs_role_policy_file" {}
+
 variable "ec2_role_policy_file" {}
 
 variable "ec2_internal_policy_file" {}

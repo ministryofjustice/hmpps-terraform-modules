@@ -14,7 +14,7 @@ data "aws_ssm_parameter" "db_password" {
 ############################################
 
 locals {
-  common_name           = "${var.alfresco_app_name}"
+  common_name           = "${var.app_hostnames["internal"]}"
   lb_name               = "${var.short_environment_identifier}-${var.alfresco_app_name}"
   common_label          = "${var.environment_identifier}-${var.alfresco_app_name}"
   common_prefix         = "${var.environment_identifier}-${var.alfresco_app_name}"
@@ -79,9 +79,17 @@ resource "aws_app_cookie_stickiness_policy" "alfresco_app_cookie_policy" {
 ###############################################
 
 resource "aws_route53_record" "dns_entry" {
+  name    = "${local.common_name}.${var.external_domain}"
+  type    = "CNAME"
+  zone_id = "${var.public_zone_id}"
+  ttl     = 300
+  records = ["${module.create_app_elb.environment_elb_dns_name}"]
+}
+
+resource "aws_route53_record" "dns_entry_private" {
   name    = "${local.common_name}.${var.internal_domain}"
   type    = "CNAME"
-  zone_id = "${var.zone_id}"
+  zone_id = "${var.public_zone_id}"
   ttl     = 300
   records = ["${module.create_app_elb.environment_elb_dns_name}"]
 }
@@ -128,7 +136,7 @@ data "template_file" "user_data" {
     bucket_name         = "${var.alfresco_s3bucket}"
     bucket_encrypt_type = "kms"
     bucket_key_id       = "${var.bucket_kms_key_id}"
-    external_fqdn       = "${local.common_name}.${var.internal_domain}"
+    external_fqdn       = "${var.app_hostnames["external"]}.${var.external_domain}"
   }
 }
 

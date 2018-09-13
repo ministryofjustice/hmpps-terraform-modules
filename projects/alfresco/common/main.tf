@@ -43,56 +43,6 @@ resource "aws_security_group_rule" "http" {
   description       = "${local.common_name}-http"
 }
 
-resource "aws_security_group_rule" "https" {
-  security_group_id = "${aws_security_group.vpc-sg-outbound.id}"
-  type              = "egress"
-  from_port         = "443"
-  to_port           = "443"
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  description       = "${local.common_name}-https"
-}
-
-resource "aws_security_group_rule" "rsyslog_tcp" {
-  security_group_id = "${aws_security_group.vpc-sg-outbound.id}"
-  type              = "egress"
-  from_port         = "2514"
-  protocol          = "tcp"
-  to_port           = "2514"
-  description       = "Monitoring traffic rsyslog"
-  cidr_blocks       = ["${local.cidr_block}"]
-}
-
-resource "aws_security_group_rule" "rsyslog_udp" {
-  security_group_id = "${aws_security_group.vpc-sg-outbound.id}"
-  type              = "egress"
-  from_port         = "2514"
-  protocol          = "udp"
-  to_port           = "2514"
-  description       = "Monitoring traffic rsyslog"
-  cidr_blocks       = ["${local.cidr_block}"]
-}
-
-resource "aws_security_group_rule" "logstash" {
-  security_group_id = "${aws_security_group.vpc-sg-outbound.id}"
-  type              = "egress"
-  from_port         = "5000"
-  protocol          = "tcp"
-  to_port           = "5000"
-  description       = "Monitoring traffic logstash"
-  cidr_blocks       = ["${local.cidr_block}"]
-}
-
-resource "aws_security_group_rule" "elasticsearch" {
-  security_group_id = "${aws_security_group.vpc-sg-outbound.id}"
-  type              = "egress"
-  from_port         = "9200"
-  protocol          = "tcp"
-  to_port           = "9200"
-  description       = "Monitoring traffic elasticsearch"
-  cidr_blocks       = ["${local.cidr_block}"]
-}
-
 # #-------------------------------------------
 # ### S3 bucket for config
 # #--------------------------------------------

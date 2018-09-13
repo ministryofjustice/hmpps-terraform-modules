@@ -10,6 +10,10 @@ variable "private_subnet_ids" {
   type = "map"
 }
 
+variable "app_hostnames" {
+  type = "map"
+}
+
 variable depends_on {
   default = []
   type    = "list"
@@ -41,7 +45,11 @@ variable "instance_security_groups" {
 
 variable "internal_domain" {}
 
-variable "zone_id" {}
+variable "external_domain" {}
+
+variable "private_zone_id" {}
+
+variable "public_zone_id" {}
 
 variable "alfresco_s3bucket" {}
 

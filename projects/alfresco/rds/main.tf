@@ -159,7 +159,15 @@ module "db_instance" {
 resource "aws_route53_record" "rds_dns_entry" {
   name    = "${local.dns_name}.${var.internal_domain}"
   type    = "CNAME"
-  zone_id = "${var.zone_id}"
+  zone_id = "${var.private_zone_id}"
+  ttl     = 300
+  records = ["${module.db_instance.db_instance_address}"]
+}
+
+resource "aws_route53_record" "rds_dns_entry_public" {
+  name    = "${local.dns_name}.${var.external_domain}"
+  type    = "CNAME"
+  zone_id = "${var.public_zone_id}"
   ttl     = 300
   records = ["${module.db_instance.db_instance_address}"]
 }

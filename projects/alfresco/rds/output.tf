@@ -64,11 +64,6 @@ output "rds_db_instance_endpoint" {
   value       = "${module.db_instance.db_instance_endpoint}"
 }
 
-output "rds_db_instance_endpoint_cname" {
-  description = "The connection endpoint"
-  value       = "${local.dns_name}.${var.internal_domain}"
-}
-
 output "rds_db_instance_hosted_zone_id" {
   description = "The canonical hosted zone ID of the DB instance (to be used in a Route 53 Alias record)"
   value       = "${module.db_instance.db_instance_hosted_zone_id}"
@@ -102,4 +97,14 @@ output "rds_db_instance_username" {
 output "rds_db_instance_port" {
   description = "The database port"
   value       = "${module.db_instance.db_instance_port}"
+}
+
+output "rds_db_instance_endpoint_cname" {
+  description = "The connection endpoint"
+  value       = "${aws_route53_record.rds_dns_entry_public.fqdn}"
+}
+
+output "rds_db_instance_endpoint_cname_private" {
+  description = "The connection endpoint"
+  value       = "${aws_route53_record.rds_dns_entry.fqdn}"
 }

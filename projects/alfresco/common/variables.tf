@@ -24,7 +24,7 @@ variable "lb_account_id" {}
 
 variable "role_arn" {}
 
-variable "route53_hosted_zone_id" {}
+variable "private_zone_id" {}
 
 variable "alfresco_app_name" {}
 
