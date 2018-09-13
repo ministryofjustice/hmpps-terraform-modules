@@ -13,7 +13,7 @@ data "template_file" "create_elasticsearch_instance_role" {
 
 module "create_elasticsearch_app_role" {
   source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
-  rolename   = "${var.short_environment_identifier}-${var.app_name}-elasticsearch"
+  rolename   = "${var.short_environment_identifier}-${var.app_name}"
   policyfile = "${local.policy_file}"
 }
 
