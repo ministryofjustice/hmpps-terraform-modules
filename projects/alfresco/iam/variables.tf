@@ -26,6 +26,8 @@ variable "remote_config_bucket" {}
 
 variable "storage_s3bucket" {}
 
+variable "s3bucket_kms_arn" {}
+
 variable depends_on {
   default = []
   type    = "list"

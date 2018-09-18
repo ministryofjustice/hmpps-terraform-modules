@@ -13,6 +13,7 @@ locals {
   remote_iam_role      = "${var.remote_iam_role}"
   remote_config_bucket = "${var.remote_config_bucket}"
   storage_s3bucket     = "${var.storage_s3bucket}"
+  s3bucket_kms_arn     = "${var.s3bucket_kms_arn}"
 }
 
 ############################################
@@ -86,6 +87,7 @@ data "template_file" "iam_policy_app_int" {
     remote_iam_role      = "${local.remote_iam_role}"
     remote_config_bucket = "${local.remote_config_bucket}"
     storage_s3bucket     = "${local.storage_s3bucket}"
+    s3bucket_kms_arn     = "${local.s3bucket_kms_arn}"
   }
 }
 
