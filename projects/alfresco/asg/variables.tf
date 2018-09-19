@@ -10,6 +10,10 @@ variable "private_subnet_ids" {
   type = "map"
 }
 
+variable "app_hostnames" {
+  type = "map"
+}
+
 variable depends_on {
   default = []
   type    = "list"
@@ -18,6 +22,8 @@ variable depends_on {
 variable "tags" {
   type = "map"
 }
+
+variable "monitoring_server_url" {}
 
 variable "db_name" {}
 variable "db_host" {}
@@ -38,6 +44,8 @@ variable "instance_security_groups" {
 }
 
 variable "internal_domain" {}
+
+variable "external_domain" {}
 
 variable "zone_id" {}
 

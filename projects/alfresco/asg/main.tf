@@ -14,13 +14,13 @@ data "aws_ssm_parameter" "db_password" {
 ############################################
 
 locals {
-  common_name           = "${var.alfresco_app_name}-az"
-  lb_name               = "${var.short_environment_identifier}-${var.alfresco_app_name}-az"
-  common_label          = "${var.environment_identifier}-${var.alfresco_app_name}-az"
+  common_name           = "${var.app_hostnames["internal"]}"
+  lb_name               = "${var.short_environment_identifier}-${var.alfresco_app_name}"
+  common_label          = "${var.environment_identifier}-${var.alfresco_app_name}"
   common_prefix         = "${var.environment_identifier}-${var.alfresco_app_name}"
   db_password           = "${data.aws_ssm_parameter.db_password.value}"
   tags                  = "${var.tags}"
-  monitoring_server_url = "test"                                                            #"${data.terraform_remote_state.monitoring-server.monitoring_internal_dns}"
+  monitoring_server_url = "${var.monitoring_server_url}"                                 #"${data.terraform_remote_state.monitoring-server.monitoring_internal_dns}"
 
   subnet_ids = [
     "${var.private_subnet_ids["az1"]}",
@@ -128,7 +128,7 @@ data "template_file" "user_data" {
     bucket_name         = "${var.alfresco_s3bucket}"
     bucket_encrypt_type = "kms"
     bucket_key_id       = "${var.bucket_kms_key_id}"
-    external_fqdn       = "${local.common_name}.${var.internal_domain}"
+    external_fqdn       = "${var.app_hostnames["external"]}.${var.external_domain}"
   }
 }
 

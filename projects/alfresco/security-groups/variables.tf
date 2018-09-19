@@ -50,3 +50,8 @@ variable depends_on {
   default = []
   type    = "list"
 }
+
+# SG ids
+variable "sg_map_ids" {
+  type = "map"
+}

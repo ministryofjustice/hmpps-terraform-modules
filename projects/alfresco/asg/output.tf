@@ -30,7 +30,7 @@ output "asg_elb_zone_id" {
 }
 
 output "asg_elb_dns_cname" {
-  value = "${local.common_name}.${var.internal_domain}"
+  value = "${aws_route53_record.dns_entry.fqdn}"
 }
 
 # Launch config

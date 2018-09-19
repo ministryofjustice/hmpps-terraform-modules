@@ -180,7 +180,7 @@ variable "tags" {
 
 variable "internal_domain" {}
 
-variable "zone_id" {}
+variable "private_zone_id" {}
 
 variable "security_group_ids" {
   type = "list"
