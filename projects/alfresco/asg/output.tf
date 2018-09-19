@@ -33,10 +33,6 @@ output "asg_elb_dns_cname" {
   value = "${aws_route53_record.dns_entry.fqdn}"
 }
 
-output "asg_elb_dns_cname_private" {
-  value = "${aws_route53_record.dns_entry_private.fqdn}"
-}
-
 # Launch config
 # AZ1
 output "asg_launch_id_az1" {

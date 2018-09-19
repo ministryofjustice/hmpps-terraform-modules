@@ -101,10 +101,5 @@ output "rds_db_instance_port" {
 
 output "rds_db_instance_endpoint_cname" {
   description = "The connection endpoint"
-  value       = "${aws_route53_record.rds_dns_entry_public.fqdn}"
-}
-
-output "rds_db_instance_endpoint_cname_private" {
-  description = "The connection endpoint"
   value       = "${aws_route53_record.rds_dns_entry.fqdn}"
 }

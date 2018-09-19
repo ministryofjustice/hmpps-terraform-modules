@@ -79,17 +79,9 @@ resource "aws_app_cookie_stickiness_policy" "alfresco_app_cookie_policy" {
 ###############################################
 
 resource "aws_route53_record" "dns_entry" {
-  name    = "${local.common_name}.${var.external_domain}"
-  type    = "CNAME"
-  zone_id = "${var.public_zone_id}"
-  ttl     = 300
-  records = ["${module.create_app_elb.environment_elb_dns_name}"]
-}
-
-resource "aws_route53_record" "dns_entry_private" {
   name    = "${local.common_name}.${var.internal_domain}"
   type    = "CNAME"
-  zone_id = "${var.public_zone_id}"
+  zone_id = "${var.zone_id}"
   ttl     = 300
   records = ["${module.create_app_elb.environment_elb_dns_name}"]
 }

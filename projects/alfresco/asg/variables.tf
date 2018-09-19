@@ -47,9 +47,7 @@ variable "internal_domain" {}
 
 variable "external_domain" {}
 
-variable "private_zone_id" {}
-
-variable "public_zone_id" {}
+variable "zone_id" {}
 
 variable "alfresco_s3bucket" {}
 
