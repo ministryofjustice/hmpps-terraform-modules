@@ -43,6 +43,10 @@ monitoring_host: "monitoring.${private_domain}"
 EOF
 
 wget https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/bastion -O users.yml
+sed -i "/- username: centos/d" users.yml
+sed -i "/- username: ec2-user/d" users.yml
+sed -i "/users_deleted:/d" users.yml
+
 
 cat << EOF > ~/bootstrap.yml
 ---
