@@ -43,8 +43,10 @@ monitoring_host: "monitoring.${private_domain}"
 EOF
 
 wget https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/bastion -O bastion.yml
-# We need the ec2-user still for now for this to function correctly
-sed "/- username: ec2-user/d" bastion.yml > users.yml
+# Leaving this in place for debugging
+sed "/users_deleted:/d" bastion.yml > users.yml
+sed "/- username: ec2-user/d" users.yml > users.yml
+sed "/- username: centos/d" users.yml > users.yml
 rm bastion.yml
 
 cat << EOF > ~/bootstrap.yml
