@@ -28,6 +28,7 @@ pip install ansible
 cat << EOF > ~/requirements.yml
 - name: bootstrap
   src: https://github.com/ministryofjustice/hmpps-bootstrap
+  version: centos
 - name: rsyslog
   src: https://github.com/ministryofjustice/hmpps-rsyslog-role
 - name: elasticbeats
