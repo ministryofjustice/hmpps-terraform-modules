@@ -28,26 +28,43 @@ pip install ansible
 cat << EOF > ~/requirements.yml
 - name: bootstrap
   src: https://github.com/ministryofjustice/hmpps-bootstrap
-  version: centos
 - name: rsyslog
   src: https://github.com/ministryofjustice/hmpps-rsyslog-role
 - name: elasticbeats
   src: https://github.com/ministryofjustice/hmpps-beats-monitoring
+- name: users
+  src: singleplatform-eng.users
 EOF
+
+cat << EOF > ~/bootstrap_vars.yml
+mount_point: "${es_home}"
+device_name: "${ebs_device}"
+monitoring_host: "monitoring.${private_domain}"
+EOF
+
+wget https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/bastion -O bastion.yml
+# We need the ec2-user still for now for this to function correctly
+sed "/- username: ec2-user/d" bastion.yml > users.yml
+rm bastion.yml
 
 cat << EOF > ~/bootstrap.yml
 ---
 
 - hosts: localhost
+  vars_files:
+    - "{{ playbook_dir }}/bootstrap_vars.yml"
+    - "{{ playbook_dir }}/users.yml"
   roles:
      - bootstrap
      - rsyslog
      - elasticbeats
-
+     - users
 EOF
 
+
 ansible-galaxy install -f -r ~/requirements.yml
-HAS_DOCKER=True ansible-playbook ~/bootstrap.yml -e mount_point="${es_home}" -e device_name="${ebs_device}" -e monitoring_host="monitoring.${private_domain}"
+HAS_DOCKER=True ansible-playbook ~/bootstrap.yml
+
 
 #Create docker-compose file and env file
 mkdir -p ${es_home}/service-elasticsearch ${es_home}/elasticsearch/data ${es_home}/elasticsearch/conf.d
