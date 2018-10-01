@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-yum install -y python-pip git
+yum install -y python-pip git wget
 
 cat << EOF >> /etc/environment
 HMPPS_ROLE=${app_name}
