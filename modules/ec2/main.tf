@@ -15,4 +15,8 @@ resource "aws_instance" "instance" {
 
   monitoring = "${var.monitoring}"
   user_data  = "${var.user_data}"
+
+  root_block_device {
+    volume_size = "${var.root_device_size}"
+  }
 }

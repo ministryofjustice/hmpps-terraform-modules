@@ -27,3 +27,7 @@ variable "monitoring" {
 variable "tags" {
   type = "map"
 }
+
+variable "root_device_size" {
+  default = "8"
+}
