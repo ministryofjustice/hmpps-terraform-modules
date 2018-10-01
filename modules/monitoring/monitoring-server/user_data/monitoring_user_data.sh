@@ -61,7 +61,6 @@ EOF
 
 ansible-galaxy install -f -r ~/requirements.yml
 IS_MONITORING=True HAS_DOCKER=True ansible-playbook ~/bootstrap.yml
- HAS_DOCKER=True ansible-playbook ~/bootstrap.yml -e mount_point="${es_home}" -e device_name="${ebs_device}" -e monitoring_host="monitoring.${private_domain}"
 
 #Create docker-compose file and env file
 mkdir -p ${es_home}/service-monitoring ${es_home}/elasticsearch/data ${es_home}/elasticsearch/conf.d
