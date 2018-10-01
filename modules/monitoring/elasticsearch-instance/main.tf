@@ -12,6 +12,7 @@ module "create_elasticsearch_instance" {
   tags                        = "${var.instance_tags}"
   key_name                    = "${var.ssh_deployer_key}"
   vpc_security_group_ids      = "${var.security_groups}"
+  root_device_size            = "20"
 }
 
 module "create_elasticsearch_ebs_volume" {

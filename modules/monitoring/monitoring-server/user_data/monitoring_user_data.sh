@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-yum install -y python-pip git
+yum install -y python-pip git wget
 
 cat << EOF >> /etc/environment
 HMPPS_ROLE=${app_name}
@@ -32,21 +32,35 @@ cat << EOF > ~/requirements.yml
   src: https://github.com/ministryofjustice/hmpps-rsyslog-role
 - name: elasticbeats
   src: https://github.com/ministryofjustice/hmpps-beats-monitoring
+- name: users
+  src: singleplatform-eng.users
 EOF
+
+cat << EOF > ~/bootstrap_vars.yml
+mount_point: "${es_home}"
+device_name: "${ebs_device}"
+monitoring_host: "monitoring.${private_domain}"
+EOF
+
+wget https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/bastion -O users.yml
 
 cat << EOF > ~/bootstrap.yml
 ---
 
 - hosts: localhost
+  vars_files:
+    - "{{ playbook_dir }}/bootstrap_vars.yml"
+    - "{{ playbook_dir }}/users.yml"
   roles:
      - bootstrap
      - rsyslog
      - elasticbeats
-
+     - users
 EOF
 
+
 ansible-galaxy install -f -r ~/requirements.yml
-IS_MONITORING=True HAS_DOCKER=True ansible-playbook ~/bootstrap.yml -e mount_point="${es_home}" -e device_name="${ebs_device}" -e monitoring_host="monitoring.${private_domain}"
+IS_MONITORING=True HAS_DOCKER=True ansible-playbook ~/bootstrap.yml
 
 #Create docker-compose file and env file
 mkdir -p ${es_home}/service-monitoring ${es_home}/elasticsearch/data ${es_home}/elasticsearch/conf.d
