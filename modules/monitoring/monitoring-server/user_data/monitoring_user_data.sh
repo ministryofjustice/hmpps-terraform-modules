@@ -22,7 +22,7 @@ export HMPPS_ACCOUNT_ID="${account_id}"
 export HMPPS_DOMAIN="${private_domain}"
 
 cd ~
-pip install ansible
+pip install ansible==2.5
 
 cat << EOF > ~/requirements.yml
 - name: bootstrap
