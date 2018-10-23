@@ -135,6 +135,7 @@ module "create_elastic_cluster" {
   subnet_ids                    = "${local.private_subnet_ids}"
   vpc_id                        = "${data.terraform_remote_state.vpc.vpc_id}"
   vpc_cidr                      = "${data.terraform_remote_state.vpc.vpc_cidr_block}"
+  bastion_inventory             = "${data.terraform_remote_state.vpc.bastion_inventory}"
   s3-config-bucket              = "${var.remote_state_bucket_name}"
 }
 
@@ -167,6 +168,7 @@ module "create_monitoring_instance" {
   public_subnet_ids                   = "${local.public_subnet_ids}"
   vpc_id                              = "${data.terraform_remote_state.vpc.vpc_id}"
   vpc_cidr                            = "${data.terraform_remote_state.vpc.vpc_cidr_block}"
+  bastion_inventory                   = "${data.terraform_remote_state.vpc.bastion_inventory}"
   s3-config-bucket                    = "${var.remote_state_bucket_name}"
   elasticsearch_cluster_name          = "${module.create_elastic_cluster.elasticsearch_cluster_name}"
   elasticsearch_cluster_sg_client_id  = "${module.create_elastic_cluster.elasticsearch_cluster_sg_client_id}"
