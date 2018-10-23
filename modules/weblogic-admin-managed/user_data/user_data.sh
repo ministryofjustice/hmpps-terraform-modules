@@ -37,7 +37,7 @@ cat << EOF > ~/requirements.yml
   src: singleplatform-eng.users
 EOF
 
-/usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/bastion
+/usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml
 
 cat << EOF > ~/vars.yml
 region: "${region}" \

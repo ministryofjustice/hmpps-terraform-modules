@@ -37,6 +37,7 @@ data "template_file" "create_elasticsearch_1_user_data" {
     aws_cluster           = "${var.short_environment_identifier}-${var.app_name}"
     registry_url          = "${local.docker_registry_url}"
     instance_identifier   = "1"
+    bastion_inventory     = "${var.bastion_inventory}"
   }
 }
 
@@ -95,6 +96,7 @@ data "template_file" "create_elasticsearch_2_user_data" {
     aws_cluster           = "${var.short_environment_identifier}-${var.app_name}"
     registry_url          = "${local.docker_registry_url}"
     instance_identifier   = "2"
+    bastion_inventory     = "${var.bastion_inventory}"
   }
 }
 
@@ -156,6 +158,7 @@ data "template_file" "create_elasticsearch_3_user_data" {
     aws_cluster           = "${var.short_environment_identifier}-${var.app_name}"
     registry_url          = "${local.docker_registry_url}"
     instance_identifier   = "3"
+    bastion_inventory     = "${var.bastion_inventory}"
   }
 }
 

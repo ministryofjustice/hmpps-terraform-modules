@@ -39,13 +39,14 @@ cat << EOF > ~/requirements.yml
   src: https://github.com/ministryofjustice/hmpps-delius-core-oracledb-bootstrap.git
 EOF
 
-/usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/bastion
+/usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml
+
 
 cat << EOF > ~/vars.yml
 region: "${region}" \
 
 # These values are to be updated when the are injected and pulled from paramstore, consumed by oradb bootstrap
-# oradb_sys_password            
+# oradb_sys_password
 # oradb_system_password
 # oradb_sysman_password
 # oradb_dbsnmp_password

@@ -38,6 +38,7 @@ data "template_file" "monitoring_instance_user_data" {
     version               = "${var.docker_image_tag}"
     aws_cluster           = "${var.elasticsearch_cluster_name}"
     registry_url          = "${local.docker_registry_url}"
+    bastion_inventory     = "${var.bastion_inventory}"
   }
 }
 
@@ -138,5 +139,3 @@ resource "aws_route53_record" "external_monitoring_dns" {
     zone_id = "${aws_elb.monitoring_elb.zone_id}"
   }
 }
-
-
