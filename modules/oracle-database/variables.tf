@@ -43,6 +43,11 @@ variable "environment_name" {
   type        = "string"
 }
 
+variable "bastion_inventory" {
+  description = "Bastion environment inventory"
+  type        = "string"
+}
+
 variable "environment_type" {
   description = "The environment type - e.g. dev"
 }

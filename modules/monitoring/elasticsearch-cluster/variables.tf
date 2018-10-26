@@ -58,3 +58,8 @@ variable "s3-config-bucket" {}
 variable "bastion_origin_sgs" {
   type = "list"
 }
+
+variable "bastion_inventory" {
+  description = "Bastion environment inventory"
+  type        = "string"
+}
