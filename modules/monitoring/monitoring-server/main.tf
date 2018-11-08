@@ -88,6 +88,7 @@ module "create_monitoring_instance" {
   CreateSnapshot              = true
   tags                        = "${var.tags}"
   key_name                    = "${var.ssh_deployer_key}"
+  root_device_size            = "20"
 
   vpc_security_group_ids = "${concat(
         var.bastion_origin_sgs,
