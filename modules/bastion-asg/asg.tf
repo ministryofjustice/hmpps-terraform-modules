@@ -125,18 +125,26 @@ module "bastion_asg" {
   }"
 }
 
-//resource "aws_route53_record" "bastion_dns_entry" {
-//  zone_id = "${var.route53_hosted_zone_id}"
-//  name    = "${var.app_name}.${var.route53_sub_domain}.${var.route53_domain_private}"
-//  type    = "A"
-//  ttl     = "300"
-//  records = ["${aws_instance.bastion.public_ip}"]
-//}
-//
-//resource "aws_route53_record" "bastion_dns_alias" {
-//  zone_id = "${var.route53_hosted_zone_id}"
-//  name    = "jump.${var.route53_sub_domain}.${var.route53_domain_private}"
-//  type    = "A"
-//  ttl     = "300"
-//  records = ["${aws_instance.bastion.public_ip}"]
-//}
+resource "aws_route53_record" "jumphost_dns_entry" {
+  zone_id = "${data.aws_route53_zone.hosted_zone.zone_id}"
+  name    = "jumphost.${var.route53_sub_domain}.${var.route53_domain_private}"
+  type    = "A"
+
+  alias {
+    evaluate_target_health = false
+    name = "${aws_elb.bastion_external_lb.dns_name}"
+    zone_id = "${aws_elb.bastion_external_lb.zone_id}"
+  }
+}
+
+resource "aws_route53_record" "bastion_dns_entry" {
+  zone_id = "${data.aws_route53_zone.hosted_zone.zone_id}"
+  name    = "bastion.${var.route53_sub_domain}.${var.route53_domain_private}"
+  type    = "A"
+
+  alias {
+    evaluate_target_health = false
+    name = "${aws_elb.bastion_external_lb.dns_name}"
+    zone_id = "${aws_elb.bastion_external_lb.zone_id}"
+  }
+}

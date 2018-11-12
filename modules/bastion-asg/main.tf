@@ -11,3 +11,7 @@ data "terraform_remote_state" "vpc" {
     region = "${var.region}"
   }
 }
+
+data "aws_route53_zone" "hosted_zone" {
+  name = "${var.route53_sub_domain}.${var.route53_domain_private}"
+}
