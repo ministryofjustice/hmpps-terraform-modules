@@ -58,7 +58,7 @@ module "bastion_launch_config" {
 
   user_data = "${data.template_file.bastion_user_data.rendered}"
 
-  launch_configuration_name = "${var.environment_identifier}-vpc-bastion-host-lc"
+  launch_configuration_name = "${var.short_environment_identifier}-vpc-bastion-host-lc"
 }
 
 resource "aws_elb" "bastion_external_lb" {

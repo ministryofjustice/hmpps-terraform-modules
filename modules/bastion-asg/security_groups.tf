@@ -24,6 +24,9 @@ resource "aws_security_group_rule" "bastion_elb_to_asg" {
   security_group_id = "${aws_security_group.bastion_elb_security_group.id}"
   to_port = 22
   type = "egress"
+  cidr_blocks = [
+    "${data.terraform_remote_state.vpc.vpc_cidr}"
+  ]
 
   description = "${var.environment_identifier}-vpc-bastion-external-access-ssh-out"
 }
@@ -61,7 +64,9 @@ resource "aws_security_group_rule" "asg_ssh_out" {
   security_group_id = "${aws_security_group.bastion_asg_security_group.id}"
   to_port = 22
   type = "ingress"
-
+  cidr_blocks = [
+    "${data.terraform_remote_state.vpc.vpc_cidr}"
+  ]
   description = "${var.environment_identifier}-vpc-asg-elb-access-ssh-out"
 
 }
@@ -86,7 +91,6 @@ resource "aws_security_group_rule" "bastion_host_ssh_in" {
   security_group_id = "${aws_security_group.bastion_host_sg.id}"
   to_port = 22
   type = "ingress"
-
   source_security_group_id = "${aws_security_group.bastion_asg_security_group.id}"
 
   description = "${var.environment_identifier}-vpc-bastion-host-ssh-in"
@@ -120,7 +124,9 @@ resource "aws_security_group_rule" "bastion_host_world_out_http" {
   security_group_id = "${aws_security_group.bastion_host_sg.id}"
   to_port = 80
   type = "egress"
-
+  cidr_blocks = [
+    "0.0.0.0/0"
+  ]
   description = "${var.environment_identifier}-vpc-bastion-host-http-out"
 }
 
@@ -130,7 +136,9 @@ resource "aws_security_group_rule" "bastion_host_world_out_https" {
   security_group_id = "${aws_security_group.bastion_host_sg.id}"
   to_port = 443
   type = "egress"
-
+  cidr_blocks = [
+    "0.0.0.0/0"
+  ]
   description = "${var.environment_identifier}-vpc-bastion-host-https-out"
 }
 
@@ -149,21 +157,25 @@ resource "aws_security_group" "bastion_host_sg" {
 
 resource "aws_security_group_rule" "bastion_client_ssh_in" {
   from_port = 22
-  protocol = ""
+  protocol = "tcp"
   security_group_id = "${aws_security_group.bastion_host_sg.id}"
   to_port = 22
   type = "ingress"
-
+  cidr_blocks = [
+    "${data.terraform_remote_state.vpc.vpc_cidr}"
+  ]
   description = "${var.environment_identifier}-vpc-bastion-client-ssh-in"
 }
 
 resource "aws_security_group_rule" "shared_bastion_client_ssh_in" {
   from_port = 22
-  protocol = ""
+  protocol = "tcp"
   security_group_id = "${aws_security_group.bastion_host_sg.id}"
   to_port = 22
   type = "ingress"
-
+  cidr_blocks = [
+    "${data.terraform_remote_state.vpc.vpc_cidr}"
+  ]
   description = "${var.environment_identifier}-vpc-bastion-client-ssh-in"
 }
 
