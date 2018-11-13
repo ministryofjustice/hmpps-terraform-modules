@@ -167,18 +167,6 @@ resource "aws_security_group_rule" "bastion_client_ssh_in" {
   description = "${var.environment_identifier}-vpc-bastion-client-ssh-in"
 }
 
-resource "aws_security_group_rule" "shared_bastion_client_ssh_in" {
-  from_port = 22
-  protocol = "tcp"
-  security_group_id = "${aws_security_group.bastion_host_sg.id}"
-  to_port = 22
-  type = "ingress"
-  cidr_blocks = [
-    "${data.terraform_remote_state.vpc.vpc_cidr}"
-  ]
-  description = "${var.environment_identifier}-vpc-bastion-client-ssh-in"
-}
-
 resource "aws_security_group" "bastion_client_security_group" {
   name        = "${var.environment_identifier}-bastion-client-sg"
   description = "security group for ${var.environment_identifier}-vpc-bastion-internal-access"

@@ -40,17 +40,12 @@ data "template_file" "bastion_user_data" {
   }
 }
 
-module "bastion_instance_profile" {
-  source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules/iam/instance_profile"
-  role = "${var.environment_identifier}-${var.app_name}"
-}
-
 module "bastion_launch_config" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules/launch_configuration/noblockdevice"
 
   image_id = "${data.aws_ami.amazon_ami.id}"
   instance_type = "${var.instance_type}"
-  instance_profile = "${module.bastion_instance_profile.iam_instance_name}"
+  instance_profile = "${module.create_bastion_instance_profile.iam_instance_name}"
   key_name = "${data.terraform_remote_state.vpc.ssh_deployer_key}"
   security_groups = [
     "${aws_security_group.bastion_host_sg.id}"
@@ -81,7 +76,7 @@ resource "aws_elb" "bastion_external_lb" {
 
   access_logs {
     bucket        = "${data.terraform_remote_state.vpc.s3_lb_logs_bucket}"
-    bucket_prefix = "${var.app_name}"
+    bucket_prefix = "${var.short_environment_identifier}-${var.app_name}-lb"
     interval      = 60
   }
 
