@@ -88,7 +88,7 @@ resource "aws_security_group_rule" "external_inst_sg_ingress_self" {
   self              = true
 }
 
-resource "aws_security_group_rule" "external_inst_sg_ingress_self" {
+resource "aws_security_group_rule" "external_inst_sg_egress_self" {
   security_group_id = "${local.external_inst_sg_id}"
   type              = "egress"
   from_port         = 0
