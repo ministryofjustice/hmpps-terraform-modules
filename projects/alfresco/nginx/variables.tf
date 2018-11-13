@@ -40,6 +40,8 @@ variable "access_logs_bucket" {}
 
 variable "external_domain" {}
 
+variable "internal_domain" {}
+
 variable "public_zone_id" {}
 
 variable "cloudwatch_log_retention" {}
