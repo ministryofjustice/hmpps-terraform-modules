@@ -145,3 +145,4 @@ variable "cloudwatch_log_retention" {}
 
 ############### END OF CLOUDWATCH SECTION #####################
 
+variable "bastion_inventory" {}
