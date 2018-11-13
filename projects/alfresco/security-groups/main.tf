@@ -79,6 +79,24 @@ resource "aws_security_group_rule" "external_lb_egress_https" {
 #-------------------------------------------------------------
 ### external instance sg
 #-------------------------------------------------------------
+resource "aws_security_group_rule" "external_inst_sg_ingress_self" {
+  security_group_id = "${local.external_inst_sg_id}"
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  self              = true
+}
+
+resource "aws_security_group_rule" "external_inst_sg_egress_self" {
+  security_group_id = "${local.external_inst_sg_id}"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = -1
+  self              = true
+}
+
 resource "aws_security_group_rule" "external_inst_ingress_http" {
   security_group_id        = "${local.external_inst_sg_id}"
   type                     = "ingress"

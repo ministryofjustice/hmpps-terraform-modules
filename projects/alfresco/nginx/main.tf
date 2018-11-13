@@ -12,6 +12,7 @@ locals {
   access_logs_bucket       = "${var.access_logs_bucket}"
   public_zone_id           = "${var.public_zone_id}"
   external_domain          = "${var.external_domain}"
+  internal_domain          = "${var.internal_domain}"
   instance_security_groups = ["${var.instance_security_groups}"]
 }
 
@@ -140,7 +141,7 @@ data "template_file" "app_task_definition" {
     config_file_path        = "${local.common_name}/config/nginx.conf"
     nginx_config_file       = "/etc/nginx/conf.d/app.conf"
     runtime_config_override = "s3"
-    tomcat_host             = "${var.app_hostnames["internal"]}.${local.external_domain}"
+    tomcat_host             = "${var.app_hostnames["internal"]}.${local.internal_domain}"
     kibana_host             = "${var.kibana_host}"
   }
 }

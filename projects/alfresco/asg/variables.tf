@@ -141,6 +141,7 @@ variable "deploy_across_all_azs" {
 variable "bastion_inventory" {
   default = "dev"
 }
+
 ############### END OF ASG SECTION #####################
 
 ##################### CLOUDWATCH SECTION #####################
