@@ -18,14 +18,14 @@ resource "aws_security_group_rule" "bastion_external_access" {
   description = "${var.environment_identifier}-vpc-bastion-external-access-ssh-in"
 }
 
-resource "aws_security_group_rule" "bastion_elb_to_asg_host" {
+resource "aws_security_group_rule" "bastion_elb_bastion_host" {
   from_port = 22
   protocol = "tcp"
   security_group_id = "${aws_security_group.bastion_elb_security_group.id}"
   to_port = 22
   type = "egress"
 
-  source_security_group_id = "${aws_security_group.bastion_asg_security_group.id}"
+  source_security_group_id = "${aws_security_group.bastion_elb_security_group.id}"
 
   description = "${var.environment_identifier}-vpc-bastion-external-access-ssh-out"
 }
@@ -43,43 +43,43 @@ resource "aws_security_group" "bastion_elb_security_group" {
   }"
 }
 
-### Internal ASG
-resource "aws_security_group_rule" "asg_ssh_in" {
-  from_port = 22
-  protocol = "tcp"
-  security_group_id = "${aws_security_group.bastion_asg_security_group.id}"
-  to_port = 22
-  type = "ingress"
-
-  description = "${var.environment_identifier}-vpc-asg-elb-access-ssh-in"
-
-  source_security_group_id = "${aws_security_group.bastion_elb_security_group.id}"
-}
-
-resource "aws_security_group_rule" "asg_ssh_out" {
-  from_port = 22
-  protocol = "tcp"
-  security_group_id = "${aws_security_group.bastion_asg_security_group.id}"
-  to_port = 22
-  type = "egress"
-  source_security_group_id = "${aws_security_group.bastion_host_sg.id}"
-
-  description = "${var.environment_identifier}-vpc-asg-elb-access-ssh-out"
-
-}
-
-resource "aws_security_group" "bastion_asg_security_group" {
-  name = "${var.environment_identifier}-bastion-asg-sg"
-  description = "${var.environment_identifier}-vpc-asg-ssh"
-  vpc_id = "${data.terraform_remote_state.vpc.vpc_id}"
-
-  tags = "${
-    merge(
-      data.terraform_remote_state.vpc.tags,
-      map("Name", "${var.environment_identifier}-bastion-asg-sg")
-    )
-  }"
-}
+//### Internal ASG
+//resource "aws_security_group_rule" "asg_ssh_in" {
+//  from_port = 22
+//  protocol = "tcp"
+//  security_group_id = "${aws_security_group.bastion_asg_security_group.id}"
+//  to_port = 22
+//  type = "ingress"
+//
+//  description = "${var.environment_identifier}-vpc-asg-elb-access-ssh-in"
+//
+//  source_security_group_id = "${aws_security_group.bastion_elb_security_group.id}"
+//}
+//
+//resource "aws_security_group_rule" "asg_ssh_out" {
+//  from_port = 22
+//  protocol = "tcp"
+//  security_group_id = "${aws_security_group.bastion_asg_security_group.id}"
+//  to_port = 22
+//  type = "egress"
+//  source_security_group_id = "${aws_security_group.bastion_host_sg.id}"
+//
+//  description = "${var.environment_identifier}-vpc-asg-elb-access-ssh-out"
+//
+//}
+//
+//resource "aws_security_group" "bastion_asg_security_group" {
+//  name = "${var.environment_identifier}-bastion-asg-sg"
+//  description = "${var.environment_identifier}-vpc-asg-ssh"
+//  vpc_id = "${data.terraform_remote_state.vpc.vpc_id}"
+//
+//  tags = "${
+//    merge(
+//      data.terraform_remote_state.vpc.tags,
+//      map("Name", "${var.environment_identifier}-bastion-asg-sg")
+//    )
+//  }"
+//}
 
 ### Bastion host(s) security group
 resource "aws_security_group_rule" "bastion_host_ssh_in" {
@@ -88,7 +88,7 @@ resource "aws_security_group_rule" "bastion_host_ssh_in" {
   security_group_id = "${aws_security_group.bastion_host_sg.id}"
   to_port = 22
   type = "ingress"
-  source_security_group_id = "${aws_security_group.bastion_asg_security_group.id}"
+  source_security_group_id = "${aws_security_group.bastion_elb_security_group.id}"
 
   description = "${var.environment_identifier}-vpc-bastion-host-ssh-in"
 }
