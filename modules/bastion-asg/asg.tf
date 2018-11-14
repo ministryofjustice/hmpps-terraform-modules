@@ -67,6 +67,8 @@ resource "aws_elb" "bastion_external_lb" {
     "${data.terraform_remote_state.vpc.public-subnet-az3}"
   ]
   internal        = false
+  idle_timeout    = 600
+
   tags            = "${
     merge(
       data.terraform_remote_state.vpc.tags,
