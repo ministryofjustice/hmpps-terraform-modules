@@ -69,7 +69,7 @@ cat << EOF > ~/bootstrap.yml
   roles:
      - bootstrap
      - users
-     - oracle-db
+     #- oracle-db
 EOF
 
 # get ssm parmaeters
