@@ -88,3 +88,8 @@ variable "vpc_account_id" {
   description = "VPC Account ID"
   type        = "string"
 }
+
+variable "ansible_vars" {
+  description = "Ansible vars for user_data script"
+  type        = "map"
+}
