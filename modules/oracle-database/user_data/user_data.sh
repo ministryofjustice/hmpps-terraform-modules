@@ -76,11 +76,11 @@ EOF
 PARAM=$(aws ssm get-parameters \
 --region eu-west-2 \
 --with-decryption --name \
-"/${environment_name}/delius-core/oracle-database/db/oradb_sys_password" \
-"/${environment_name}/delius-core/oracle-database/db/oradb_system_password" \
-"/${environment_name}/delius-core/oracle-database/db/oradb_sysman_password" \
-"/${environment_name}/delius-core/oracle-database/db/oradb_dbsnmp_password" \
-"/${environment_name}/delius-core/oracle-database/db/oradb_asmsnmp_password" \
+"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_sys_password" \
+"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_system_password" \
+"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_sysman_password" \
+"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_dbsnmp_password" \
+"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_asmsnmp_password" \
 --query Parameters)
 
 # set parameter values
