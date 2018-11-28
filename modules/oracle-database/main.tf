@@ -11,6 +11,11 @@ data "template_file" "user_data" {
     private_domain       = "${var.private_domain}"
     account_id           = "${var.vpc_account_id}"
     bastion_inventory    = "${var.bastion_inventory}"
+
+    service_user_name             = "${var.ansible_vars["service_user_name"]}"
+    database_global_database_name = "${var.ansible_vars["database_global_database_name"]}"
+    database_sid                  = "${var.ansible_vars["database_sid"]}"
+    database_characterset         = "${var.ansible_vars["database_characterset"]}"
   }
 }
 
