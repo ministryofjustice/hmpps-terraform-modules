@@ -141,7 +141,7 @@ data "template_file" "user_data" {
 
 # AZ1 
 module "launch_cfg_az1" {
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//launch_configuration//blockdevice"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//launch_configuration//blockdevice"
   launch_configuration_name   = "${local.common_label}1"
   image_id                    = "${var.alfresco_instance_ami["az1"] != "" ? var.alfresco_instance_ami["az1"] : var.ami_id}"
   instance_type               = "${var.instance_type}"
@@ -163,7 +163,7 @@ module "launch_cfg_az1" {
 
 #AZ2
 module "launch_cfg_az2" {
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//launch_configuration//blockdevice"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//launch_configuration//blockdevice"
   launch_configuration_name   = "${local.common_label}2"
   image_id                    = "${var.alfresco_instance_ami["az2"] != "" ? var.alfresco_instance_ami["az2"] : var.ami_id}"
   instance_type               = "${var.instance_type}"
@@ -185,7 +185,7 @@ module "launch_cfg_az2" {
 
 #AZ3
 module "launch_cfg_az3" {
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//launch_configuration//blockdevice"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//launch_configuration//blockdevice"
   launch_configuration_name   = "${local.common_label}3"
   image_id                    = "${var.alfresco_instance_ami["az3"] != "" ? var.alfresco_instance_ami["az3"] : var.ami_id}"
   instance_type               = "${var.instance_type}"
