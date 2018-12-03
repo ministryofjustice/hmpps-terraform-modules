@@ -31,8 +31,3 @@ variable "tags" {
 variable "root_device_size" {
   default = "8"
 }
-
-variable "change_list" {
-  type = "list"
-  default = ["ami", "user_data"]
-}
