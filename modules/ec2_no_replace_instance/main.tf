@@ -21,6 +21,9 @@ resource "aws_instance" "instance" {
   }
 
   lifecycle {
-    ignore_changes = "${var.change_list}"
+    ignore_changes = [
+      "ami",
+      "user_data"
+    ]
   }
 }
