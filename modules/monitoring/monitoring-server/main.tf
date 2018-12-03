@@ -76,7 +76,7 @@ resource "aws_elb" "monitoring_elb" {
 }
 
 module "create_monitoring_instance" {
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ec2"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ec2_no_replace_instance"
   app_name                    = "${var.environment_identifier}-${var.app_name}-node"
   ami_id                      = "${var.amazon_ami_id}"
   instance_type               = "${var.instance_type}"

@@ -1,5 +1,5 @@
 module "create_elasticsearch_instance" {
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ec2"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ec2_no_replace_instance"
   app_name                    = "${var.app_name}"
   ami_id                      = "${var.ami_id}"
   instance_type               = "${var.instance_type}"
