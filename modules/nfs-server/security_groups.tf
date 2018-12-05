@@ -14,6 +14,8 @@ resource "aws_security_group_rule" "nfs_sg_outbound_global_http" {
   to_port = 80
   type = "egress"
   description = "${var.environment_identifier}-nfs-sg-global-outbound-http"
+
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "nfs_sg_outbound_global_https" {
@@ -23,6 +25,8 @@ resource "aws_security_group_rule" "nfs_sg_outbound_global_https" {
   to_port = 443
   type = "egress"
   description = "${var.environment_identifier}-nfs-sg-global-outbound-https"
+
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "nfs_sg_vpc_outbound_all_protocols" {
@@ -32,7 +36,7 @@ resource "aws_security_group_rule" "nfs_sg_vpc_outbound_all_protocols" {
   to_port =0
   type = "egress"
   description = "${var.environment_identifier}-nfs-sg-vpc-outbound-all"
-  cidr_blocks = ["${data.terraform_remote_state.vpc.vpc_cidr}"]
+  cidr_blocks = ["${data.terraform_remote_state.vpc.vpc_cidr_block}"]
 }
 
 resource "aws_security_group" "nfs_sg" {
@@ -173,7 +177,7 @@ resource "aws_security_group_rule" "nfs_sg_client_nfs_udp_cluster_health_out" {
   protocol = "udp"
   security_group_id = "${aws_security_group.nfs_client_sg.id}"
   to_port = 32768
-  type = "ingress"
+  type = "egress"
   description = "${var.environment_identifier}-nfs-client-sg-nfs-udp-cluster-out"
 
   source_security_group_id = "${aws_security_group.nfs_sg.id}"
@@ -224,10 +228,10 @@ resource "aws_security_group_rule" "nfs_sg_client_nfs_lock_manager_1_out" {
 }
 
 resource "aws_security_group_rule" "nfs_sg_client_nfs_lock_manager_2_in" {
-  from_port = 44182
+  from_port = 54508
   protocol = "tcp"
   security_group_id = "${aws_security_group.nfs_client_sg.id}"
-  to_port = 44182
+  to_port = 54508
   type = "ingress"
   description = "${var.environment_identifier}-nfs-client-sg-nfs-tcp-lock-manager-in"
 

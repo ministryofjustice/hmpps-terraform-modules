@@ -4,7 +4,7 @@
 
 resource "aws_ebs_volume" "nfs_data_disk" {
   count                   = "${var.volume_count}"
-  availability_zone       = "${var.availability_zone["az2"]}"
+  availability_zone       = "${var.availability_zones[1]}"
   size                    = "${var.nfs_volume_size}"
   encrypted               = true
 

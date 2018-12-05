@@ -66,13 +66,26 @@ data "terraform_remote_state" "bastion" {
 }
 
 #-------------------------------------------------------------
+### Getting monitoring
+#-------------------------------------------------------------
+data "terraform_remote_state" "monitoring" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.remote_state_bucket_name}"
+    key    = "shared-monitoring/terraform.tfstate"
+    region = "${var.region}"
+  }
+}
+
+#-------------------------------------------------------------
 ### Declare our local variables
 #-------------------------------------------------------------
 locals {
   app_name = "nfs"
   bucket_list = "${concat(
-    list("arn:aws:s3:::${data.terraform_remote_state.vpc.s3-config-bucket}"),
-    list("arn:aws:s3:::${data.terraform_remote_state.vpc.s3-config-bucket}/*")
+    list("arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket"),
+    list("arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket/*")
   )}"
 
   device_list = ["/dev/xvdc", "/dev/xvdd", "/dev/xvde"]

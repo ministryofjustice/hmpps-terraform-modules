@@ -2,10 +2,10 @@
 ### Create policies
 #-------------------------------------------------------------
 data "template_file" "iam_policy_app" {
-  template = "${file("${var.ec2_role_policy_file}")}"
+  template = "${file("${path.module}/${var.ec2_role_policy_file}")}"
 
   vars {
-    s3-config-bucket = "${data.terraform_remote_state.vpc.s3-config-bucket}"
+    buckets          = "${join(", ", local.bucket_list)}"
   }
 }
 

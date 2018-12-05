@@ -18,8 +18,8 @@ variable "tags" {
   type = "map"
 }
 
-variable "availability_zone" {
-  type = "map"
+variable "availability_zones" {
+  type = "list"
 }
 
 variable "instance_type" {
@@ -34,18 +34,30 @@ variable "nfs_encrypted" {
   default = true
 }
 
-variable "ec2_policy_file" {}
-variable "ec2_role_policy_file" {}
-
-variable "private-cidr" {
-  type = "map"
+variable "ec2_policy_file" {
+  default = "ec2_policy.json"
+}
+variable "ec2_role_policy_file" {
+  default = "policies/ec2_role_policy.json"
 }
 
-variable "nfs_share" {}
+variable "private-cidr" {
+  type = "list"
+}
 
-variable "ebs_device" {}
+variable "bastion_origin_sgs" {
+  type = "list"
+}
 
-variable "bastion_inventory" {}
+variable "private_subnet_ids" {
+  type = "list"
+}
+
+variable "bastion_inventory" {
+  description = "Bastion environment inventory"
+  type        = "string"
+  default     = "dev"
+}
 
 variable "volume_count" {
   default = "3"
