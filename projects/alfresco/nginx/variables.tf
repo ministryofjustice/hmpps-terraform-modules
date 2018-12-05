@@ -14,13 +14,15 @@ variable "app_hostnames" {
   type = "map"
 }
 
-variable "certificate_arn" {
-  type = "list"
-}
+variable "certificate_arn" {}
 
 variable "app_name" {}
 
 variable "public_subnet_ids" {
+  type = "list"
+}
+
+variable "private_subnet_ids" {
   type = "list"
 }
 
@@ -46,63 +48,43 @@ variable "public_zone_id" {}
 
 variable "cloudwatch_log_retention" {}
 
-variable "alb_http_port" {}
-
-variable "alb_https_port" {}
-
-# variable "alfresco_allowed_ip_cidrs" {
-#   type = "list"
-# }
-
-# variable "internet_zone_label" {
-#   description = "public or private"
-# }
-
 ################ LB SECTION ###############
-variable "alb_backend_port" {}
 
-variable "alb_listener_protocol" {
-  default = "HTTPS"
+# ELB
+variable "internal" {
+  description = "If true, ELB will be an internal ELB"
 }
 
-variable "public_ssl_policy" {
-  default = "ELBSecurityPolicy-FS-2018-06"
+variable "cross_zone_load_balancing" {
+  description = "Enable cross-zone load balancing"
+  default     = true
 }
 
-variable "backend_app_port" {}
+variable "idle_timeout" {
+  description = "The time in seconds that the connection is allowed to be idle"
+  default     = 60
+}
 
-variable "backend_app_protocol" {}
+variable "connection_draining" {
+  description = "Boolean to enable connection draining"
+  default     = false
+}
 
-variable "backend_app_template_file" {}
+variable "connection_draining_timeout" {
+  description = "The time in seconds to allow for connections to drain"
+  default     = 300
+}
 
-variable "backend_check_app_path" {}
+variable "access_logs" {
+  description = "An access logs block"
+  type        = "list"
+  default     = []
+}
 
-variable "backend_check_interval" {}
-
-variable "backend_ecs_cpu_units" {}
-
-variable "backend_ecs_desired_count" {}
-
-variable "backend_ecs_memory" {}
-
-variable "backend_healthy_threshold" {}
-
-variable "backend_maxConnections" {}
-
-variable "backend_maxConnectionsPerRoute" {}
-
-variable "backend_return_code" {}
-
-variable "backend_timeout" {}
-
-variable "backend_timeoutInSeconds" {}
-
-variable "backend_timeoutRetries" {}
-
-variable "backend_unhealthy_threshold" {}
-
-variable "deregistration_delay" {}
-variable "target_type" {}
+variable "health_check" {
+  description = "A health check block"
+  type        = "list"
+}
 
 ############### END OF LB SECTION #####################
 
@@ -142,7 +124,11 @@ variable "image_url" {}
 
 variable "image_version" {}
 
-# variable "alfresco_app_name" {}
+variable "backend_ecs_cpu_units" {}
+
+variable "backend_ecs_memory" {}
+
+variable "backend_app_template_file" {}
 
 variable "kibana_host" {}
 
