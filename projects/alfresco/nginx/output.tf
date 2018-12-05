@@ -1,63 +1,22 @@
-# # SECURITY GROUPS
-# output "service_alfresco_ecs_cluster_public_nginx_sg_external_lb_id" {
-#   value = "${aws_security_group.external_lb_sg.id}"
-# }
-# output "service_alfresco_security_groups_sg_external_instance_id" {
-#   value = "${aws_security_group.external_instance.id}"
-# }
-# # LB
+# LB
 output "lb_id" {
-  value = "${module.create_app_alb.lb_id}"
+  value = "${module.create_app_elb.environment_elb_id}"
 }
 
 output "lb_arn" {
-  value = "${module.create_app_alb.lb_arn}"
-}
-
-output "lb_arn_suffix" {
-  value = "${module.create_app_alb.lb_arn_suffix}"
+  value = "${module.create_app_elb.environment_elb_arn}"
 }
 
 output "lb_dns_name" {
-  value = "${module.create_app_alb.lb_dns_name}"
+  value = "${module.create_app_elb.environment_elb_dns_name}"
 }
 
 output "lb_dns_alias" {
   value = "${aws_route53_record.dns_entry.fqdn}"
 }
 
-# LISTENER
-output "https_lb_listener_id" {
-  value = "${element(module.create_app_alb_listener.listener_id,0)}"
-}
-
-output "https_lb_listener_arn" {
-  value = "${element(module.create_app_alb_listener.listener_arn,0)}"
-}
-
-output "http_lb_listener_id" {
-  value = "${element(module.create_app_alb_listener.listener_id,0)}"
-}
-
-output "http_lb_listener_arn" {
-  value = "${element(module.create_app_alb_listener.listener_arn,0)}"
-}
-
-# TARGET GROUPS
-output "target_group_id" {
-  value = "${module.create_app_alb_targetgrp.target_group_id}"
-}
-
-output "target_group_arn" {
-  value = "${module.create_app_alb_targetgrp.target_group_arn}"
-}
-
-output "target_group_arn_suffix" {
-  value = "${module.create_app_alb_targetgrp.target_group_arn_suffix}"
-}
-
-output "target_group_name" {
-  value = "${module.create_app_alb_targetgrp.target_group_name}"
+output "lb_zone_id" {
+  value = "${module.create_app_elb.environment_elb_zone_id}"
 }
 
 # ECS CLUSTER
