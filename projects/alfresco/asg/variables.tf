@@ -142,6 +142,8 @@ variable "bastion_inventory" {
   default = "dev"
 }
 
+variable "jvm_memory" {}
+
 ############### END OF ASG SECTION #####################
 
 ##################### CLOUDWATCH SECTION #####################
