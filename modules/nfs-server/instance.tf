@@ -28,13 +28,6 @@ data "template_file" "nfs_user_data" {
   template = "${file("${path.module}/user_data/user_data.sh")}"
 
   vars {
-    allowed_ranges_1    = "${var.private-cidr[0]}"
-    allowed_ranges_2    = "${var.private-cidr[1]}"
-    allowed_ranges_3    = "${var.private-cidr[2]}"
-    allowed_ranges_4    = "${var.private-cidr[3]}"
-    allowed_ranges_5    = "${var.private-cidr[4]}"
-    allowed_ranges_6    = "${var.private-cidr[5]}"
-
     // Variables Below are for bootstrapping
     app_name              = "${local.app_name}"
     env_identifier        = "${var.environment_identifier}"
@@ -47,11 +40,13 @@ data "template_file" "nfs_user_data" {
     monitoring_server_url = "${data.terraform_remote_state.monitoring.monitoring_server_internal_url}"
 
     // LVM data
-    device_list           = "${join(", ",local.device_list)}"
+    device_list           = "'${join("', '", local.device_list)}'"
     device_size           = "${var.nfs_volume_size}"
     device_count          = "${var.volume_count}"
     mount_point           = "${local.mount_point}"
     volume_group_name     = "${local.volume_group_name}"
     logical_volume_name   = "${local.logical_volume_name}"
+
+    allowed_ip_ranges     = "'${join("', '", var.private-cidr)}'"
   }
 }

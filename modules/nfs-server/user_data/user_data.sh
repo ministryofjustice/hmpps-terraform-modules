@@ -33,6 +33,9 @@ cat << EOF > ~/requirements.yml
   src: https://github.com/ministryofjustice/hmpps-rsyslog-role
 - name: elasticbeats
   src: https://github.com/ministryofjustice/hmpps-beats-monitoring
+- name: nfs
+  src: https://github.com/ministryofjustice/hmpps-nfs
+  version: nfsServer
 - name: users
   src: singleplatform-eng.users
 EOF
@@ -45,8 +48,14 @@ lvm_disks: [${device_list}]
 lvm_mount_point: ${mount_point}
 vg_name: ${volume_group_name}
 lv_name: ${logical_volume_name}
-lv_size: "{{ ((${device_size}*${device_count}))-2) }}G" #Remove 2 gigs from our total available as a rule of thumb
+lv_size: "{{ ((${device_size}*${device_count}))-2 }}G" #Remove 2 gigs from our total available as a rule of thumb
+
+## NFS data
+is_nfs_server: true
+nfs_share: ${mount_point}
+allowed_ip_ranges: [${allowed_ip_ranges}]
 EOF
+
 cat << EOF > ~/bootstrap.yml
 ---
 
@@ -59,10 +68,9 @@ cat << EOF > ~/bootstrap.yml
      - rsyslog
      - elasticbeats
      - users
+     - nfs
 
 EOF
 
 ansible-galaxy install -f -r ~/requirements.yml
-ansible-playbook ~/bootstrap.yml
-
-
+ansible-playbook ~/bootstrap.yml -vvv
