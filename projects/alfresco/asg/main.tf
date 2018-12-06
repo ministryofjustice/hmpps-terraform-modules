@@ -129,6 +129,7 @@ data "template_file" "user_data" {
     bucket_encrypt_type = "kms"
     bucket_key_id       = "${var.bucket_kms_key_id}"
     external_fqdn       = "${var.app_hostnames["external"]}.${var.external_domain}"
+    jvm_memory          = "${var.jvm_memory}"
 
     # For bootstrapping
     bastion_inventory = "${var.bastion_inventory}"
