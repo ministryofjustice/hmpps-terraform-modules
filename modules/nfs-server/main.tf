@@ -82,14 +82,16 @@ data "terraform_remote_state" "monitoring" {
 ### Declare our local variables
 #-------------------------------------------------------------
 locals {
-  app_name = "nfs"
-  bucket_list = "${concat(
+  app_name            = "nfs"
+  bucket_list         = "${concat(
     list("arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket"),
     list("arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket/*")
   )}"
 
-  device_list = ["/dev/xvdc", "/dev/xvdd", "/dev/xvde"]
-
+  device_list         = ["/dev/xvdc", "/dev/xvdd", "/dev/xvde"]
+  logical_volume_name = "${local.app_name}_data"
+  mount_point         =  "/data"
+  volume_group_name   = "${local.app_name}.vg"
 }
 
 

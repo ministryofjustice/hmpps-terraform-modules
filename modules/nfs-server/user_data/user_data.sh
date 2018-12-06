@@ -39,11 +39,20 @@ EOF
 
 wget https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml -O users.yml
 
+cat << EOF > ~/vars.yml
+monitoring_host: monitoring.${private_domain}
+lvm_disks: [${device_list}]
+lvm_mount_point: ${mount_point}
+vg_name: ${volume_group_name}
+lv_name: ${logical_volume_name}
+lv_size: "{{ ((${device_size}*${device_count}))-2) }}G" #Remove 2 gigs from our total available as a rule of thumb
+EOF
 cat << EOF > ~/bootstrap.yml
 ---
 
 - hosts: localhost
   vars_files:
+    - "~/vars.yml"
     - "~/users.yml"
   roles:
      - bootstrap
@@ -54,6 +63,6 @@ cat << EOF > ~/bootstrap.yml
 EOF
 
 ansible-galaxy install -f -r ~/requirements.yml
-ansible-playbook ~/bootstrap.yml -e monitoring_host="monitoring.${private_domain}"
+ansible-playbook ~/bootstrap.yml
 
 
