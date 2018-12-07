@@ -47,14 +47,6 @@ module "create_app_elb" {
   tags                        = "${var.tags}"
 }
 
-# session persistence
-resource "aws_app_cookie_stickiness_policy" "cookie_policy" {
-  name          = "${local.lb_name}-ext-cookie-policy"
-  load_balancer = "${module.create_app_elb.environment_elb_name}"
-  lb_port       = 443
-  cookie_name   = "JSESSIONID"
-}
-
 ###############################################
 # Create route53 entry for nginx lb
 ###############################################
@@ -72,16 +64,6 @@ resource "aws_route53_record" "dns_entry" {
 }
 
 ############################################
-# CREATE ECS CLUSTER FOR NGINX
-############################################
-# ##### ECS Cluster
-
-module "ecs_cluster" {
-  source       = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs//ecs_cluster"
-  cluster_name = "${local.common_name}"
-}
-
-############################################
 # CREATE LOG GROUPS FOR CONTAINER LOGS
 ############################################
 
@@ -94,68 +76,6 @@ module "create_loggroup" {
 }
 
 ############################################
-# CREATE ECS TASK DEFINTIONS
-############################################
-
-data "aws_ecs_task_definition" "app_task_definition" {
-  task_definition = "${module.app_task_definition.task_definition_family}"
-  depends_on      = ["module.app_task_definition"]
-}
-
-data "template_file" "app_task_definition" {
-  template = "${file("task_definitions/${var.backend_app_template_file}")}"
-
-  vars {
-    environment             = "${var.environment}"
-    image_url               = "${var.image_url}"
-    container_name          = "${var.app_name}"
-    s3_bucket_config        = "${local.config_bucket}"
-    version                 = "${var.image_version}"
-    log_group_name          = "${module.create_loggroup.loggroup_name}"
-    log_group_region        = "${var.region}"
-    memory                  = "${var.backend_ecs_memory}"
-    cpu_units               = "${var.backend_ecs_cpu_units}"
-    data_volume_name        = "key_dir"
-    data_volume_host_path   = "${var.keys_dir}"
-    alfresco_host           = "${aws_route53_record.dns_entry.fqdn}"
-    config_file_path        = "${local.common_name}/config/nginx.conf"
-    nginx_config_file       = "/etc/nginx/conf.d/app.conf"
-    runtime_config_override = "s3"
-    tomcat_host             = "${var.app_hostnames["internal"]}.${local.internal_domain}"
-    kibana_host             = "${var.kibana_host}"
-  }
-}
-
-module "app_task_definition" {
-  source   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs//ecs-taskdefinitions//appwith_single_volume"
-  app_name = "${local.common_name}"
-
-  container_name        = "${var.app_name}"
-  container_definitions = "${data.template_file.app_task_definition.rendered}"
-
-  data_volume_name      = "key_dir"
-  data_volume_host_path = "${var.keys_dir}"
-}
-
-############################################
-# CREATE ECS SERVICES
-############################################
-
-module "app_service" {
-  source                          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ecs/ecs_service//withloadbalancer//elb"
-  servicename                     = "${local.common_name}"
-  clustername                     = "${module.ecs_cluster.ecs_cluster_id}"
-  ecs_service_role                = "${var.ecs_service_role}"
-  elb_name                        = "${module.create_app_elb.environment_elb_name}"
-  containername                   = "${var.app_name}"
-  containerport                   = "80"
-  task_definition_family          = "${module.app_task_definition.task_definition_family}"
-  task_definition_revision        = "${module.app_task_definition.task_definition_revision}"
-  current_task_definition_version = "${data.aws_ecs_task_definition.app_task_definition.revision}"
-  service_desired_count           = "${var.service_desired_count}"
-}
-
-############################################
 # CREATE USER DATA FOR EC2 RUNNING SERVICES
 ############################################
 
@@ -163,19 +83,27 @@ data "template_file" "user_data" {
   template = "${file("${var.user_data}")}"
 
   vars {
-    keys_dir             = "${var.cache_home}"
-    ebs_device           = "${var.ebs_device_name}"
-    app_name             = "${var.app_name}"
-    env_identifier       = "${var.environment_identifier}"
-    short_env_identifier = "${var.short_environment_identifier}"
-    cluster_name         = "${module.ecs_cluster.ecs_cluster_name}"
-    log_group_name       = "${module.create_loggroup.loggroup_name}"
-    container_name       = "${var.app_name}"
-    keys_dir             = "${var.keys_dir}"
-    self_signed_ca_cert  = "${var.self_signed_ssm["ca_cert"]}"
-    self_signed_cert     = "${var.self_signed_ssm["cert"]}"
-    self_signed_key      = "${var.self_signed_ssm["key"]}"
-    ssm_get_command      = "aws --region ${var.region} ssm get-parameters --names"
+    keys_dir                = "${var.cache_home}"
+    ebs_device              = "${var.ebs_device_name}"
+    app_name                = "${var.app_name}"
+    env_identifier          = "${var.environment_identifier}"
+    short_env_identifier    = "${var.short_environment_identifier}"
+    log_group_name          = "${module.create_loggroup.loggroup_name}"
+    container_name          = "${var.app_name}"
+    keys_dir                = "${var.keys_dir}"
+    image_url               = "${var.image_url}"
+    image_version           = "${var.image_version}"
+    self_signed_ca_cert     = "${var.self_signed_ssm["ca_cert"]}"
+    self_signed_cert        = "${var.self_signed_ssm["cert"]}"
+    self_signed_key         = "${var.self_signed_ssm["key"]}"
+    ssm_get_command         = "aws --region ${var.region} ssm get-parameters --names"
+    alfresco_host           = "${aws_route53_record.dns_entry.fqdn}"
+    config_file_path        = "${local.common_name}/config/nginx.conf"
+    nginx_config_file       = "/etc/nginx/conf.d/app.conf"
+    runtime_config_override = "s3"
+    tomcat_host             = "${var.app_hostnames["internal"]}.${local.internal_domain}"
+    kibana_host             = "${var.kibana_host}"
+    s3_bucket_config        = "${local.config_bucket}"
   }
 }
 
@@ -205,13 +133,14 @@ module "launch_cfg" {
 ############################################
 
 module "auto_scale" {
-  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//autoscaling//group//default"
+  source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//autoscaling//group//asg_classic_lb"
   asg_name             = "${local.common_name}"
   subnet_ids           = ["${local.private_subnet_ids}"]
   asg_min              = "${var.asg_min}"
   asg_max              = "${var.asg_max}"
   asg_desired          = "${var.asg_desired}"
   launch_configuration = "${module.launch_cfg.launch_name}"
+  load_balancers       = ["${module.create_app_elb.environment_elb_name}"]
   tags                 = "${var.tags}"
 }
 
