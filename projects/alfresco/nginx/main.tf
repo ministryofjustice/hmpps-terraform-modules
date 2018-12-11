@@ -104,6 +104,11 @@ data "template_file" "user_data" {
     tomcat_host             = "${var.app_hostnames["internal"]}.${local.internal_domain}"
     kibana_host             = "${var.kibana_host}"
     s3_bucket_config        = "${local.config_bucket}"
+    external_domain         = "${local.external_domain}"
+    internal_domain         = "${local.internal_domain}"
+    route53_sub_domain      = "${var.app_name}.${var.environment}"
+    bastion_inventory       = "${var.environment}"
+    account_id              = "${var.account_id}"
   }
 }
 

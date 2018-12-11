@@ -1,5 +1,7 @@
 variable "region" {}
 
+variable "account_id" {}
+
 variable "environment_identifier" {}
 
 variable "short_environment_identifier" {}
