@@ -1,7 +1,7 @@
 #-------------------------------------------------------------
 ### Create Security Groups
 #-------------------------------------------------------------
-
+# https://stackoverflow.com/questions/26187345/iptables-rules-for-nfs-server-and-nfs-client
 
 #-------------------------------------------------------------
 ### Outbound rules
@@ -139,6 +139,95 @@ resource "aws_security_group_rule" "nfs_sg_client_nfs_udp_main_out" {
   source_security_group_id = "${aws_security_group.nfs_sg.id}"
 }
 
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rpc_mountd_tcp_in" {
+  from_port = 892
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 892
+  type = "ingress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-rpc-mountd-tcp-in"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rpc_mountd_tcp_out" {
+  from_port = 892
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 892
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-rpc-mountd-tcp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rpc_mountd_udp_in" {
+  from_port = 892
+  protocol = "udp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 892
+  type = "ingress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-rpc-mountd-udp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rpc_mountd_udp_out" {
+  from_port = 892
+  protocol = "udp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 892
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-rpc-mountd-tcp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+//Statd
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rpc_statd_tcp_in" {
+  from_port = 662
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 662
+  type = "ingress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-rpc-statd-tcp-in"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rpc_statd_tcp_out" {
+  from_port = 662
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 662
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-rpc-statd-tcp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rpc_statd_bound_udp_out" {
+  from_port = 2020
+  protocol = "udp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 2020
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-rpc-statd-udp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rpc_statd_bound_tcp_out" {
+  from_port = 2020
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 2020
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-rpc-statd-tcp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
 resource "aws_security_group_rule" "nfs_sg_client_nfs_tcp_cluster_health_in" {
   from_port = 32768
   protocol = "tcp"
@@ -245,6 +334,96 @@ resource "aws_security_group_rule" "nfs_sg_client_nfs_lock_manager_2_out" {
   to_port = 54508
   type = "egress"
   description = "${var.environment_identifier}-nfs-client-sg-nfs-tcp-lock-manager-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rquoatad_tcp_in" {
+  from_port = 875
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 875
+  type = "ingress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-tcp-rquotad-tcp-in"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rquoatad_udp_in" {
+  from_port = 875
+  protocol = "udp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 875
+  type = "ingress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-tcp-rquotad-udp-in"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rquoatad_tcp_out" {
+  from_port = 875
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 875
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-tcp-rquotad-tcp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_rquoatad_udp_out" {
+  from_port = 875
+  protocol = "udp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 875
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-tcp-rquotad-udp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+//Lockd tcp
+resource "aws_security_group_rule" "nfs_sg_client_nfs_lockd_tcp_in" {
+  from_port = 32803
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 32803
+  type = "ingress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-lockd-tcp-in"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_lockd_tcp_out" {
+  from_port = 32803
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 32803
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-lockd-tcp-out"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+//Lockd udp
+resource "aws_security_group_rule" "nfs_sg_client_nfs_lockd_udp_in" {
+  from_port = 32769
+  protocol = "udp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 32769
+  type = "ingress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-lockd-udp-in"
+
+  source_security_group_id = "${aws_security_group.nfs_sg.id}"
+}
+
+resource "aws_security_group_rule" "nfs_sg_client_nfs_lockd_udp_out" {
+  from_port = 32769
+  protocol = "udp"
+  security_group_id = "${aws_security_group.nfs_client_sg.id}"
+  to_port = 32769
+  type = "egress"
+  description = "${var.environment_identifier}-nfs-client-sg-nfs-lockd-udp-out"
 
   source_security_group_id = "${aws_security_group.nfs_sg.id}"
 }
