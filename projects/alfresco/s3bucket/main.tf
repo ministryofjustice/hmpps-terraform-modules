@@ -7,7 +7,7 @@
 ####################################################
 
 locals {
-  common_name = "${var.environment_identifier}-${var.alfresco_app_name}"
+  common_name = "${var.common_name}"
   tags        = "${var.tags}"
 }
 

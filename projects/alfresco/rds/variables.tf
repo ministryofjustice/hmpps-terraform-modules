@@ -7,6 +7,8 @@ variable "subnet_ids" {
   type = "list"
 }
 
+variable "common_name" {}
+
 variable "environment_identifier" {}
 
 variable "alfresco_app_name" {}
