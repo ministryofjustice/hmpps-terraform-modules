@@ -1,6 +1,4 @@
-variable "environment_identifier" {}
-
-variable "alfresco_app_name" {}
+variable "common_name" {}
 
 variable "ec2_policy_file" {}
 

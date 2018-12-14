@@ -6,6 +6,8 @@ variable "environment_identifier" {}
 
 variable "short_environment_identifier" {}
 
+variable "common_name" {}
+
 variable "environment" {}
 
 variable "tags" {

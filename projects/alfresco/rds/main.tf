@@ -6,11 +6,11 @@
 ## Getting the rds db password
 #-------------------------------------------------------------
 data "aws_ssm_parameter" "db_password" {
-  name = "${var.environment_identifier}-${var.alfresco_app_name}-rds-db-password"
+  name = "${var.common_name}-rds-db-password"
 }
 
 locals {
-  common_name = "${var.environment_identifier}-${var.alfresco_app_name}-rds"
+  common_name = "${var.common_name}-rds"
   dns_name    = "${var.alfresco_app_name}-db"
   db_identity = "${var.alfresco_app_name}${var.environment}"
   db_password = "${data.aws_ssm_parameter.db_password.value}"

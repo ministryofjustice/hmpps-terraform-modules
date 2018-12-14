@@ -31,6 +31,8 @@ variable "db_username" {}
 
 variable "ami_id" {}
 
+variable "common_name" {}
+
 variable "account_id" {}
 
 variable "access_logs_bucket" {}

@@ -1,7 +1,7 @@
 # LOCALS 
 
 locals {
-  common_name              = "${var.environment_identifier}-${var.app_hostnames["external"]}-${var.app_name}"
+  common_name              = "${var.common_name}-${var.app_name}"
   application_endpoint     = "${var.app_hostnames["external"]}"
   lb_name                  = "${var.short_environment_identifier}-${var.app_name}"
   vpc_id                   = "${var.vpc_id}"
