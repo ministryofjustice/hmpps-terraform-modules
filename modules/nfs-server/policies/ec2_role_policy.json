@@ -1,0 +1,83 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ecrAuth",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetAuthorizationToken"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "ecsInstanceRole",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:*",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:PutImage",
+                "ecr:InitiateLayerUpload",
+                "ecr:UploadLayerPart",
+                "ecr:CompleteLayerUpload",
+                "ecr:DescribeRepositories",
+                "ecr:GetRepositoryPolicy",
+                "ecr:ListImages",
+                "ecr:BatchDeleteImage"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "ec2InstanceRole",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Describe*",
+                "ec2:CreateSnapshot",
+                "ec2:DeleteSnapshot",
+                "ec2:CreateTags",
+                "ec2:ModifySnapshotAttribute",
+                "ec2:ResetSnapshotAttribute"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "logsAllowAll",
+            "Effect": "Allow",
+            "Action": [
+                "logs:*"
+            ],
+            "Resource": [
+                "arn:aws:logs:*:*:*"
+            ]
+        },        
+        {
+            "Sid": "ListAllBuckets",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListAllMyBuckets"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*"
+            ]
+        },
+        {
+            "Sid": "allowAccessToS3Buckets",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "${buckets}"
+
+            ]
+        }
+    ]
+}
