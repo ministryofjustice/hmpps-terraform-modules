@@ -19,6 +19,7 @@ locals {
   internal_lb_sg_id   = "${var.sg_map_ids["internal_lb_sg_id"]}"
   internal_inst_sg_id = "${var.sg_map_ids["internal_inst_sg_id"]}"
   db_sg_id            = "${var.sg_map_ids["db_sg_id"]}"
+  elasticache_sg_id   = "${var.sg_map_ids["elasticache_sg_id"]}"
   external_lb_sg_id   = "${var.sg_map_ids["external_lb_sg_id"]}"
   external_inst_sg_id = "${var.sg_map_ids["external_inst_sg_id"]}"
 }
@@ -221,6 +222,16 @@ resource "aws_security_group_rule" "internal_inst_sg_egress_postgres" {
   description              = "${local.common_name}-rds-sg"
 }
 
+resource "aws_security_group_rule" "internal_inst_sg_egress_elasticache" {
+  security_group_id        = "${local.internal_inst_sg_id}"
+  type                     = "egress"
+  from_port                = "11211"
+  to_port                  = "11211"
+  protocol                 = "tcp"
+  source_security_group_id = "${local.elasticache_sg_id}"
+  description              = "${local.common_name}-elasticache-sg"
+}
+
 #-------------------------------------------------------------
 ### rds sg
 #-------------------------------------------------------------
@@ -232,4 +243,17 @@ resource "aws_security_group_rule" "rds_sg_egress_postgres" {
   protocol                 = "tcp"
   source_security_group_id = "${local.internal_inst_sg_id}"
   description              = "${local.common_name}-rds-sg"
+}
+
+#-------------------------------------------------------------
+### elasticache sg
+#-------------------------------------------------------------
+resource "aws_security_group_rule" "elasticache_memchached" {
+  security_group_id        = "${local.elasticache_sg_id}"
+  type                     = "ingress"
+  from_port                = "11211"
+  to_port                  = "11211"
+  protocol                 = "tcp"
+  source_security_group_id = "${local.internal_inst_sg_id}"
+  description              = "${local.common_name}-elasticache-sg"
 }
