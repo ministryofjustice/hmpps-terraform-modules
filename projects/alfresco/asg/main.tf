@@ -67,13 +67,6 @@ module "create_app_elb" {
   tags = "${local.tags}"
 }
 
-resource "aws_app_cookie_stickiness_policy" "alfresco_app_cookie_policy" {
-  name          = "${local.common_prefix}-app-cookie-policy"
-  load_balancer = "${module.create_app_elb.environment_elb_name}"
-  lb_port       = 80
-  cookie_name   = "JSESSIONID"
-}
-
 ###############################################
 # Create route53 entry for elb
 ###############################################
