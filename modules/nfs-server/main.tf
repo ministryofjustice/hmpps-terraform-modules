@@ -1,8 +1,6 @@
 terraform {
   # The configuration for this backend will be filled in by Terragrunt
-  backend "s3" {
-    key = "nfs-server/${var.app_name}/terraform.tfstate"
-  }
+  backend "s3" {}
 }
 
 provider "aws" {
