@@ -9,7 +9,41 @@ resource "aws_sns_topic_subscription" "lambda_sns_subscriber" {
 }
 
 resource "aws_iam_policy" "lambda_sns_iam_policy" {
-  policy = "${file("${path.module}/policies/allow_sns_policy.json")}"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "sns:ListSubscriptionsByTopic",
+                "sns:GetTopicAttributes",
+                "sns:ListTopics",
+                "sns:GetPlatformApplicationAttributes",
+                "sns:ListSubscriptions",
+                "sns:GetSubscriptionAttributes",
+                "logs:PutLogEvents",
+                "sns:CheckIfPhoneNumberIsOptedOut",
+                "sns:ListEndpointsByPlatformApplication",
+                "sns:ListPhoneNumbersOptedOut",
+                "sns:GetEndpointAttributes",
+                "logs:CreateLogStream",
+                "route53:*",
+                "sns:ListPlatformApplications",
+                "sns:GetSMSAttributes"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 }
 
 resource "aws_iam_role_policy" "lamda_sns_iam_role_policy" {
@@ -28,7 +62,7 @@ resource "aws_iam_role" "lambda_sns_iam_role" {
           "Service": "sns.amazonaws.com"
         },
         "Effect": "Allow",
-        "Sid": "*"
+        "Sid": ""
       }
     ]
   }
