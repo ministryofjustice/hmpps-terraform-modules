@@ -14,18 +14,18 @@ resource "aws_iam_policy" "lambda_sns_iam_policy" {
 
 resource "aws_iam_role" "lambda_sns_iam_role" {
   assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "sns.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": "*"
-    }
-  ]
-}
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": "sts:AssumeRole",
+        "Principal": {
+          "Service": "sns.amazonaws.com"
+        },
+        "Effect": "Allow",
+        "Sid": "*"
+      }
+    ]
+  }
 EOF
 }
