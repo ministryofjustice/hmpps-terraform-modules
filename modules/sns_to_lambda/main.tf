@@ -12,6 +12,11 @@ resource "aws_iam_policy" "lambda_sns_iam_policy" {
   policy = "${file("policies/allow_sns_policy.json")}"
 }
 
+resource "aws_iam_role_policy" "lamda_sns_iam_role_policy" {
+  policy = "${aws_iam_policy.lambda_sns_iam_policy.id}"
+  role = "${aws_iam_role.lambda_sns_iam_role.id}"
+}
+
 resource "aws_iam_role" "lambda_sns_iam_role" {
   assume_role_policy = <<EOF
   {
