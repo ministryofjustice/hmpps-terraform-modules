@@ -13,7 +13,3 @@ output "lambda_sns_topic_arn" {
 output "lambda_sns_topic_subscription_arn" {
   value = "${aws_sns_topic_subscription.lambda_sns_subscriber.arn}"
 }
-
-output "lambda_sns_iam_role_arn" {
-  value = "${aws_iam_role.lambda_sns_iam_role.arn}"
-}
