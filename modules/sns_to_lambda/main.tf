@@ -9,7 +9,7 @@ resource "aws_sns_topic_subscription" "lambda_sns_subscriber" {
 }
 
 resource "aws_iam_policy" "lambda_sns_iam_policy" {
-  policy = "${file("policies/allow_sns_policy.json")}"
+  policy = "${file("${path.module}/policies/allow_sns_policy.json")}"
 }
 
 resource "aws_iam_role_policy" "lamda_sns_iam_role_policy" {
