@@ -5,9 +5,9 @@
 #-------------------------------------------------------------
 ### Getting the rds db password
 #-------------------------------------------------------------
-data "aws_ssm_parameter" "db_password" {
-  name = "${var.common_name}-rds-db-password"
-}
+# data "aws_ssm_parameter" "db_password" {
+#   name = "${var.common_name}-rds-db-password"
+# }
 
 ############################################
 # LOCALS
@@ -19,9 +19,9 @@ locals {
   lb_name               = "${var.short_environment_identifier}-app"
   common_label          = "${var.common_name}"
   common_prefix         = "${var.environment_identifier}"
-  db_password           = "${data.aws_ssm_parameter.db_password.value}"
+  db_password           = "alfresco"                                #"${data.aws_ssm_parameter.db_password.value}"
   tags                  = "${var.tags}"
-  monitoring_server_url = "${var.monitoring_server_url}"                #"${data.terraform_remote_state.monitoring-server.monitoring_internal_dns}"
+  monitoring_server_url = "${var.monitoring_server_url}"            #"${data.terraform_remote_state.monitoring-server.monitoring_internal_dns}"
   config_bucket         = "${var.config_bucket}"
 
   subnet_ids = [
