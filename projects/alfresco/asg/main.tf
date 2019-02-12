@@ -283,7 +283,7 @@ module "auto_scale_az2" {
 module "auto_scale_az3" {
   source               = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//autoscaling//group//asg_classic_lb"
   asg_name             = "${local.common_label}-az3"
-  subnet_ids           = ["${local.public_subnet_ids[3]}"]                                                                                                       #["${local.az3_subnet}"]
+  subnet_ids           = ["${local.public_subnet_ids[2]}"]                                                                                                       #["${local.az3_subnet}"]
   asg_min              = "${var.az_asg_min["az3"]}"
   asg_max              = "${var.az_asg_max["az3"]}"
   asg_desired          = "${var.az_asg_desired["az3"]}"
