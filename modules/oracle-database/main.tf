@@ -16,6 +16,12 @@ data "template_file" "user_data" {
     database_global_database_name = "${var.ansible_vars["database_global_database_name"]}"
     database_sid                  = "${var.ansible_vars["database_sid"]}"
     database_characterset         = "${var.ansible_vars["database_characterset"]}"
+    database_type                 = "${lookup(var.ansible_vars, "database_type", "NOTSET")}"
+    dependencies_bucket_arn       = "${lookup(var.ansible_vars, "dependencies_bucket_arn", "NOTSET")}"
+    database_bootstrap_restore    = "${lookup(var.ansible_vars, "database_bootstrap_restore", "False")}"
+    database_backup               = "${lookup(var.ansible_vars, "database_backup", "NOTSET")}"
+    database_backup_sys_passwd    = "${lookup(var.ansible_vars, "database_backup_sys_passwd", "NOTSET")}"
+    database_backup_location      = "${lookup(var.ansible_vars, "database_backup_location", "NOTSET")}"
   }
 }
 
