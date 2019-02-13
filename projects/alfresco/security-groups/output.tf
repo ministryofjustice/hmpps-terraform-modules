@@ -23,7 +23,3 @@ output "security_groups_sg_external_instance_id" {
 output "security_groups_sg_elasticache_sg_id" {
   value = "${local.elasticache_sg_id}"
 }
-
-output "security_groups_sg_efs_sg_id" {
-  value = "${local.efs_sg_id}"
-}

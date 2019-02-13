@@ -172,10 +172,6 @@ data "template_file" "user_data" {
 
     # For bootstrapping
     bastion_inventory = "${var.bastion_inventory}"
-
-    # EFS
-    efs_contentstore_id         = "${var.efs_shares["content_store_id"]}"
-    efs_contentstore_deleted_id = "${var.efs_shares["content_store_deleted_id"]}"
   }
 }
 

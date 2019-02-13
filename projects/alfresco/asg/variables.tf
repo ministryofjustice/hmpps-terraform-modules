@@ -154,10 +154,6 @@ variable "bastion_inventory" {
 
 variable "jvm_memory" {}
 
-variable "efs_shares" {
-  type = "map"
-}
-
 ############### END OF ASG SECTION #####################
 
 ##################### CLOUDWATCH SECTION #####################

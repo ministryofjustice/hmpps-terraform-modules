@@ -22,8 +22,6 @@ locals {
   elasticache_sg_id   = "${var.sg_map_ids["elasticache_sg_id"]}"
   external_lb_sg_id   = "${var.sg_map_ids["external_lb_sg_id"]}"
   external_inst_sg_id = "${var.sg_map_ids["external_inst_sg_id"]}"
-
-  efs_sg_id = "${var.sg_map_ids["efs_sg_id"]}"
 }
 
 #######################################
@@ -164,25 +162,4 @@ resource "aws_security_group_rule" "elasticache_memchached" {
   protocol                 = "tcp"
   source_security_group_id = "${local.internal_inst_sg_id}"
   description              = "${local.common_name}-elasticache-sg"
-}
-
-#-------------------------------------------------------------
-### efs sg
-#-------------------------------------------------------------
-resource "aws_security_group_rule" "efs_ingress_self" {
-  security_group_id = "${local.efs_sg_id}"
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = -1
-  self              = true
-}
-
-resource "aws_security_group_rule" "efs_egress_self" {
-  security_group_id = "${local.efs_sg_id}"
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = -1
-  self              = true
 }
