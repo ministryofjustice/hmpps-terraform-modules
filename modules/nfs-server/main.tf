@@ -82,7 +82,7 @@ data "terraform_remote_state" "monitoring" {
 ### Declare our local variables
 #-------------------------------------------------------------
 locals {
-  app_name            = "nfs"
+  app_name            = "${var.app_name}"
   bucket_list         = "${concat(
     list("arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket"),
     list("arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket/*")
