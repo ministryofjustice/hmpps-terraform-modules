@@ -16,8 +16,6 @@ variable "tags" {
 
 variable "s3-config-bucket" {}
 
-variable "aws_ecr_arn" {}
-
 variable "remote_iam_role" {}
 
 variable "remote_config_bucket" {}

@@ -15,12 +15,14 @@ data "aws_ssm_parameter" "db_password" {
 
 locals {
   common_name           = "${var.app_hostnames["internal"]}"
-  lb_name               = "${var.short_environment_identifier}-app-int"
+  application_endpoint  = "${var.app_hostnames["external"]}"
+  lb_name               = "${var.short_environment_identifier}-app"
   common_label          = "${var.common_name}"
   common_prefix         = "${var.environment_identifier}"
   db_password           = "${data.aws_ssm_parameter.db_password.value}"
   tags                  = "${var.tags}"
   monitoring_server_url = "${var.monitoring_server_url}"                #"${data.terraform_remote_state.monitoring-server.monitoring_internal_dns}"
+  config_bucket         = "${var.config_bucket}"
 
   subnet_ids = [
     "${var.private_subnet_ids["az1"]}",
@@ -41,16 +43,21 @@ locals {
   lb_security_groups = ["${var.lb_security_groups}"]
 
   instance_security_groups = ["${var.instance_security_groups}"]
+  public_subnet_ids        = ["${var.public_subnet_ids}"]
+  certificate_arn          = "${var.certificate_arn}"
+  external_domain          = "${var.external_domain}"
+  public_zone_id           = "${var.public_zone_id}"
 }
 
 ############################################
-# CREATE ELB FOR ALFRESCO
+# CREATE LB FOR NGINX
 ############################################
 
+# elb
 module "create_app_elb" {
-  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//loadbalancer//elb//create_elb"
-  name            = "${local.lb_name}"
-  subnets         = ["${local.subnet_ids}"]
+  source          = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//loadbalancer//elb//create_elb_with_https"
+  name            = "${local.lb_name}-ext"
+  subnets         = ["${local.public_subnet_ids}"]
   security_groups = ["${local.lb_security_groups}"]
   internal        = "${var.internal}"
 
@@ -61,24 +68,50 @@ module "create_app_elb" {
   bucket                      = "${local.access_logs_bucket}"
   bucket_prefix               = "${local.lb_name}"
   interval                    = 60
-  listener                    = ["${var.listener}"]
+  ssl_certificate_id          = "${local.certificate_arn}"
+  instance_port               = 80
+  instance_protocol           = "http"
+  lb_port                     = 80
+  lb_port_https               = 443
+  lb_protocol                 = "http"
+  lb_protocol_https           = "https"
   health_check                = ["${var.health_check}"]
+  tags                        = "${var.tags}"
+}
 
-  tags = "${local.tags}"
+resource "aws_app_cookie_stickiness_policy" "alfresco_app_cookie_policy" {
+  name          = "${local.common_prefix}-app-cookie-policy"
+  load_balancer = "${module.create_app_elb.environment_elb_name}"
+  lb_port       = 80
+  cookie_name   = "JSESSIONID"
+}
+
+resource "aws_app_cookie_stickiness_policy" "alfresco_app_cookie_policy_https" {
+  name          = "${local.common_prefix}-app-cookie-policy-https"
+  load_balancer = "${module.create_app_elb.environment_elb_name}"
+  lb_port       = 443
+  cookie_name   = "JSESSIONID"
 }
 
 ###############################################
-# Create route53 entry for elb
+# Create route53 entry for nginx lb
 ###############################################
 
 resource "aws_route53_record" "dns_entry" {
-  name    = "${local.common_name}.${var.internal_domain}"
-  type    = "CNAME"
-  zone_id = "${var.zone_id}"
-  ttl     = 300
-  records = ["${module.create_app_elb.environment_elb_dns_name}"]
+  zone_id = "${local.public_zone_id}"
+  name    = "${local.application_endpoint}.${local.external_domain}"
+  type    = "A"
+
+  alias {
+    name                   = "${module.create_app_elb.environment_elb_dns_name}"
+    zone_id                = "${module.create_app_elb.environment_elb_zone_id}"
+    evaluate_target_health = false
+  }
 }
 
+###############################################
+# CloudWatch
+###############################################
 module "create_loggroup" {
   source                   = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//cloudwatch//loggroup"
   log_group_path           = "${var.environment_identifier}"
@@ -116,6 +149,19 @@ data "template_file" "user_data" {
     db_user                 = "${var.db_username}"
     db_password             = "${local.db_password}"
     server_mode             = "TEST"
+    keys_dir                = "${var.keys_dir}"
+    image_url               = "${var.image_url}"
+    image_version           = "${var.image_version}"
+    tomcat_host             = "${var.tomcat_host}"
+    tomcat_port             = "${var.tomcat_port}"
+    config_file_path        = "${local.common_name}/config/nginx.conf"
+    nginx_config_file       = "/etc/nginx/conf.d/app.conf"
+    s3_bucket_config        = "${local.config_bucket}"
+    runtime_config_override = "s3"
+    self_signed_ca_cert     = "${var.self_signed_ssm["ca_cert"]}"
+    self_signed_cert        = "${var.self_signed_ssm["cert"]}"
+    self_signed_key         = "${var.self_signed_ssm["key"]}"
+    ssm_get_command         = "aws --region ${var.region} ssm get-parameters --names"
 
     #s3 config data
     bucket_name         = "${var.alfresco_s3bucket}"
@@ -240,4 +286,15 @@ module "auto_scale_az3" {
   launch_configuration = "${module.launch_cfg_az3.launch_name}"
   load_balancers       = ["${module.create_app_elb.environment_elb_name}"]
   tags                 = "${local.tags}"
+}
+
+############################################
+# UPLOAD TO S3
+############################################
+
+resource "aws_s3_bucket_object" "nginx_bucket_object" {
+  key    = "${local.common_name}/config/nginx.conf"
+  bucket = "${local.config_bucket}"
+  source = "./templates/nginx.conf"
+  etag   = "${md5(file("./templates/nginx.conf"))}"
 }

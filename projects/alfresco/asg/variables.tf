@@ -10,6 +10,10 @@ variable "private_subnet_ids" {
   type = "map"
 }
 
+variable "public_subnet_ids" {
+  type = "list"
+}
+
 variable "app_hostnames" {
   type = "map"
 }
@@ -50,6 +54,8 @@ variable "internal_domain" {}
 variable "external_domain" {}
 
 variable "zone_id" {}
+
+variable "public_zone_id" {}
 
 variable "alfresco_s3bucket" {}
 
@@ -100,6 +106,8 @@ variable "health_check" {
   description = "A health check block"
   type        = "list"
 }
+
+variable "certificate_arn" {}
 
 ##################### ASG SECTION #####################
 variable "service_desired_count" {}
@@ -153,3 +161,25 @@ variable "cloudwatch_log_retention" {}
 
 ############### END OF CLOUDWATCH SECTION #####################
 
+## NGINX
+variable "keys_dir" {}
+
+variable "image_url" {}
+
+variable "image_version" {}
+
+variable "self_signed_ssm" {
+  type = "map"
+}
+
+variable "config_bucket" {}
+
+variable "tomcat_host" {
+  description = "Alfresco host"
+  default     = "localhost"
+}
+
+variable "tomcat_port" {
+  description = "Alfresco port"
+  default     = "8080"
+}
