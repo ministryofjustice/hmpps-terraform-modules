@@ -120,4 +120,6 @@ chown -R 1000:1000 ${es_home}/elasticsearch
 chmod -R 777 ${es_home}/elasticsearch
 ulimit -n 65536
 sysctl -w vm.max_map_count=262144
+service docker restart
+sleep 10
 docker-compose -f ${es_home}/service-monitoring/docker-compose.yml up -d
