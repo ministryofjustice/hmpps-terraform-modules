@@ -7,3 +7,7 @@ variable "acl" {
 variable "tags" {
   type = "map"
 }
+
+variable "versioning" {
+  default = true
+}
