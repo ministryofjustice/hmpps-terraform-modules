@@ -9,6 +9,11 @@ output "internal_fqdn" {
 output "private_ip" {
   value = "${aws_instance.oracle_db.private_ip}"
 }
+
+output "ami_id" {
+  value = "${aws_instance.oracle_db.id}"
+}
+
 output "db_size_parameters" {
   value = {
     database_size  = "${local.database_size}"
