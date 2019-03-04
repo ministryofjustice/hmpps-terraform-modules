@@ -1,4 +1,3 @@
-#TODO: add oracle RDS for OID
 data "template_file" "user_data" {
   template = "${file("${path.module}/user_data/user_data.sh")}"
 
@@ -16,18 +15,28 @@ data "template_file" "user_data" {
     database_global_database_name = "${var.ansible_vars["database_global_database_name"]}"
     database_sid                  = "${var.ansible_vars["database_sid"]}"
     database_characterset         = "${var.ansible_vars["database_characterset"]}"
+    oracle_dbca_template_file     = "${var.ansible_vars["oracle_dbca_template_file"]}"
     database_type                 = "${lookup(var.ansible_vars, "database_type", "NOTSET")}"
     dependencies_bucket_arn       = "${lookup(var.ansible_vars, "dependencies_bucket_arn", "NOTSET")}"
     database_bootstrap_restore    = "${lookup(var.ansible_vars, "database_bootstrap_restore", "False")}"
     database_backup               = "${lookup(var.ansible_vars, "database_backup", "NOTSET")}"
     database_backup_sys_passwd    = "${lookup(var.ansible_vars, "database_backup_sys_passwd", "NOTSET")}"
     database_backup_location      = "${lookup(var.ansible_vars, "database_backup_location", "NOTSET")}"
+    asm_disks_quantity            = "${lookup(var.db_size, "disks_quantity")}"
   }
 }
 
+locals {
+  database_size    = "${lookup(var.db_size, "database_size")}"
+  instance_type    = "${lookup(var.db_size, "instance_type")}"
+  iops             = "${lookup(var.db_size, "disk_iops")}"
+  disks_quantity   = "${lookup(var.db_size, "disks_quantity")}"
+  size             = "${lookup(var.db_size, "disk_size")}"
+  tags_name_prefix = "${var.environment_name}-${var.server_name}"
+}
 resource "aws_instance" "oracle_db" {
   ami                    = "${var.ami_id}"
-  instance_type          = "${var.instance_type}"
+  instance_type          = "${local.instance_type}"
   subnet_id              = "${var.db_subnet}"
   key_name               = "${var.key_name}"
   iam_instance_profile   = "${var.iam_instance_profile}"
@@ -37,8 +46,9 @@ resource "aws_instance" "oracle_db" {
 
   root_block_device = {
     delete_on_termination = true
-    volume_size           = 50
-    volume_type           = "gp2"
+    volume_size           = 256
+    volume_type           = "io1"
+    iops                  = "1000"
   }
 
   tags = "${merge(var.tags, map("Name", "${var.environment_name}-${var.server_name}"))}"
@@ -46,40 +56,10 @@ resource "aws_instance" "oracle_db" {
   lifecycle {
     ignore_changes = ["ami", "user_data"]
   }
-}
 
-resource "aws_ebs_volume" "oracle_db_xvdd" {
-  availability_zone = "${aws_instance.oracle_db.availability_zone}"
-  type              = "io1"
-  iops              = 1000
-  size              = 50
-  encrypted         = true
-  kms_key_id        = "${var.kms_key_id}"
-  tags              = "${merge(var.tags, map("Name", "${var.environment_name}-${var.server_name}-xvdd"))}"
-}
 
-resource "aws_volume_attachment" "oracle_db_xvdd" {
-  device_name  = "/dev/xvdd"
-  instance_id  = "${aws_instance.oracle_db.id}"
-  volume_id    = "${aws_ebs_volume.oracle_db_xvdd.id}"
-  force_detach = true
-}
 
-resource "aws_ebs_volume" "oracle_db_xvde" {
-  availability_zone = "${aws_instance.oracle_db.availability_zone}"
-  type              = "io1"
-  iops              = 1000
-  size              = 50
-  encrypted         = true
-  kms_key_id        = "${var.kms_key_id}"
-  tags              = "${merge(var.tags, map("Name", "${var.environment_name}-${var.server_name}-xvde"))}"
-}
 
-resource "aws_volume_attachment" "oracle_db_xvde" {
-  device_name  = "/dev/xvde"
-  instance_id  = "${aws_instance.oracle_db.id}"
-  volume_id    = "${aws_ebs_volume.oracle_db_xvde.id}"
-  force_detach = true
 }
 
 resource "aws_route53_record" "oracle_db_instance_internal" {
