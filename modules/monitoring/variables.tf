@@ -51,3 +51,17 @@ variable "route53_domain_private" {}
 variable "route53_hosted_zone_id" {}
 
 variable "public_ssl_arn" {}
+
+variable "monitoring_node_count" {
+     type = "number"
+     default = "1"
+}
+
+variable "docker_image_tag" {
+    default = "latest"
+}
+
+variable "docker_es_image_name" {
+    default = "hmpps-elasticsearch"
+    description = "Used when we want to provision an ES version other than 6.x"
+}

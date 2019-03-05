@@ -105,7 +105,8 @@ locals {
 
   instance_type           = "t2.large"
   ebs_device_volume_size  = "2048"
-  docker_image_tag        = "latest"
+  docker_image_tag        = "${var.docker_image_tag}"
+  docker_es_image_name    = "${var.docker_es_image_name}"
   route53_sub_domain      = "${var.environment_type}.${var.project_name}"
   account_id              = "${data.aws_caller_identity.current.account_id}"
 }
@@ -117,6 +118,7 @@ module "create_elastic_cluster" {
   instance_type                 = "${local.instance_type}"
   ebs_device_volume_size        = "${local.ebs_device_volume_size}"
   docker_image_tag              = "${local.docker_image_tag}"
+  docker_image_name             = "${local.docker_es_image_name}"
   availability_zones            = "${local.availability_zones}"
   short_environment_identifier  = "${var.short_environment_identifier}"
   bastion_origin_cidr           = "${data.terraform_remote_state.bastion_remote_vpc.bastion_vpc_cidr}"

@@ -72,7 +72,7 @@ version: "3"
 
 services:
   elasticsearch:
-    image: ${registry_url}/hmpps-elasticsearch:${version}
+    image: ${registry_url}/${image_name}:${version}
     volumes:
       - ${es_home}/elasticsearch/data:/usr/share/elasticsearch/data
       - ${es_home}/elasticsearch/conf.d:/usr/share/elasticsearch/conf.d
