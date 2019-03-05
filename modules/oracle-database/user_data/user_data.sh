@@ -48,8 +48,6 @@ EOF
 
 /usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml
 
-sed -i '/- username: centos/d' ~/users.yml
-
 cat << EOF > ~/vars.yml
 region: "${region}"
 
@@ -154,12 +152,3 @@ CONFIGURE_SWAP=true SELF_REGISTER=true ansible-playbook ~/bootstrap_users.yml \
 "oradb_asmsnmp_password":"$oradb_asmsnmp_password", \
 ' \
 -v
-# ansible-playbook ~/bootstrap_db.yml \
-# --extra-vars '\
-# "oradb_sys_password":"$oradb_sys_password", \
-# "oradb_system_password":"$oradb_system_password", \
-# "oradb_sysman_password":"$oradb_sysman_password", \
-# "oradb_dbsnmp_password":"$oradb_dbsnmp_password", \
-# "oradb_asmsnmp_password":"$oradb_asmsnmp_password", \
-# ' \
-# -v
