@@ -140,6 +140,8 @@ module "create_elastic_cluster" {
 }
 
 module "create_monitoring_instance" {
+  count  = "${var.monitoring_node_count}"
+
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=refactorMonitoringIntoModule//modules/monitoring/monitoring-server"
 
   app_name                            = "mon-srv"
