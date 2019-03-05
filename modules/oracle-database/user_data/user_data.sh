@@ -48,7 +48,6 @@ EOF
 
 /usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml
 
-
 cat << EOF > ~/vars.yml
 region: "${region}"
 
@@ -56,6 +55,7 @@ service_user_name: "${service_user_name}"
 database_global_database_name: "${database_global_database_name}"
 database_sid: "${database_sid}"
 database_characterset: "${database_characterset}"
+oracle_dbca_template_file: "${oracle_dbca_template_file}"
 
 database_type: "${database_type}"
 dependencies_bucket_arn: "${dependencies_bucket_arn}"
@@ -63,6 +63,7 @@ database_bootstrap_restore: "${database_bootstrap_restore}"
 database_backup: "${database_backup}"
 database_backup_sys_passwd: "${database_backup_sys_passwd}"
 database_backup_location: "${database_backup_location}"
+asm_disks_quantity: "${asm_disks_quantity}"
 # These values are to be updated when the are injected and pulled from paramstore, consumed by oradb bootstrap
 # oradb_sys_password
 # oradb_system_password
@@ -81,6 +82,7 @@ cat << EOF > ~/bootstrap_users.yml
   roles:
      - bootstrap
      - users
+     - oracle-db
 EOF
 cat << EOF > ~/bootstrap_db.yml
 ---
@@ -142,15 +144,6 @@ export ANSIBLE_LOG_PATH=$HOME/.ansible.log
 
 ansible-galaxy install -f -r ~/requirements.yml
 CONFIGURE_SWAP=true SELF_REGISTER=true ansible-playbook ~/bootstrap_users.yml \
---extra-vars '\
-"oradb_sys_password":"$oradb_sys_password", \
-"oradb_system_password":"$oradb_system_password", \
-"oradb_sysman_password":"$oradb_sysman_password", \
-"oradb_dbsnmp_password":"$oradb_dbsnmp_password", \
-"oradb_asmsnmp_password":"$oradb_asmsnmp_password", \
-' \
--v
-ansible-playbook ~/bootstrap_db.yml \
 --extra-vars '\
 "oradb_sys_password":"$oradb_sys_password", \
 "oradb_system_password":"$oradb_system_password", \

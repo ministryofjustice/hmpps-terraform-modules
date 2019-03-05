@@ -8,10 +8,6 @@ variable "ami_id" {
   type        = "string"
 }
 
-variable "instance_type" {
-  description = "Instance type for the admin server"
-  type        = "string"
-}
 
 variable "db_subnet" {
   description = "Subnet for the servers"
@@ -89,6 +85,19 @@ variable "vpc_account_id" {
   type        = "string"
 }
 
+variable "db_size" {
+  description = "Database size details"
+  type        = "map"
+  default     = {
+    database_size   = "small"
+    instance_type   = "t3.large"
+    disk_iops       = 1000
+    disks_quantity  = 2  # Do not decrease this
+    disk_size       = 100 # Do not decrease this
+    ## total_storage   = 200 # This should equal number_of_disks x disk_size
+    ## disk_iops / disk_size can never be higher than 50
+  }
+}
 variable "ansible_vars" {
   description = "Ansible vars for user_data script"
   type        = "map"
