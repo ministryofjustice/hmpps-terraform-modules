@@ -20,6 +20,8 @@ variable "ebs_device_volume_size" {}
 
 variable "docker_image_tag" {}
 
+variable "docker_image_name" {}
+
 variable "instance_type" {}
 
 variable "route53_sub_domain" {}
