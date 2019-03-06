@@ -20,7 +20,9 @@ variable "ebs_device_volume_size" {}
 
 variable "docker_image_tag" {}
 
-variable "docker_image_name" {}
+variable "docker_image_name" {
+  default = "hmpps-elasticsearch"
+}
 
 variable "instance_type" {}
 
