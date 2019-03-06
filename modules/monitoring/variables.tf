@@ -28,8 +28,6 @@ variable "ebs_device_volume_size" {}
 
 variable "docker_registry_url" {}
 
-variable "docker_image_tag" {}
-
 variable "instance_type" {}
 
 variable "route53_sub_domain" {}
@@ -53,7 +51,6 @@ variable "route53_hosted_zone_id" {}
 variable "public_ssl_arn" {}
 
 variable "monitoring_node_count" {
-     type = "number"
      default = "1"
 }
 
