@@ -39,6 +39,9 @@ data "template_file" "create_elasticsearch_1_user_data" {
     registry_url          = "${local.docker_registry_url}"
     instance_identifier   = "1"
     bastion_inventory     = "${var.bastion_inventory}"
+    efs_mount_dir         = "${var.efs_mount_dir}"
+    efs_file_system_id    = "${var.efs_file_system_id}"
+    region                = "${var.region}"
   }
 }
 
@@ -103,6 +106,9 @@ data "template_file" "create_elasticsearch_2_user_data" {
     registry_url          = "${local.docker_registry_url}"
     instance_identifier   = "2"
     bastion_inventory     = "${var.bastion_inventory}"
+    efs_mount_dir         = "${var.efs_mount_dir}"
+    efs_file_system_id    = "${var.efs_file_system_id}"
+    region                = "${var.region}"
   }
 }
 
@@ -167,6 +173,9 @@ data "template_file" "create_elasticsearch_3_user_data" {
     registry_url          = "${local.docker_registry_url}"
     instance_identifier   = "3"
     bastion_inventory     = "${var.bastion_inventory}"
+    efs_mount_dir         = "${var.efs_mount_dir}"
+    efs_file_system_id    = "${var.efs_file_system_id}"
+    region                = "${var.region}"
   }
 }
 

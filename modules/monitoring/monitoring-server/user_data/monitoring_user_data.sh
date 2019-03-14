@@ -40,6 +40,9 @@ cat << EOF > ~/bootstrap_vars.yml
 mount_point: "${es_home}"
 device_name: "${ebs_device}"
 monitoring_host: "monitoring.${private_domain}"
+efs_mount_dir: "${efs_mount_dir}"
+efs_file_system_id: "${efs_file_system_id}"
+region: "${region}"
 EOF
 
 wget https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml -O users.yml
@@ -56,6 +59,21 @@ cat << EOF > ~/bootstrap.yml
      - rsyslog
      - elasticbeats
      - users
+  tasks:
+    - name: Create the elasticsearch group
+      group:
+        name: elasticsearch
+        gid: 3999
+        state: present
+    - name: Add an elasticsearch user
+      user:
+        name: elasticsearch
+        groups:
+          - elasticsearch
+          - docker
+        uid: 101
+        system: true
+        state: present
 EOF
 
 
@@ -65,6 +83,7 @@ IS_MONITORING=True ansible-playbook ~/bootstrap.yml
 #Create docker-compose file and env file
 mkdir -p ${es_home}/service-monitoring ${es_home}/elasticsearch/data ${es_home}/elasticsearch/conf.d
 
+if [ "x${efs_mount_dir}" == "x" ];then
 cat << EOF > ${es_home}/service-monitoring/docker-compose.yml
 version: "3"
 
@@ -115,9 +134,67 @@ services:
     ports:
       - 6379:6379
 EOF
+else
+cat << EOF > ${es_home}/service-monitoring/docker-compose.yml
+version: "3"
 
-chown -R 1000:1000 ${es_home}/elasticsearch
-chmod -R 777 ${es_home}/elasticsearch
+services:
+  elasticsearch:
+    image: ${registry_url}/hmpps-elasticsearch:${version}
+    volumes:
+      - ${es_home}/elasticsearch/data:/usr/share/elasticsearch/data
+      - ${es_home}/elasticsearch/conf.d:/usr/share/elasticsearch/conf.d
+      - ${efs_mount_dir}:${efs_mount_dir}
+    environment:
+      - HMPPS_ES_CLUSTER_NAME=${aws_cluster}
+      - HMPPS_ES_NODE_NAME=${app_name}
+      - HMPPS_ES_NODE_TYPE=ingest
+      - HMPPS_ES_CLUSTER_NODES_01=elasticsearch-1.${private_domain}
+      - HMPPS_ES_CLUSTER_NODES_02=elasticsearch-2.${private_domain}
+      - HMPPS_ES_CLUSTER_NODES_03=elasticsearch-3.${private_domain}
+      - HMPPS_ES_NETWORK_PUBLISH_HOST=`curl http://169.254.169.254/latest/meta-data/local-ipv4/`
+      - HMPPS_ES_PATH_REPO=${efs_mount_dir}
+    ports:
+      - 9300:9300
+      - 9200:9200
+    ulimits:
+      nofile: 65536
+
+  kibana:
+    image: ${registry_url}/hmpps-kibana:${version}
+    environment:
+      - HMPPS_KIBANA_SERVER_NAME=${short_env_identifier}-kibana
+      - HMPPS_KIBANA_SERVER_HOST=0.0.0.0
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    ulimits:
+      nofile: 65536
+
+  logstash:
+    image: ${registry_url}/hmpps-logstash:${version}
+    ports:
+      - 2514:2514
+      - 9600:9600
+    environment:
+      - LOGSTASH_OUTPUT_ELASTICSEARCH=yes
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:4-alpine
+    ports:
+      - 6379:6379
+EOF
+chown -R `id -u elasticsearch`:`id -g elasticsearch` ${efs_mount_dir}
+chmod -R 775 ${efs_mount_dir}
+
+fi
+
+chown -R `id -u elasticsearch`:`id -g elasticsearch` ${es_home}/elasticsearch
+chmod -R 775 ${es_home}/elasticsearch
+
 ulimit -n 65536
 sysctl -w vm.max_map_count=262144
 service docker restart

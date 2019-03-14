@@ -111,6 +111,17 @@ locals {
   account_id              = "${data.aws_caller_identity.current.account_id}"
 }
 
+module "create_elasticseach_efs_backup_share" {
+  source            = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//efs"
+
+  share_name        = "monitoring_backup"
+  zone_id           = "${data.terraform_remote_state.vpc.private_zone_id}"
+  domain            = "${data.terraform_remote_state.vpc.private_zone_name}"
+  subnets           = "${local.private_subnet_ids}"
+  security_groups   = ["${module.create_elastic_cluster.elasticsearch_cluster_sg_client_id}"]
+  tags              = "${var.tags}"
+}
+
 module "create_elastic_cluster" {
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=refactorMonitoringIntoModule//modules/monitoring/elasticsearch-cluster"
 
@@ -139,6 +150,9 @@ module "create_elastic_cluster" {
   vpc_cidr                      = "${data.terraform_remote_state.vpc.vpc_cidr_block}"
   bastion_inventory             = "${data.terraform_remote_state.vpc.bastion_inventory}"
   s3-config-bucket              = "${var.remote_state_bucket_name}"
+
+  efs_file_system_id            = "${module.create_elasticseach_efs_backup_share.efs_id}"
+  efs_mount_dir                 = "/opt/esbackup"
 }
 
 module "create_monitoring_instance" {
@@ -176,4 +190,7 @@ module "create_monitoring_instance" {
   s3-config-bucket                    = "${var.remote_state_bucket_name}"
   elasticsearch_cluster_name          = "${module.create_elastic_cluster.elasticsearch_cluster_name}"
   elasticsearch_cluster_sg_client_id  = "${module.create_elastic_cluster.elasticsearch_cluster_sg_client_id}"
+
+  efs_file_system_id            = "${module.create_elasticseach_efs_backup_share.efs_id}"
+  efs_mount_dir                 = "/opt/esbackup"
 }

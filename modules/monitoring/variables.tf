@@ -14,6 +14,14 @@ variable "availability_zones" {
 
 variable "remote_state_bucket_name" {}
 
+variable "bastion_remote_state_bucket_name" {}
+
+variable "bastion_role_arn" {}
+
+variable "environment_type" {}
+
+variable "project_name" {}
+
 variable "app_name" {}
 
 variable "policy_file" {}
@@ -62,3 +70,5 @@ variable "docker_es_image_name" {
     default = "hmpps-elasticsearch"
     description = "Used when we want to provision an ES version other than 6.x"
 }
+
+variable "tags" {}

@@ -39,6 +39,9 @@ data "template_file" "monitoring_instance_user_data" {
     aws_cluster           = "${var.elasticsearch_cluster_name}"
     registry_url          = "${local.docker_registry_url}"
     bastion_inventory     = "${var.bastion_inventory}"
+    efs_mount_dir         = "${var.efs_mount_dir}"
+    efs_file_system_id    = "${var.efs_file_system_id}"
+    region                = "${var.region}"
   }
 }
 
