@@ -1,3 +1,13 @@
+//terraform {
+//  # The configuration for this backend will be filled in by Terragrunt
+//  backend "s3" {}
+//}
+//
+//provider "aws" {
+//  region  = "${var.region}"
+//  version = "~> 1.16"
+//}
+
 module "create_elasticsearch_instance" {
   source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ec2_no_replace_instance"
   app_name                    = "${var.app_name}"

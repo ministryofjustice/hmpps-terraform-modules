@@ -6,8 +6,9 @@ data "template_file" "create_elasticsearch_instance_role" {
   template = "${file("${path.module}/${local.role_policy_file}")}"
 
   vars {
-    ingestion_role_arn = "${module.create_elasticsearch_app_role.iamrole_arn}"
-    s3-config-bucket = "${var.s3-config-bucket}"
+    ingestion_role_arn          = "${module.create_elasticsearch_app_role.iamrole_arn}"
+    s3-config-bucket            = "${var.s3-config-bucket}"
+    elasticsearch-backup-bucket = ""
   }
 }
 
