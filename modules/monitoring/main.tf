@@ -43,73 +43,76 @@ data "aws_ami" "amazon_ami" {
 #-------------------------------------------------------------
 ### Getting the current vpc
 #-------------------------------------------------------------
+#-------------------------------------------------------------
+  ### Getting the current vpc
+  #-------------------------------------------------------------
 
-data "terraform_remote_state" "vpc" {
-  backend = "s3"
+  data "terraform_remote_state" "vpc" {
+    backend = "s3"
 
-  config {
-    bucket = "${var.remote_state_bucket_name}"
-    key    = "vpc/terraform.tfstate"
-    region = "${var.region}"
+    config {
+      bucket = "${var.remote_state_bucket_name}"
+      key    = "vpc/terraform.tfstate"
+      region = "${var.region}"
+    }
   }
-}
 
-#-------------------------------------------------------------
-### Getting the bastion vpc
-#-------------------------------------------------------------
-data "terraform_remote_state" "bastion_remote_vpc" {
-  backend = "s3"
+  #-------------------------------------------------------------
+  ### Getting the bastion vpc
+  #-------------------------------------------------------------
+  data "terraform_remote_state" "bastion_remote_vpc" {
+    backend = "s3"
 
-  config {
-    bucket   = "${var.bastion_remote_state_bucket_name}"
-    key      = "bastion-vpc/terraform.tfstate"
-    region   = "${var.region}"
-    role_arn = "${var.bastion_role_arn}"
+    config {
+      bucket   = "${data.terraform_remote_state.vpc.bastion_remote_state_bucket_name}"
+      key      = "bastion-vpc/terraform.tfstate"
+      region   = "${var.region}"
+      role_arn = "${data.terraform_remote_state.vpc.bastion_role_arn}"
+    }
   }
-}
 
-#-------------------------------------------------------------
-### Getting the sub project security groups
-#-------------------------------------------------------------
-data "terraform_remote_state" "vpc_security_groups" {
-  backend = "s3"
+  #-------------------------------------------------------------
+  ### Getting the sub project security groups
+  #-------------------------------------------------------------
+  data "terraform_remote_state" "vpc_security_groups" {
+    backend = "s3"
 
-  config {
-    bucket = "${var.remote_state_bucket_name}"
-    key    = "security-groups/terraform.tfstate"
-    region = "${var.region}"
+    config {
+      bucket = "${var.remote_state_bucket_name}"
+      key    = "security-groups/terraform.tfstate"
+      region = "${var.region}"
+    }
   }
-}
 
-locals {
-  availability_zones      = [
-    "${data.terraform_remote_state.vpc.vpc_private-subnet-az1-availability_zone}",
-    "${data.terraform_remote_state.vpc.vpc_private-subnet-az2-availability_zone}",
-    "${data.terraform_remote_state.vpc.vpc_private-subnet-az3-availability_zone}",
-  ]
-  private_subnet_ids      = [
-    "${data.terraform_remote_state.vpc.vpc_private-subnet-az1}",
-    "${data.terraform_remote_state.vpc.vpc_private-subnet-az2}",
-    "${data.terraform_remote_state.vpc.vpc_private-subnet-az3}"
-  ]
+  locals {
+    availability_zones      = [
+      "${data.terraform_remote_state.vpc.vpc_private-subnet-az1-availability_zone}",
+      "${data.terraform_remote_state.vpc.vpc_private-subnet-az2-availability_zone}",
+      "${data.terraform_remote_state.vpc.vpc_private-subnet-az3-availability_zone}",
+    ]
+    private_subnet_ids      = [
+      "${data.terraform_remote_state.vpc.vpc_private-subnet-az1}",
+      "${data.terraform_remote_state.vpc.vpc_private-subnet-az2}",
+      "${data.terraform_remote_state.vpc.vpc_private-subnet-az3}"
+    ]
 
-  public_subnet_ids       = [
-    "${data.terraform_remote_state.vpc.vpc_public-subnet-az1}",
-    "${data.terraform_remote_state.vpc.vpc_public-subnet-az2}",
-    "${data.terraform_remote_state.vpc.vpc_public-subnet-az3}"
-  ]
+    public_subnet_ids       = [
+      "${data.terraform_remote_state.vpc.vpc_public-subnet-az1}",
+      "${data.terraform_remote_state.vpc.vpc_public-subnet-az2}",
+      "${data.terraform_remote_state.vpc.vpc_public-subnet-az3}"
+    ]
 
-  bastion_origin_sgs      = [
-    "${data.terraform_remote_state.vpc_security_groups.sg_ssh_bastion_in_id}"
-  ]
+    bastion_origin_sgs      = [
+      "${data.terraform_remote_state.vpc_security_groups.sg_ssh_bastion_in_id}"
+    ]
 
-  instance_type           = "t2.large"
-  ebs_device_volume_size  = "2048"
-  docker_image_tag        = "${var.docker_image_tag}"
-  docker_es_image_name    = "${var.docker_es_image_name}"
-  route53_sub_domain      = "${var.environment_type}.${var.project_name}"
-  account_id              = "${data.aws_caller_identity.current.account_id}"
-}
+    instance_type           = "t2.large"
+    ebs_device_volume_size  = "2048"
+    docker_image_tag        = "${var.docker_image_tag}"
+    docker_es_image_name    = "${var.docker_es_image_name}"
+    route53_sub_domain      = "${var.environment_type}.${var.project_name}"
+    account_id              = "${data.aws_caller_identity.current.account_id}"
+  }
 
 module "create_elasticseach_efs_backup_share" {
   source            = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//efs"
@@ -132,7 +135,6 @@ module "create_elastic_cluster" {
   docker_image_name             = "${local.docker_es_image_name}"
   availability_zones            = "${local.availability_zones}"
   short_environment_identifier  = "${var.short_environment_identifier}"
-  bastion_origin_cidr           = "${data.terraform_remote_state.bastion_remote_vpc.bastion_vpc_cidr}"
   environment_identifier        = "${var.environment_identifier}"
   region                        = "${var.region}"
   route53_sub_domain            = "${local.route53_sub_domain}"
