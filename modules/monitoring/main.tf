@@ -112,12 +112,14 @@ data "aws_ami" "amazon_ami" {
     docker_es_image_name    = "${var.docker_es_image_name}"
     route53_sub_domain      = "${var.environment_type}.${var.project_name}"
     account_id              = "${data.aws_caller_identity.current.account_id}"
+    public_ssl_arn          = "${data.terraform_remote_state.vpc.public_ssl_arn}"
+    route53_hosted_zone_id  = "${data.terraform_remote_state.vpc.internal_zone}"
   }
 
 module "create_elasticseach_efs_backup_share" {
   source            = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//efs"
 
-  share_name        = "monitoring_backup"
+  share_name        = "${var.share_name}"
   zone_id           = "${data.terraform_remote_state.vpc.private_zone_id}"
   domain            = "${data.terraform_remote_state.vpc.private_zone_name}"
   subnets           = "${local.private_subnet_ids}"
@@ -158,8 +160,6 @@ module "create_elastic_cluster" {
 }
 
 module "create_monitoring_instance" {
-  count  = "${var.monitoring_node_count}"
-
   source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=esBackups//modules/monitoring/monitoring-server"
 
   app_name                            = "mon-srv"
@@ -174,8 +174,8 @@ module "create_monitoring_instance" {
   region                              = "${var.region}"
   route53_sub_domain                  = "${local.route53_sub_domain}"
   route53_domain_private              = "${var.route53_domain_private}"
-  route53_hosted_zone_id              = "${var.route53_hosted_zone_id}"
-  public_ssl_arn                      = "${var.public_ssl_arn}"
+  route53_hosted_zone_id              = "${local.route53_hosted_zone_id}"
+  public_ssl_arn                      = "${local.public_ssl_arn}"
   bastion_origin_cidr                 = "${data.terraform_remote_state.bastion_remote_vpc.bastion_vpc_cidr}"
   bastion_origin_sgs                  = "${local.bastion_origin_sgs}"
 

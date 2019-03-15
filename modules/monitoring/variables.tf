@@ -40,3 +40,8 @@ variable "tags" {}
 variable "efs_mount_dir" {
   default = "/opt/esbackup"
 }
+
+
+variable "share_name" {}
+
+variable "bastion_inventory" {}
