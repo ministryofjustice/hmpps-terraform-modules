@@ -7,3 +7,5 @@ variable "bucket_name" {}
 variable "tags" {
   type = "map"
 }
+
+variable "vpc_cidr" {}
