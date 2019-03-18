@@ -185,6 +185,8 @@ module "create_elastic_cluster" {
 //  elasticsearch_cluster_name          = "${module.create_elastic_cluster.elasticsearch_cluster_name}"
 //  elasticsearch_cluster_sg_client_id  = "${module.create_elastic_cluster.elasticsearch_cluster_sg_client_id}"
 //
-//  efs_file_system_id            = "${module.create_elasticseach_efs_backup_share.efs_id}"
-//  efs_mount_dir                 = "/opt/esbackup"
+//   efs_file_system_id            = ""
+////  efs_file_system_id            = "${module.create_elasticseach_efs_backup_share.efs_id}"
+//  efs_mount_dir                 = ""
+////  efs_mount_dir                 = "/opt/esbackup"
 //}
