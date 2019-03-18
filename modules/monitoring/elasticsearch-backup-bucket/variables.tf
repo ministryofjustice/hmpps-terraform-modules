@@ -5,5 +5,5 @@ variable "acl" {
 variable "bucket_name" {}
 
 variable "tags" {
-  type = "list"
+  type = "map"
 }
