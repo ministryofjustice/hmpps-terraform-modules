@@ -98,11 +98,11 @@ services:
       - ${es_home}/elasticsearch/conf.d:/usr/share/elasticsearch/conf.d
     environment:
       - HMPPS_ES_CLUSTER_NAME=${aws_cluster}
-      - HMPPS_ES_NODE_NAME=${app_name}-node${instance_identifier}
+      - HMPPS_ES_NODE_NAME=elasticsearch-${instance_identifier}
       - HMPPS_ES_MIN_MASTER_NODES=2
-      - HMPPS_ES_CLUSTER_NODES_01=${app_name}-node1.${private_domain}
-      - HMPPS_ES_CLUSTER_NODES_02=${app_name}-node2.${private_domain}
-      - HMPPS_ES_CLUSTER_NODES_03=${app_name}-node3.${private_domain}
+      - HMPPS_ES_CLUSTER_NODES_01=elasticsearch-1.${private_domain}
+      - HMPPS_ES_CLUSTER_NODES_02=elasticsearch-2.${private_domain}
+      - HMPPS_ES_CLUSTER_NODES_03=elasticsearch-3.${private_domain}
       - HMPPS_ES_CLUSTER_NODES_04=elasticsearch
       - HMPPS_ES_GATEWAY_EXPECTED_NODES=3
       - HMPPS_ES_GATEWAY_RECOVER_AFTER_TIME=5m
@@ -128,11 +128,11 @@ services:
       - ${efs_mount_dir}:${efs_mount_dir}
     environment:
       - HMPPS_ES_CLUSTER_NAME=${aws_cluster}
-      - HMPPS_ES_NODE_NAME=${app_name}-node${instance_identifier}
+      - HMPPS_ES_NODE_NAME=elasticsearch-${instance_identifier}
       - HMPPS_ES_MIN_MASTER_NODES=2
-      - HMPPS_ES_CLUSTER_NODES_01=${app_name}-node1.${private_domain}
-      - HMPPS_ES_CLUSTER_NODES_02=${app_name}-node2.${private_domain}
-      - HMPPS_ES_CLUSTER_NODES_03=${app_name}-node3.${private_domain}
+      - HMPPS_ES_CLUSTER_NODES_01=elasticsearch-1.${private_domain}
+      - HMPPS_ES_CLUSTER_NODES_02=elasticsearch-2.${private_domain}
+      - HMPPS_ES_CLUSTER_NODES_03=elasticsearch-3.${private_domain}
       - HMPPS_ES_CLUSTER_NODES_04=elasticsearch
       - HMPPS_ES_GATEWAY_EXPECTED_NODES=3
       - HMPPS_ES_GATEWAY_RECOVER_AFTER_TIME=5m
