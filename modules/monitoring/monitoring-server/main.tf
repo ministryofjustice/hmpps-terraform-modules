@@ -42,6 +42,7 @@ data "template_file" "monitoring_instance_user_data" {
     efs_mount_dir         = "${var.efs_mount_dir}"
     efs_file_system_id    = "${var.efs_file_system_id}"
     region                = "${var.region}"
+    es_backup_bucket      = "${var.elasticsearch-backup-bucket}"
   }
 }
 
