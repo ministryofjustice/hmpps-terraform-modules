@@ -77,6 +77,17 @@
             ]
         },
         {
+            "Sid": "allowAccessToS3BackupBuckets",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::${elasticsearch-backup-bucket}",
+                "arn:aws:s3:::${elasticsearch-backup-bucket}/*"
+            ]
+        },
+        {
             "Effect": "Allow",
             "Sid": "allowSSMReadOnly",
             "Action": [

@@ -85,3 +85,5 @@ variable "bastion_inventory" {
 variable "efs_mount_dir" {}
 
 variable "efs_file_system_id" {}
+
+variable "elasticsearch-backup-bucket" {}

@@ -8,7 +8,7 @@ data "template_file" "create_elasticsearch_instance_role" {
   vars {
     ingestion_role_arn          = "${module.create_elasticsearch_app_role.iamrole_arn}"
     s3-config-bucket            = "${var.s3-config-bucket}"
-    elasticsearch-backup-bucket = ""
+    elasticsearch-backup-bucket = "${var.elasticsearch-backup-bucket}"
   }
 }
 

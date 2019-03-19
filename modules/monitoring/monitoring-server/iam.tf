@@ -2,8 +2,9 @@ data "template_file" "create_monitoring_instance_role" {
   template = "${file("${path.module}/${local.role_policy_file}")}"
 
   vars {
-    monitoring_role_arn = "${module.create_monitoring_app_role.iamrole_arn}"
-    s3-config-bucket = "${var.s3-config-bucket}"
+    monitoring_role_arn         = "${module.create_monitoring_app_role.iamrole_arn}"
+    s3-config-bucket            = "${var.s3-config-bucket}"
+    elasticsearch-backup-bucket = "${var.elasticsearch-backup-bucket}"
   }
 }
 

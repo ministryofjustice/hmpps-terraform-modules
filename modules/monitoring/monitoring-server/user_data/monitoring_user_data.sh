@@ -74,6 +74,7 @@ cat << EOF > ~/bootstrap.yml
         uid: 101
         system: true
         state: present
+
 EOF
 
 
