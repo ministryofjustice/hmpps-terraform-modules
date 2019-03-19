@@ -16,6 +16,7 @@ data "template_file" "elasticsearch_backup_policy" {
   vars {
     bucket      = "${var.bucket_name}"
     vpc_cidr    = "${var.vpc_cidr}"
+    account_id  = "${var.account_id}"
   }
 }
 

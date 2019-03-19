@@ -2,7 +2,6 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "AllowBucketAccess",
             "Effect": "Allow",
             "Action": [
                 "s3:*"
@@ -15,6 +14,9 @@
                 "IpAddress": {
                     "aws:SourceIp": "${vpc_cidr}"
                 }
+            },
+            "Principal": {
+              "AWS": "${account_id}"
             }
         }
     ]
