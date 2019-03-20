@@ -87,7 +87,7 @@ ansible-galaxy install -f -r ~/requirements.yml
 IS_MONITORING=True ansible-playbook ~/bootstrap.yml
 
 #Create docker-compose file and env file
-mkdir -p ${es_home}/service-monitoring ${es_home}/elasticsearch/data ${es_home}/elasticsearch/conf.d
+mkdir -p ${es_home}/service-monitoring ${es_home}/elasticsearch/data ${es_home}/elasticsearch/conf.d /opt/curator
 
 if [ "x${efs_mount_dir}" == "x" ];then
 cat << EOF > ${es_home}/service-monitoring/docker-compose.yml
@@ -99,6 +99,7 @@ services:
     volumes:
       - ${es_home}/elasticsearch/data:/usr/share/elasticsearch/data
       - ${es_home}/elasticsearch/conf.d:/usr/share/elasticsearch/conf.d
+      - /opt/curator:/opt/curator
     environment:
       - HMPPS_ES_CLUSTER_NAME=${aws_cluster}
       - HMPPS_ES_NODE_NAME=${app_name}
@@ -151,6 +152,7 @@ services:
       - ${es_home}/elasticsearch/data:/usr/share/elasticsearch/data
       - ${es_home}/elasticsearch/conf.d:/usr/share/elasticsearch/conf.d
       - ${efs_mount_dir}:${efs_mount_dir}
+      - /opt/curator:/opt/curator
     environment:
       - HMPPS_ES_CLUSTER_NAME=${aws_cluster}
       - HMPPS_ES_NODE_NAME=${app_name}
@@ -198,11 +200,16 @@ chmod -R 775 ${efs_mount_dir}
 
 fi
 
-chown -R `id -u elasticsearch`:`id -g elasticsearch` ${es_home}/elasticsearch
-chmod -R 775 ${es_home}/elasticsearch
+chown -R `id -u elasticsearch`:`id -g elasticsearch` ${es_home}/elasticsearch /opt/curator
+chmod -R 775 ${es_home}/elasticsearch /opt/curator
 
 ulimit -n 65536
 sysctl -w vm.max_map_count=262144
 service docker restart
 sleep 10
 docker-compose -f ${es_home}/service-monitoring/docker-compose.yml up -d
+
+#Wait for elasticsearch to come up
+sleep 60
+sudo docker exec -ti service-monitoring_elasticsearch_1 bash -c \
+    "es_repo_mgr create fs --repository ${aws_cluster}-backup --location ${efs_mount_dir} --compression true"
