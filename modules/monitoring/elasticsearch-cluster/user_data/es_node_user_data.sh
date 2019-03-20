@@ -75,6 +75,13 @@ cat << EOF > ~/bootstrap.yml
         uid: 101
         system: true
         state: present
+    - name: Create our backup cron
+      cron:
+        name: "Backup elasticsearch"
+        job: 'docker exec service-elasticsearch_elasticsearch_1 bash -c "curator --config /usr/share/elasticsearch/.curator/curator.yml /opt/curator/backup.yml"'
+        hour: 0
+        minute: 15
+      become: true
 EOF
 
 

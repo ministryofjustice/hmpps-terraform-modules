@@ -77,7 +77,7 @@ cat << EOF > ~/bootstrap.yml
     - name: Add a cron to run s3_sync periodically
       cron:
         name: "Sync backups to s3"
-        job: "aws s3 sync /opt/es_backups/. s3://${es_backup_bucket} --delete"
+        job: "aws s3 sync /opt/es_backups/. s3://${es_backup_bucket}"
         hour: 0
         minute: 30
 EOF
