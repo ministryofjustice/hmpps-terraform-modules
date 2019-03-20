@@ -105,6 +105,7 @@ data "aws_ami" "amazon_ami" {
     public_ssl_arn          = "${data.terraform_remote_state.vpc.public_ssl_arn}"
     route53_hosted_zone_id  = "${data.terraform_remote_state.vpc.internal_zone}"
   }
+# Example setup below
 
 //module "create_elasticseach_efs_backup_share" {
 //  source            = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//efs"
@@ -117,39 +118,39 @@ data "aws_ami" "amazon_ami" {
 //  tags              = "${var.tags}"
 //}
 
-module "create_elastic_cluster" {
-  source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=esBackups//modules/monitoring/elasticsearch-cluster"
-
-  app_name                      = "es-clust"
-  instance_type                 = "${local.instance_type}"
-  ebs_device_volume_size        = "${local.ebs_device_volume_size}"
-  docker_image_tag              = "${local.docker_image_tag}"
-  docker_image_name             = "${local.docker_es_image_name}"
-  availability_zones            = "${local.availability_zones}"
-  short_environment_identifier  = "${var.short_environment_identifier}"
-  environment_identifier        = "${var.environment_identifier}"
-  region                        = "${var.region}"
-  route53_sub_domain            = "${local.route53_sub_domain}"
-  amazon_ami_id                 = "${data.aws_ami.amazon_ami.id}"
-  bastion_origin_cidr           = "${data.terraform_remote_state.bastion_remote_vpc.bastion_vpc_cidr}"
-  bastion_origin_sgs            = "${local.bastion_origin_sgs}"
-
-  private_zone_name             = "${data.terraform_remote_state.vpc.private_zone_name}"
-  private_zone_id               = "${data.terraform_remote_state.vpc.private_zone_id}"
-  account_id                    = "${local.account_id}"
-  tags                          = "${data.terraform_remote_state.vpc.tags}"
-  ssh_deployer_key              = "${data.terraform_remote_state.vpc.ssh_deployer_key}"
-  subnet_ids                    = "${local.private_subnet_ids}"
-  vpc_id                        = "${data.terraform_remote_state.vpc.vpc_id}"
-  vpc_cidr                      = "${data.terraform_remote_state.vpc.vpc_cidr_block}"
-  bastion_inventory             = "${data.terraform_remote_state.vpc.bastion_inventory}"
-  s3-config-bucket              = "${var.remote_state_bucket_name}"
-
-  efs_file_system_id            = ""
-//  efs_file_system_id            = "${module.create_elasticseach_efs_backup_share.efs_id}"
-  efs_mount_dir                 = ""
-//  efs_mount_dir                 = "/opt/esbackup"
-}
+//module "create_elastic_cluster" {
+//  source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=esBackups//modules/monitoring/elasticsearch-cluster"
+//
+//  app_name                      = "es-clust"
+//  instance_type                 = "${local.instance_type}"
+//  ebs_device_volume_size        = "${local.ebs_device_volume_size}"
+//  docker_image_tag              = "${local.docker_image_tag}"
+//  docker_image_name             = "${local.docker_es_image_name}"
+//  availability_zones            = "${local.availability_zones}"
+//  short_environment_identifier  = "${var.short_environment_identifier}"
+//  environment_identifier        = "${var.environment_identifier}"
+//  region                        = "${var.region}"
+//  route53_sub_domain            = "${local.route53_sub_domain}"
+//  amazon_ami_id                 = "${data.aws_ami.amazon_ami.id}"
+//  bastion_origin_cidr           = "${data.terraform_remote_state.bastion_remote_vpc.bastion_vpc_cidr}"
+//  bastion_origin_sgs            = "${local.bastion_origin_sgs}"
+//
+//  private_zone_name             = "${data.terraform_remote_state.vpc.private_zone_name}"
+//  private_zone_id               = "${data.terraform_remote_state.vpc.private_zone_id}"
+//  account_id                    = "${local.account_id}"
+//  tags                          = "${data.terraform_remote_state.vpc.tags}"
+//  ssh_deployer_key              = "${data.terraform_remote_state.vpc.ssh_deployer_key}"
+//  subnet_ids                    = "${local.private_subnet_ids}"
+//  vpc_id                        = "${data.terraform_remote_state.vpc.vpc_id}"
+//  vpc_cidr                      = "${data.terraform_remote_state.vpc.vpc_cidr_block}"
+//  bastion_inventory             = "${data.terraform_remote_state.vpc.bastion_inventory}"
+//  s3-config-bucket              = "${var.remote_state_bucket_name}"
+//
+//  efs_file_system_id            = ""
+////  efs_file_system_id            = "${module.create_elasticseach_efs_backup_share.efs_id}"
+//  efs_mount_dir                 = ""
+////  efs_mount_dir                 = "/opt/esbackup"
+//}
 
 //module "create_monitoring_instance" {
 //  source = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=esBackups//modules/monitoring/monitoring-server"
