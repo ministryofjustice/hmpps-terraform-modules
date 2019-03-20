@@ -199,6 +199,41 @@ actions:
 
 EOF
 
+cat << EOF > /opt/curator/restore.yml
+---
+
+actions:
+  1:
+    action: close
+    description: "Close indices before restoring snapshot"
+    options:
+      continue_if_exception: True
+      ignore_empty_list: True
+    filters:
+      - filtertype: pattern
+        kind: regex
+        value: ".*$"
+  2:
+    action: restore
+    description: "Restore all indices in the most recent snapshot with state SUCCESS"
+    options:
+      repository: "${aws_cluster}-backup"
+      name:
+      indices:
+      wait_for_completion: True
+    filters:
+      - filtertype: state
+        state: SUCCESS
+  3:
+    action: open
+    description: "Open indices after restoring snapshot"
+    filters:
+      - filtertype: pattern
+        kind: regex
+        value: ".*$"
+
+EOF
+
 chown -R `id -u elasticsearch`:`id -g elasticsearch` ${es_home}/elasticsearch /opt/curator
 chmod -R 775 ${es_home}/elasticsearch /opt/curator
 
