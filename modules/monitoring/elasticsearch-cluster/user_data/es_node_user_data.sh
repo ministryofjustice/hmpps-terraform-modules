@@ -82,6 +82,13 @@ cat << EOF > ~/bootstrap.yml
         hour: 0
         minute: 15
       become: true
+    - name: Prune old indices
+      cron:
+        name: "Prune indices"
+        job: 'docker exec service-elasticsearch_elasticsearch_1 bash -c "curator --config /usr/share/elasticsearch/.curator/curator.yml /opt/curator/prune.yml"'
+        hour: 4
+        minute: 0
+      become: true
 EOF
 
 
