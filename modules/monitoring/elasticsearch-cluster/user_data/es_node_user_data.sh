@@ -89,6 +89,13 @@ cat << EOF > ~/bootstrap.yml
         hour: 4
         minute: 0
       become: true
+    - name: Remove old backups
+      cron:
+        name: "Remove backups older than 7 days"
+        job: "find /opt/es_backups -mtime +7 -print | xargs rm -rf"
+        hour: 1
+        minute: 0
+      become: true
 EOF
 
 
