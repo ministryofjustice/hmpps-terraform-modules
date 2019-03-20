@@ -208,8 +208,3 @@ sysctl -w vm.max_map_count=262144
 service docker restart
 sleep 10
 docker-compose -f ${es_home}/service-monitoring/docker-compose.yml up -d
-
-#Wait for elasticsearch to come up
-sleep 60
-sudo docker exec -ti service-monitoring_elasticsearch_1 bash -c \
-    "es_repo_mgr create fs --repository ${aws_cluster}-backup --location ${efs_mount_dir} --compression true"

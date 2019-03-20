@@ -83,7 +83,7 @@ ansible-playbook ~/bootstrap.yml
 
 
 #Create docker-compose file and env file
-mkdir -p ${es_home}/service-elasticsearch ${es_home}/elasticsearch/data ${es_home}/elasticsearch/conf.d
+mkdir -p ${es_home}/service-elasticsearch ${es_home}/elasticsearch/data ${es_home}/elasticsearch/conf.d /opt/curator
 
 if [ "x${efs_mount_dir}" == "x" ];then
 
@@ -96,6 +96,7 @@ services:
     volumes:
       - ${es_home}/elasticsearch/data:/usr/share/elasticsearch/data
       - ${es_home}/elasticsearch/conf.d:/usr/share/elasticsearch/conf.d
+      - /opt/curator:/opt/curator
     environment:
       - HMPPS_ES_CLUSTER_NAME=${aws_cluster}
       - HMPPS_ES_NODE_NAME=elasticsearch-${instance_identifier}
@@ -126,6 +127,7 @@ services:
       - ${es_home}/elasticsearch/data:/usr/share/elasticsearch/data
       - ${es_home}/elasticsearch/conf.d:/usr/share/elasticsearch/conf.d
       - ${efs_mount_dir}:${efs_mount_dir}
+      - /opt/curator:/opt/curator
     environment:
       - HMPPS_ES_CLUSTER_NAME=${aws_cluster}
       - HMPPS_ES_NODE_NAME=elasticsearch-${instance_identifier}
@@ -149,11 +151,59 @@ chown -R `id -u elasticsearch`:`id -g elasticsearch` ${efs_mount_dir}
 chmod -R 775 ${efs_mount_dir}
 fi
 
-chown -R `id -u elasticsearch`:`id -g elasticsearch` ${es_home}/elasticsearch
-chmod -R 775 ${es_home}/elasticsearch
+#Create our curator templates
+cat << EOF > /opt/curator/backup.yml
+---
+
+actions:
+  1:
+    action: snapshot
+    description: "Create snapshot of ${aws_cluster}"
+    options:
+      repository: "${aws_cluster}-backup"
+      continue_if_exception: False
+      wait_for_completion: True
+    filters:
+      - filtertype: pattern
+        kind: regex
+        value: ".*$"
+
+EOF
+
+cat << EOF > /opt/curator/prune.yml
+---
+
+actions:
+  1:
+    action: delete_indices
+    description: "Prune indices on ${aws_cluster}"
+    options:
+      ignore_empty_list: True
+      disable_action: False
+    filters:
+    - filtertype: age
+      source: creation_date
+      direction: older
+      unit: days
+      unit_count: 365
+    - filtertype: pattern
+      kind: regex
+      value: '*'
+
+EOF
+
+chown -R `id -u elasticsearch`:`id -g elasticsearch` ${es_home}/elasticsearch /opt/curator
+chmod -R 775 ${es_home}/elasticsearch /opt/curator
 
 ulimit -n 65536
 sysctl -w vm.max_map_count=262144
 service docker restart
 sleep 10
 docker-compose -f ${es_home}/service-elasticsearch/docker-compose.yml up -d
+
+#Wait for elasticsearch to come up
+sleep 60
+sudo docker exec -ti service-monitoring_elasticsearch_1 bash -c \
+    "es_repo_mgr create fs --config /usr/share/elasticsearch/.curator/curator.yml --repository ${aws_cluster}-backup --location ${efs_mount_dir} --compression true"
+
+
