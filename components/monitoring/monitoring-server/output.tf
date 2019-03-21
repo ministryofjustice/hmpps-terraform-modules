@@ -9,3 +9,7 @@ output "monitoring_server_internal_dns" {
 output "monitoring_server_external_dns" {
   value = "${aws_route53_record.external_monitoring_dns.fqdn}"
 }
+
+output "monitoring_server_internal_ipv4" {
+  value = "${module.create_monitoring_server.private_ip}"
+}

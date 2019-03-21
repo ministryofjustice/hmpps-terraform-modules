@@ -81,3 +81,9 @@ variable "bastion_inventory" {
   description = "Bastion environment inventory"
   type        = "string"
 }
+
+variable "efs_mount_dir" {}
+
+variable "efs_file_system_id" {}
+
+variable "elasticsearch-backup-bucket" {}

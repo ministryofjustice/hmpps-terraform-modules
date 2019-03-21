@@ -39,6 +39,10 @@ data "template_file" "monitoring_instance_user_data" {
     aws_cluster           = "${var.elasticsearch_cluster_name}"
     registry_url          = "${local.docker_registry_url}"
     bastion_inventory     = "${var.bastion_inventory}"
+    efs_mount_dir         = "${var.efs_mount_dir}"
+    efs_file_system_id    = "${var.efs_file_system_id}"
+    region                = "${var.region}"
+    es_backup_bucket      = "${var.elasticsearch-backup-bucket}"
   }
 }
 
@@ -75,7 +79,7 @@ resource "aws_elb" "monitoring_elb" {
   }"
 }
 
-module "create_monitoring_instance" {
+module "create_monitoring_server" {
   source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ec2_no_replace_instance"
   app_name                    = "${var.environment_identifier}-${var.app_name}-node"
   ami_id                      = "${var.amazon_ami_id}"
@@ -101,7 +105,7 @@ module "create_monitoring_instance" {
 
 resource "aws_elb_attachment" "monitoring_node_attachment" {
   elb = "${aws_elb.monitoring_elb.id}"
-  instance = "${module.create_monitoring_instance.instance_id}"
+  instance = "${module.create_monitoring_server.instance_id}"
 }
 
 module "create_monitoring_ebs_volume" {
@@ -117,7 +121,7 @@ module "create_monitoring_ebs_volume" {
 module "attach_monitoring_volume" {
   source      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ebs//ebs_attachment"
   device_name = "/dev/xvdb"
-  instance_id = "${module.create_monitoring_instance.instance_id}"
+  instance_id = "${module.create_monitoring_server.instance_id}"
   volume_id   = "${module.create_monitoring_ebs_volume.id}"
 }
 
@@ -126,7 +130,7 @@ resource "aws_route53_record" "internal_monitoring_dns" {
   type    = "A"
   zone_id = "${var.private_zone_id}"
   ttl     = 300
-  records = ["${module.create_monitoring_instance.private_ip}"]
+  records = ["${module.create_monitoring_server.private_ip}"]
 }
 
 resource "aws_route53_record" "external_monitoring_dns" {

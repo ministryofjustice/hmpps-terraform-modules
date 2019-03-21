@@ -67,3 +67,19 @@ variable "bastion_inventory" {
   description = "Bastion environment inventory"
   type        = "string"
 }
+
+variable "efs_mount_dir" {}
+
+variable "efs_file_system_id" {}
+
+variable "elasticsearch-backup-bucket" {}
+
+variable "retention_period" {
+  description = "How long do we want to keep our indices for"
+  default     = 365
+}
+
+variable "backup_retention_days" {
+  description = "How many days do we want to store the backup on our efs share"
+  default     = 14
+}

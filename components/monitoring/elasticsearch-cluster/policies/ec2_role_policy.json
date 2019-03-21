@@ -43,7 +43,20 @@
             ],
             "Resource": [
                 "arn:aws:s3:::${s3-config-bucket}",
-                "arn:aws:s3:::${s3-config-bucket}/*"
+                "arn:aws:s3:::${s3-config-bucket}/*",
+                "arn:aws:s3:::${elasticsearch-backup-bucket}",
+                "arn:aws:s3:::${elasticsearch-backup-bucket}/*"
+            ]
+        },
+        {
+            "Sid": "allowAccessToS3BackupBuckets",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::${elasticsearch-backup-bucket}",
+                "arn:aws:s3:::${elasticsearch-backup-bucket}/*"
             ]
         },
         {
