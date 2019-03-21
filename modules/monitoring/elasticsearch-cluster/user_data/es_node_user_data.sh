@@ -172,6 +172,9 @@ chown -R `id -u elasticsearch`:`id -g elasticsearch` ${efs_mount_dir}
 chmod -R 775 ${efs_mount_dir}
 fi
 
+# See
+# http://www.madhur.co.in/blog/2017/04/09/usingcuratordeleteelasticindex.html
+# https://adnanahmed.info/blog/2017/11/15/backing_up_and_restoring_es_indices_using_curator/
 #Create our curator templates
 cat << EOF > /opt/curator/backup.yml
 ---
