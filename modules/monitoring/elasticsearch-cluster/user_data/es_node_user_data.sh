@@ -91,8 +91,8 @@ cat << EOF > ~/bootstrap.yml
       become: true
     - name: Remove old backups
       cron:
-        name: "Remove backups older than 7 days"
-        job: "find /opt/es_backups -mtime +7 -print | xargs rm -rf"
+        name: "Remove backups older than ${backup_retention_days} days"
+        job: "find /opt/es_backups -mtime ${backup_retention_days} -print | xargs rm -rf"
         hour: 1
         minute: 0
       become: true
@@ -206,7 +206,7 @@ actions:
       source: creation_date
       direction: older
       unit: days
-      unit_count: 365
+      unit_count: ${retention_period}
     - filtertype: pattern
       kind: regex
       value: '*'

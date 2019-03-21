@@ -42,6 +42,8 @@ data "template_file" "create_elasticsearch_1_user_data" {
     efs_mount_dir         = "${var.efs_mount_dir}"
     efs_file_system_id    = "${var.efs_file_system_id}"
     region                = "${var.region}"
+    retention_period      = "${var.retention_period}"
+    backup_retention_days = "${var.backup_retention_days}"
   }
 }
 
@@ -109,6 +111,8 @@ data "template_file" "create_elasticsearch_2_user_data" {
     efs_mount_dir         = "${var.efs_mount_dir}"
     efs_file_system_id    = "${var.efs_file_system_id}"
     region                = "${var.region}"
+    retention_period      = "${var.retention_period}"
+    backup_retention_days = "${var.backup_retention_days}"
   }
 }
 
@@ -176,6 +180,8 @@ data "template_file" "create_elasticsearch_3_user_data" {
     efs_mount_dir         = "${var.efs_mount_dir}"
     efs_file_system_id    = "${var.efs_file_system_id}"
     region                = "${var.region}"
+    retention_period      = "${var.retention_period}"
+    backup_retention_days = "${var.backup_retention_days}"
   }
 }
 
