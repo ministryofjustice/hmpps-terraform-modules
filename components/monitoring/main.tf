@@ -190,4 +190,5 @@ data "aws_ami" "amazon_ami" {
 ////  efs_file_system_id            = "${module.create_elasticseach_efs_backup_share.efs_id}"
 //  efs_mount_dir                 = ""
 ////  efs_mount_dir                 = "/opt/esbackup"
+//  public_domain                       = "${var.public_domain}
 //}
