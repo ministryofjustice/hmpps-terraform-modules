@@ -135,7 +135,7 @@ resource "aws_route53_record" "internal_monitoring_dns" {
 
 resource "aws_route53_record" "external_monitoring_dns" {
   zone_id = "${var.route53_hosted_zone_id}"
-  name    = "${local.server_dns}.${var.route53_sub_domain}.${var.route53_domain_private}"
+  name    = "${local.server_dns}.${var.public_domain}"
   type    = "A"
 
   alias {

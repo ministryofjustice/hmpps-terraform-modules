@@ -45,3 +45,5 @@ variable "efs_mount_dir" {
 variable "share_name" {}
 
 variable "bastion_inventory" {}
+
+variable "public_domain" {}
