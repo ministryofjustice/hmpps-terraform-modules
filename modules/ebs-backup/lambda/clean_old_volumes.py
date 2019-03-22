@@ -1,9 +1,9 @@
 import boto3
 import datetime
 from datetime import datetime
-import ConfigParser
+import configparser
 
-config = ConfigParser.RawConfigParser()
+config = configparser.RawConfigParser()
 config.read('./vars.ini')
 
 
