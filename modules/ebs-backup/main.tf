@@ -41,7 +41,7 @@ data "archive_file" "ebs_lambda_zip" {
 
 resource "aws_lambda_function" "ebs_backup_lambda" {
   function_name     = "${var.stack_prefix}_snapshot_${var.unique_name}"
-  filename          = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}_snapshot.zip"
+  filename          = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}.zip"
   source_code_hash  = "${data.archive_file.ebs_lambda_zip.output_base64sha256}"
   role              = "${module.ebs_backup_iam_role.iamrole_arn}"
   runtime           = "python3.6"
@@ -53,7 +53,7 @@ resource "aws_lambda_function" "ebs_backup_lambda" {
 
 resource "aws_lambda_function" "ebs_prune_lambda" {
   function_name     = "${var.stack_prefix}_prune_${var.unique_name}"
-  filename          = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}_prune.zip"
+  filename          = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}.zip"
   source_code_hash  = "${data.archive_file.ebs_lambda_zip.output_base64sha256}"
   role              = "${module.ebs_backup_iam_role.iamrole_arn}"
   runtime           = "python3.6"
