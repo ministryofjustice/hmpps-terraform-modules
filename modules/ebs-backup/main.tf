@@ -20,65 +20,48 @@ data "template_file" "vars" {
 }
 
 
-resource "null_resource" "build_ebs_snapshot_lambdazip" {
+resource "null_resource" "build_ebs_lambdazip" {
   triggers { key = "${uuid()}" }
   provisioner "local-exec" {
     command = <<EOF
     mkdir -p ${path.module}/lambda && mkdir -p ${path.module}/tmp
     cp ${path.module}/lambda/ebs_backup.py ${path.module}/tmp/ebs_backup.py
+    cp ${path.module}/lambda/clean_old_volumes.py ${path.module}/tmp/clean_old_volumes.py
     echo "${data.template_file.vars.rendered}" > ${path.module}/tmp/vars.ini
 EOF
   }
 }
 
-resource "null_resource" "build_ebs_prune_lambdazip" {
-  triggers { key = "${uuid()}" }
-  provisioner "local-exec" {
-    command = <<EOF
-    mkdir -p ${path.module}/lambda && mkdir -p ${path.module}/tmp
-    cp ${path.module}/lambda/ebs_backup.py ${path.module}/tmp/clean_old_volumes.py
-    echo "${data.template_file.vars.rendered}" > ${path.module}/tmp/vars.ini
-EOF
-  }
-}
-
-data "archive_file" "ebs_snapshot_lambda_zip" {
+data "archive_file" "ebs_lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/tmp"
-  output_path = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}_snapshot.zip"
-  depends_on  = ["null_resource.build_ebs_snapshot_lambdazip"]
-}
-
-data "archive_file" "ebs_prune_lambda_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}/tmp"
-  output_path = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}_prune.zip"
-  depends_on  = ["null_resource.build_ebs_prune_lambdazip"]
+  output_path = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}.zip"
+  depends_on  = ["null_resource.build_ebs_lambdazip"]
 }
 
 resource "aws_lambda_function" "ebs_backup_lambda" {
   function_name     = "${var.stack_prefix}_snapshot_${var.unique_name}"
   filename          = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}_snapshot.zip"
-  source_code_hash  = "${data.archive_file.ebs_snapshot_lambda_zip.output_base64sha256}"
+  source_code_hash  = "${data.archive_file.ebs_lambda_zip.output_base64sha256}"
   role              = "${module.ebs_backup_iam_role.iamrole_arn}"
   runtime           = "python3.6"
   handler           = "ebs_backup.lambda_handler"
   timeout           = "60"
   publish           = true
-  depends_on        = ["null_resource.build_ebs_snapshot_lambdazip"]
+  depends_on        = ["null_resource.build_ebs_lambdazip"]
 }
 
 resource "aws_lambda_function" "ebs_prune_lambda" {
   function_name     = "${var.stack_prefix}_prune_${var.unique_name}"
   filename          = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}_prune.zip"
-  source_code_hash  = "${data.archive_file.ebs_prune_lambda_zip.output_base64sha256}"
+  source_code_hash  = "${data.archive_file.ebs_lambda_zip.output_base64sha256}"
   role              = "${module.ebs_backup_iam_role.iamrole_arn}"
   runtime           = "python3.6"
   handler           = "clean_old_volumes.lambda_handler"
   timeout           = 300
   memory_size       = 1024
   publish           = true
-  depends_on        = ["null_resource.build_ebs_prune_lambdazip"]
+  depends_on        = ["null_resource.build_ebs_lambdazip"]
 }
 
 resource "aws_cloudwatch_event_rule" "ebs_backup_timer" {
