@@ -24,7 +24,7 @@ def lambda_handler(event, context):
                 instance_name = 'Unknown'
 
                 vol_id = volume['VolumeId']
-                if volume['Attachments'][0]:
+                try:
                     instance_id = volume['Attachments'][0]['InstanceId']
                     device_name = volume['Attachments'][0]['Device']
 
@@ -55,3 +55,5 @@ def lambda_handler(event, context):
                                     {'Key': 'InstanceName', 'Value': instance_name}
                                 ]
                             )
+                except IndexError:
+                    pass
