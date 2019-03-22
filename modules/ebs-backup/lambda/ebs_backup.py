@@ -1,9 +1,6 @@
 import boto3
 import ConfigParser
-import botocore
 import datetime
-import re
-import collections
 
 config = ConfigParser.RawConfigParser()
 config.read('./vars.ini')
@@ -53,7 +50,9 @@ def lambda_handler(event, context):
                                 {'Key': 'DeleteOn', 'Value': delete_fmt},
                                 {'Key': 'Name', 'Value': snapshot},
                                 {'Key': 'InstanceId', 'Value': instance_id},
-                                {'Key': 'DeviceName', 'Value': device_name}
+                                {'Key': 'DeviceName', 'Value': device_name},
+                                {'Key': 'Source', 'Value': 'Automated Volume Snapshot'},
+                                {'Key': 'InstanceName', 'Value': instance_name}
                             ]
                         )
 
