@@ -96,6 +96,20 @@
                 "ssm:List*"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Sid": "allowBucketEncryptionAccess",
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:DescribeKey"
+            ],
+            "Resource": [
+                "*"
+            ]
         }
     ]
 }
