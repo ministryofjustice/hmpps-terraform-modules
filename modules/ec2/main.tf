@@ -19,11 +19,4 @@ resource "aws_instance" "instance" {
   root_block_device {
     volume_size = "${var.root_device_size}"
   }
-
-  lifecycle {
-    ignore_changes = [
-      "ami",
-      "user_data"
-    ]
-  }
 }
