@@ -1,6 +1,6 @@
 resource "aws_eip" "environment" {
   vpc  = true
-  tags = "${merge(var.tags, map("Name", "${var.az}-nat-gateway"), map("Do  not delete", "true")}"
+  tags = "${merge(var.tags, map("Name", "${var.az}-nat-gateway", "Persitant", "DoNotDelete"))}"
   lifecycle {
     prevent_destroy = true
   }
@@ -11,3 +11,6 @@ resource "aws_nat_gateway" "environment" {
   subnet_id     = "${var.subnet}"
   tags          = "${merge(var.tags, map("Name", "${var.az}-nat-gateway"))}"
 }
+
+
+tags = "${merge(var.tags, map("Name", "${var.az}-nat-gateway", "Persitant", "DoNotDelete"))}"
