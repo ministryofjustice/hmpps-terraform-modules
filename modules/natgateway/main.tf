@@ -1,6 +1,6 @@
 resource "aws_eip" "environment" {
   vpc  = true
-  tags = "${merge(var.tags, map("Name", "${var.az}-nat-gateway-eip"))}"
+  tags = "${merge(var.tags, map("Name", "${var.az}-nat-gateway"), map("Do-Not-Delete", "true"))}"
   lifecycle {
     prevent_destroy = true
   }
