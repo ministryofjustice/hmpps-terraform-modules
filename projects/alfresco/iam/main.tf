@@ -6,13 +6,14 @@
 # Locals
 ####################################################
 locals {
-  common_name          = "${var.common_name}"
-  tags                 = "${var.tags}"
-  s3-config-bucket     = "${var.s3-config-bucket}"
-  remote_iam_role      = "${var.remote_iam_role}"
-  remote_config_bucket = "${var.remote_config_bucket}"
-  storage_s3bucket     = "${var.storage_s3bucket}"
-  s3bucket_kms_arn     = "${var.s3bucket_kms_arn}"
+  common_name                = "${var.common_name}"
+  tags                       = "${var.tags}"
+  s3-config-bucket           = "${var.s3-config-bucket}"
+  remote_iam_role            = "${var.remote_iam_role}"
+  remote_config_bucket       = "${var.remote_config_bucket}"
+  storage_s3bucket           = "${var.storage_s3bucket}"
+  s3bucket_kms_arn           = "${var.s3bucket_kms_arn}"
+  restore_dynamodb_table_arn = "${var.restore_dynamodb_table_arn}"
 }
 
 ############################################
@@ -80,12 +81,13 @@ data "template_file" "iam_policy_app_int" {
   template = "${var.ec2_internal_policy_file}"
 
   vars {
-    s3-config-bucket     = "${local.s3-config-bucket}"
-    app_role_arn         = "${module.create-iam-app-role-int.iamrole_arn}"
-    remote_iam_role      = "${local.remote_iam_role}"
-    remote_config_bucket = "${local.remote_config_bucket}"
-    storage_s3bucket     = "${local.storage_s3bucket}"
-    s3bucket_kms_arn     = "${local.s3bucket_kms_arn}"
+    s3-config-bucket           = "${local.s3-config-bucket}"
+    app_role_arn               = "${module.create-iam-app-role-int.iamrole_arn}"
+    remote_iam_role            = "${local.remote_iam_role}"
+    remote_config_bucket       = "${local.remote_config_bucket}"
+    storage_s3bucket           = "${local.storage_s3bucket}"
+    s3bucket_kms_arn           = "${local.s3bucket_kms_arn}"
+    restore_dynamodb_table_arn = "${local.restore_dynamodb_table_arn}"
   }
 }
 

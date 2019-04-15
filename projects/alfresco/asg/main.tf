@@ -162,6 +162,7 @@ data "template_file" "user_data" {
     self_signed_cert        = "${var.self_signed_ssm["cert"]}"
     self_signed_key         = "${var.self_signed_ssm["key"]}"
     ssm_get_command         = "aws --region ${var.region} ssm get-parameters --names"
+    messaging_broker_url    = "${var.messaging_broker_url}"
 
     #s3 config data
     bucket_name         = "${var.alfresco_s3bucket}"
