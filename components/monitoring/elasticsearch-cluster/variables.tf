@@ -2,13 +2,12 @@ variable "region" {
   description = "The AWS region."
 }
 
-
 variable "environment_identifier" {
   description = "resource label or name"
 }
 
 variable "availability_zones" {
-  type = "list"
+  type        = "list"
   description = "a map of az's we can deploy to"
 }
 
@@ -82,4 +81,8 @@ variable "retention_period" {
 variable "backup_retention_days" {
   description = "How many days do we want to store the backup on our efs share"
   default     = 14
+}
+
+variable "es_jvm_heap_size" {
+  default = "1g"
 }

@@ -9,52 +9,50 @@ provider "aws" {
 }
 
 locals {
-  policy_file                   = "ec2_policy.json"
-  role_policy_file              = "policies/ec2_role_policy.json"
-  ebs_device_mount_point        = "/dev/xvdb"
-  elasticsearch_root_directory  = "/srv"
-  docker_registry_url           = "mojdigitalstudio"
-  server_dns                    = "monitoring"
+  policy_file                  = "ec2_policy.json"
+  role_policy_file             = "policies/ec2_role_policy.json"
+  ebs_device_mount_point       = "/dev/xvdb"
+  elasticsearch_root_directory = "/srv"
+  docker_registry_url          = "mojdigitalstudio"
+  server_dns                   = "monitoring"
 }
-
 
 ######
 ## Monitoring-node internal elb
 #####
 
 data "template_file" "monitoring_instance_user_data" {
-   template = "${file("${path.module}/user_data/monitoring_user_data.sh")}"
+  template = "${file("${path.module}/user_data/monitoring_user_data.sh")}"
 
   vars {
-    es_home               = "${local.elasticsearch_root_directory}"
-    ebs_device            = "${local.ebs_device_mount_point}"
-    app_name              = "${var.app_name}"
-    env_identifier        = "${var.environment_identifier}"
-    short_env_identifier  = "${var.short_environment_identifier}"
-    route53_sub_domain    = "${var.route53_sub_domain}"
-    private_domain        = "${var.private_zone_name}"
-    account_id            = "${var.account_id}"
-    internal_domain       = "${var.private_zone_name}"
-    version               = "${var.docker_image_tag}"
-    aws_cluster           = "${var.elasticsearch_cluster_name}"
-    registry_url          = "${local.docker_registry_url}"
-    bastion_inventory     = "${var.bastion_inventory}"
-    efs_mount_dir         = "${var.efs_mount_dir}"
-    efs_file_system_id    = "${var.efs_file_system_id}"
-    region                = "${var.region}"
-    es_backup_bucket      = "${var.elasticsearch-backup-bucket}"
+    es_home              = "${local.elasticsearch_root_directory}"
+    ebs_device           = "${local.ebs_device_mount_point}"
+    app_name             = "${var.app_name}"
+    env_identifier       = "${var.environment_identifier}"
+    short_env_identifier = "${var.short_environment_identifier}"
+    route53_sub_domain   = "${var.route53_sub_domain}"
+    private_domain       = "${var.private_zone_name}"
+    account_id           = "${var.account_id}"
+    internal_domain      = "${var.private_zone_name}"
+    version              = "${var.docker_image_tag}"
+    aws_cluster          = "${var.elasticsearch_cluster_name}"
+    registry_url         = "${local.docker_registry_url}"
+    bastion_inventory    = "${var.bastion_inventory}"
+    efs_mount_dir        = "${var.efs_mount_dir}"
+    efs_file_system_id   = "${var.efs_file_system_id}"
+    region               = "${var.region}"
+    es_backup_bucket     = "${var.elasticsearch-backup-bucket}"
+    es_jvm_heap_size     = "${var.es_jvm_heap_size}"
   }
 }
 
 resource "aws_elb" "monitoring_elb" {
-
   listener {
-    instance_port = "5601"
-    instance_protocol = "http"
-    lb_port = "443"
-    lb_protocol = "https"
+    instance_port      = "5601"
+    instance_protocol  = "http"
+    lb_port            = "443"
+    lb_protocol        = "https"
     ssl_certificate_id = "${var.public_ssl_arn}"
-
   }
 
   health_check {
@@ -68,7 +66,7 @@ resource "aws_elb" "monitoring_elb" {
   name = "${var.short_environment_identifier}-${var.app_name}-elb"
 
   subnets = [
-    "${var.public_subnet_ids}"
+    "${var.public_subnet_ids}",
   ]
 
   security_groups = ["${aws_security_group.monitoring_elb_sg.id}"]
@@ -100,11 +98,10 @@ module "create_monitoring_server" {
         list(var.elasticsearch_cluster_sg_client_id)
       )
     }"
-
 }
 
 resource "aws_elb_attachment" "monitoring_node_attachment" {
-  elb = "${aws_elb.monitoring_elb.id}"
+  elb      = "${aws_elb.monitoring_elb.id}"
   instance = "${module.create_monitoring_server.instance_id}"
 }
 
@@ -140,7 +137,7 @@ resource "aws_route53_record" "external_monitoring_dns" {
 
   alias {
     evaluate_target_health = false
-    name = "${aws_elb.monitoring_elb.dns_name}"
-    zone_id = "${aws_elb.monitoring_elb.zone_id}"
+    name                   = "${aws_elb.monitoring_elb.dns_name}"
+    zone_id                = "${aws_elb.monitoring_elb.zone_id}"
   }
 }

@@ -40,3 +40,6 @@ variable "zone_name" {}
 
 variable "zone_id" {}
 
+variable "es_jvm_heap_size" {
+  default = "1g"
+}

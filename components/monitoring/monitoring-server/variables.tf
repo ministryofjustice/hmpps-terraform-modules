@@ -2,16 +2,14 @@ variable "region" {
   description = "The AWS region."
 }
 
-
 variable "environment_identifier" {
   description = "resource label or name"
 }
 
 variable "availability_zones" {
-  type = "list"
+  type        = "list"
   description = "a map of az's we can deploy to"
 }
-
 
 variable "amazon_ami_id" {}
 
@@ -89,3 +87,7 @@ variable "efs_file_system_id" {}
 variable "elasticsearch-backup-bucket" {}
 
 variable "public_domain" {}
+
+variable "es_jvm_heap_size" {
+  default = "1g"
+}
