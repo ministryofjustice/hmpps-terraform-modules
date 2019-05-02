@@ -130,6 +130,7 @@ services:
       - HMPPS_ES_GATEWAY_RECOVER_AFTER_TIME=5m
       - HMPPS_ES_GATEWAY_RECOVER_AFTER_NODES=2
       - HMPPS_ES_NETWORK_PUBLISH_HOST=`curl http://169.254.169.254/latest/meta-data/local-ipv4/`
+      - HMPPS_JVM_HEAPSIZE=${es_jvm_heap_size}
     ports:
       - 9300:9300
       - 9200:9200
@@ -162,6 +163,7 @@ services:
       - HMPPS_ES_GATEWAY_RECOVER_AFTER_NODES=2
       - HMPPS_ES_NETWORK_PUBLISH_HOST=`curl http://169.254.169.254/latest/meta-data/local-ipv4/`
       - HMPPS_ES_PATH_REPO=${efs_mount_dir}
+      - HMPPS_JVM_HEAPSIZE=${es_jvm_heap_size}
     ports:
       - 9300:9300
       - 9200:9200

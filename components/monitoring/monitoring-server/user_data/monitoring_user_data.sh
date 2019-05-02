@@ -108,6 +108,7 @@ services:
       - HMPPS_ES_CLUSTER_NODES_02=elasticsearch-2.${private_domain}
       - HMPPS_ES_CLUSTER_NODES_03=elasticsearch-3.${private_domain}
       - HMPPS_ES_NETWORK_PUBLISH_HOST=`curl http://169.254.169.254/latest/meta-data/local-ipv4/`
+      - HMPPS_JVM_HEAPSIZE=${es_jvm_heap_size}
     ports:
       - 9300:9300
       - 9200:9200
@@ -162,6 +163,7 @@ services:
       - HMPPS_ES_CLUSTER_NODES_03=elasticsearch-3.${private_domain}
       - HMPPS_ES_NETWORK_PUBLISH_HOST=`curl http://169.254.169.254/latest/meta-data/local-ipv4/`
       - HMPPS_ES_PATH_REPO=${efs_mount_dir}
+      - HMPPS_JVM_HEAPSIZE=${es_jvm_heap_size}
     ports:
       - 9300:9300
       - 9200:9200
