@@ -27,7 +27,6 @@ resource "null_resource" "build_ebs_lambdazip" {
     lower(md5(file("${path.module}/files/vars.ini"))))}" }
   provisioner "local-exec" {
     command = <<EOF
-    mkdir -p ${path.module}/lambda && mkdir -p ${path.module}/tmp
     cp ${path.module}/lambda/ebs_backup.py ${path.module}/tmp/ebs_backup.py
     cp ${path.module}/lambda/clean_old_volumes.py ${path.module}/tmp/clean_old_volumes.py
     echo "${data.template_file.vars.rendered}" > ${path.module}/tmp/vars.ini
