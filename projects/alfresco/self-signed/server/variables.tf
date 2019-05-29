@@ -20,6 +20,10 @@ variable "alfresco_app_name" {}
 
 variable "internal_domain" {}
 
+variable "external_domain" {
+  default = "external.local"
+}
+
 variable "common_name" {}
 
 variable "tags" {
