@@ -63,7 +63,7 @@ resource "aws_batch_compute_environment" "batch_ce" {
 
   service_role = "${aws_iam_role.batch_service_role.arn}"
   type         = "MANAGED"
-  depends_on   = ["aws_iam_role_policy_attachment.batch_service_role_policy_attchment"]
+  depends_on   = ["aws_iam_role_policy_attachment.batch_service_role_policy_attachment"]
 
   # AWS Batch manages the desired_vcpus value dynamically - don't try and adjust
   lifecycle {
