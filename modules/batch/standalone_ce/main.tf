@@ -12,8 +12,8 @@ resource "aws_iam_role" "batch_service_role" {
 }
 
 # Use existing managed iam policy for ECS instances - May want to copy and manage this separately
-resource "aws_iam_role_policy_attachment" "batch_service_role_policy_attchment" {
-  role       = "${aws_iam_role.aws_batch_service_role.name}"
+resource "aws_iam_role_policy_attachment" "batch_service_role_policy_attachment" {
+  role       = "${aws_iam_role.batch_service_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole"
 }
 
@@ -63,7 +63,7 @@ resource "aws_batch_compute_environment" "batch_ce" {
 
   service_role = "${aws_iam_role.batch_service_role.arn}"
   type         = "MANAGED"
-  depends_on   = ["aws_iam_role_policy_attachment.batch_service_role"]
+  depends_on   = ["aws_iam_role_policy_attachment.batch_service_role_policy_attchment"]
 
   # AWS Batch manages the desired_vcpus value dynamically - don't try and adjust
   lifecycle {
