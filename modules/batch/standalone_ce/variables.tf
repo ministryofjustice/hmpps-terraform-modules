@@ -1,6 +1,5 @@
 variable "ce_name" {
   description = "Name for Compute Environment"
-  type        = "string"
 }
 
 variable "ce_instances" {
@@ -10,13 +9,11 @@ variable "ce_instances" {
 
 variable "ce_min_vcpu" {
   description = "Lower bound of active VCPUs to maintain. Should be 0 in most cases"
-  type        = "number"
   default     = 0
 }
 
 variable "ce_max_vcpu" {
   description = "Upper bound of active VCPUs to maintain. Must be at least as high as the largest instance type specified"
-  type        = "number"
 }
 
 variable "ce_sg" {
@@ -36,5 +33,4 @@ variable "ce_tags" {
 
 variable "ce_queue_state" {
   description = "State of CE job queue: ENABLED or DISABLED"
-  type = "string"
 }

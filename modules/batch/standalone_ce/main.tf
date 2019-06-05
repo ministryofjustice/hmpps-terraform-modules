@@ -73,10 +73,10 @@ resource "aws_batch_compute_environment" "batch_ce" {
   }
 }
 
-
 resource "aws_batch_job_queue" "batch_queue" {
-  name                 = "${var.ce_name}-queue"
-  state                = "${var.ce_queue_state}"
+  name  = "${var.ce_name}-queue"
+  state = "${var.ce_queue_state}"
+
   # This is a standalone CE with a single queue - therefore priority is fixed
   priority             = 1
   compute_environments = ["${aws_batch_compute_environment.batch_ce.arn}"]
