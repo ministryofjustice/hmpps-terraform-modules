@@ -1,6 +1,6 @@
 # Create a Service Role for AWS Batch to run under - allows to 
-data "template" "batch_assume_role_template" {
-  template = "${file("./templates/iam_policies/batch_assume_policy.tpl")}"
+data "template_file" "batch_assume_role_template" {
+  template = "${file("${path.module}/templates/iam_policies/batch_assume_policy.tpl")}"
 
   vars {}
 }
@@ -8,7 +8,7 @@ data "template" "batch_assume_role_template" {
 resource "aws_iam_role" "batch_service_role" {
   name = "${var.ce_name}-batch-role"
 
-  assume_role_policy = "${data.template.batch_assume_role_template.rendered}"
+  assume_role_policy = "${data.template_file.batch_assume_role_template.rendered}"
 }
 
 # Use existing managed iam policy for ECS instances - May want to copy and manage this separately
@@ -18,8 +18,8 @@ resource "aws_iam_role_policy_attachment" "batch_service_role_policy_attachment"
 }
 
 # Create the EC2 Instance role
-data "template" "ec2_assume_role_template" {
-  template = "${file("./templates/iam_policies/ec2_assume_policy.tpl")}"
+data "template_file" "ec2_assume_role_template" {
+  template = "${file("${path.module}/templates/iam_policies/ec2_assume_policy.tpl")}"
 
   vars {}
 }
@@ -27,7 +27,7 @@ data "template" "ec2_assume_role_template" {
 resource "aws_iam_role" "ecs_instance_role" {
   name = "${var.ce_name}-ecs-role"
 
-  assume_role_policy = "${data.template.ec2_assume_role_template.rendered}"
+  assume_role_policy = "${data.template_file.ec2_assume_role_template.rendered}"
 }
 
 # Use existing managed iam policy for ECS instances - May want to copy and manage this separately
@@ -52,9 +52,9 @@ resource "aws_batch_compute_environment" "batch_ce" {
     max_vcpus = "${var.ce_max_vcpu}"
     min_vcpus = "${var.ce_min_vcpu}"
 
-    security_group_ids = "${var.ce_sg}"
+    security_group_ids = [ "${var.ce_sg}" ]
 
-    subnets = "${var.ce_subnets}"
+    subnets = [ "${var.ce_subnets}" ]
 
     type = "EC2"
 

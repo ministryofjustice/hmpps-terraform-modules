@@ -9,8 +9,8 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
 }
 
 # Create an IAM role for the event target to run under
-data "template" "event_assume_role_policy_template" {
-  template = "${file("./templates/iam_templates/event_assume_role.tpl.tpl")}"
+data "template_file" "event_assume_role_policy_template" {
+  template = "${file("${path.module}/templates/iam_policies/event_assume_role.tpl")}"
 
   vars {}
 }
@@ -18,12 +18,12 @@ data "template" "event_assume_role_policy_template" {
 resource "aws_iam_role" "event_role" {
   name = "${var.event_name}-event-role"
 
-  assume_role_policy = "${data.template.event_assume_role_policy_template.rendered}"
+  assume_role_policy = "${data.template_file.event_assume_role_policy_template.rendered}"
 }
 
 # Creata and attach IAM policy to allow event to submit batch jobs to target queue
-data "template" "event_policy_template" {
-  template = "${file("./templates/iam_templates/event_policy.tpl.tpl")}"
+data "template_file" "event_policy_template" {
+  template = "${file("${path.module}/templates/iam_policies/event_policy.tpl")}"
 
   vars {
     job_queue_arn = "${var.event_job_queue_arn}"
@@ -34,7 +34,7 @@ resource "aws_iam_role_policy" "cloudwatch_batch_role" {
   name = "cloudwatch_batch_policy"
   role = "${aws_iam_role.event_role.name}"
 
-  policy = "${data.template.event_policy_template.rendered}"
+  policy = "${data.template_file.event_policy_template.rendered}"
 }
 
 resource "aws_cloudwatch_event_target" "event_target" {
