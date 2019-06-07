@@ -18,6 +18,8 @@ export HMPPS_ACCOUNT_ID="${account_id}"
 export HMPPS_DOMAIN="${private_domain}"
 export S3_ORACLEDB_BACKUPS_ARN="${s3_oracledb_backups_arn}"
 export DEPENDENCIES_BUCKET_ARN="${dependencies_bucket_arn}"
+export INSTANCE_ID="`curl http://169.254.169.254/latest/meta-data/instance-id`"
+export REGION="${region}"
 EOF
 ## Ansible runs in the same shell that has just set the env vars for future logins so it has no knowledge of the vars we've
 ## just configured, so lets export them
@@ -30,6 +32,8 @@ export HMPPS_ACCOUNT_ID="${account_id}"
 export HMPPS_DOMAIN="${private_domain}"
 export S3_ORACLEDB_BACKUPS_ARN="${s3_oracledb_backups_arn}"
 export DEPENDENCIES_BUCKET_ARN="${dependencies_bucket_arn}"
+export INSTANCE_ID="`curl http://169.254.169.254/latest/meta-data/instance-id`"
+export REGION="${region}"
 
 cat << EOF > ~/requirements.yml
 ---
