@@ -165,3 +165,7 @@ CONFIGURE_SWAP=true SELF_REGISTER=true ansible-playbook ~/bootstrap_users.yml \
 "oradb_asmsnmp_password":"$oradb_asmsnmp_password", \
 ' \
 -v
+if [[ $? -eq 0 ]]
+then
+   /sbin/shutdown -r now
+fi
