@@ -128,6 +128,10 @@ ansible-playbook ~/bootstrap_db.yml \
 "oradb_asmsnmp_password":"\$oradb_asmsnmp_password", \
 ' \
 -vvvv
+if [[ $? -eq 0 ]]
+then
+   /sbin/shutdown -r now
+fi
 EOF
 chmod u+x ~/runboot.sh
 
