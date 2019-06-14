@@ -13,7 +13,7 @@ locals {
     "client_auth",
   ]
 
-  dns_names = ["*.${var.internal_domain}"]
+  dns_names = ["*.${var.internal_domain}", "*.${var.external_domain}"]
 
   subject = {
     common_name  = "${var.internal_domain}"

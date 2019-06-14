@@ -47,9 +47,10 @@ resource "aws_security_group_rule" "http" {
 # ### S3 bucket for config
 # #--------------------------------------------
 module "s3config_bucket" {
-  source         = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=pre-shared-vpc//modules//s3bucket//s3bucket_without_policy"
+  source         = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//s3bucket//s3bucket_without_policy"
   s3_bucket_name = "${local.common_name}"
   tags           = "${local.tags}"
+  versioning     = false
 }
 
 # #-------------------------------------------
