@@ -2,10 +2,12 @@ data "template_file" "user_data" {
   template = "${file("${path.module}/user_data/user_data.sh")}"
 
   vars {
+    project_name         = "${var.project_name}"
     env_identifier       = "${var.environment_identifier}"
     short_env_identifier = "${var.short_environment_identifier}"
     region               = "${var.region}"
-    app_name             = "${var.server_name}"
+    server_name          = "${var.server_name}"
+    app_name             = "${element(split("-", var.server_name), 0)}" # delius-db-1 -> delius - misboe-db-2 -> misboe
     route53_sub_domain   = "${var.environment_name}"
     private_domain       = "${var.private_domain}"
     account_id           = "${var.vpc_account_id}"
@@ -36,6 +38,7 @@ locals {
   size             = "${lookup(var.db_size, "disk_size")}"
   tags_name_prefix = "${var.environment_name}-${var.server_name}"
 }
+
 resource "aws_instance" "oracle_db" {
   ami                    = "${var.ami_id}"
   instance_type          = "${local.instance_type}"
