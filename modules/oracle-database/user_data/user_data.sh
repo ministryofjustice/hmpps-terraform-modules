@@ -10,7 +10,7 @@ pip install ansible
 
 cat << EOF >> /etc/environment
 export HMPPS_ROLE="${app_name}"
-export HMPPS_FQDN="${app_name}.${private_domain}"
+export HMPPS_FQDN="${server_name}.${private_domain}"
 export HMPPS_STACKNAME=${env_identifier}
 export HMPPS_STACK="${short_env_identifier}"
 export HMPPS_ENVIRONMENT="${route53_sub_domain}"
@@ -25,7 +25,7 @@ EOF
 ## Ansible runs in the same shell that has just set the env vars for future logins so it has no knowledge of the vars we've
 ## just configured, so lets export them
 export HMPPS_ROLE="${app_name}"
-export HMPPS_FQDN="${app_name}.${private_domain}"
+export HMPPS_FQDN="${server_name}.${private_domain}"
 export HMPPS_STACKNAME="${env_identifier}"
 export HMPPS_STACK="${short_env_identifier}"
 export HMPPS_ENVIRONMENT="${route53_sub_domain}"
@@ -106,11 +106,11 @@ cat << EOF > ~/runboot.sh
 PARAM=$(aws ssm get-parameters \
 --region eu-west-2 \
 --with-decryption --name \
-"/\${route53_sub_domain}/delius-core/oracle-database/db/oradb_sys_password" \
-"/\${route53_sub_domain}/delius-core/oracle-database/db/oradb_system_password" \
-"/\${route53_sub_domain}/delius-core/oracle-database/db/oradb_sysman_password" \
-"/\${route53_sub_domain}/delius-core/oracle-database/db/oradb_dbsnmp_password" \
-"/\${route53_sub_domain}/delius-core/oracle-database/db/oradb_asmsnmp_password" \
+"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_sys_password" \
+"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_system_password" \
+"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_sysman_password" \
+"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_dbsnmp_password" \
+"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_asmsnmp_password" \
 --query Parameters)
 oradb_sys_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_sys_password")) | .Value' --raw-output)"
 oradb_system_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_system_password")) | .Value' --raw-output)"
@@ -139,11 +139,11 @@ chmod u+x ~/runboot.sh
 PARAM=$(aws ssm get-parameters \
 --region eu-west-2 \
 --with-decryption --name \
-"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_sys_password" \
-"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_system_password" \
-"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_sysman_password" \
-"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_dbsnmp_password" \
-"/${route53_sub_domain}/delius-core/oracle-database/db/oradb_asmsnmp_password" \
+"/${route53_sub_domain}/${project_name}/\${app_name}-database/db/oradb_sys_password" \
+"/${route53_sub_domain}/${project_name}/\${app_name}-database/db/oradb_system_password" \
+"/${route53_sub_domain}/${project_name}/\${app_name}-database/db/oradb_sysman_password" \
+"/${route53_sub_domain}/${project_name}/\${app_name}-database/db/oradb_dbsnmp_password" \
+"/${route53_sub_domain}/${project_name}/\${app_name}-database/db/oradb_asmsnmp_password" \
 --query Parameters)
 
 # set parameter values
