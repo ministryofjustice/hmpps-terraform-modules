@@ -37,3 +37,8 @@ variable "tags" {
 }
 
 variable "common_name" {}
+
+# SG
+variable "sg_create_outbound_web_rules" {
+  default = 1
+}
