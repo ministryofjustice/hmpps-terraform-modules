@@ -187,3 +187,7 @@ variable "tomcat_port" {
 variable "messaging_broker_url" {
   default = "localhost:61616"
 }
+
+variable "logstash_host_fqdn" {
+  default = "logstash"
+}
