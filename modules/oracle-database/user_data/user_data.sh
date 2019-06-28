@@ -165,5 +165,6 @@ CONFIGURE_SWAP=true SELF_REGISTER=true ansible-playbook ~/bootstrap_users.yml \
 -v
 if [[ $? -eq 0 ]]
 then
-   /sbin/shutdown -r now
+    ## allow Ansible jobs polling for readyness time to disconnect
+   /sbin/shutdown -r +1 "Rebooting in 1 minute"
 fi
