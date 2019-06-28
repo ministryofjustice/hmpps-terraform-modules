@@ -103,6 +103,8 @@ cat << EOF > ~/bootstrap_db.yml
      - oracle-db
 EOF
 cat << EOF > ~/runboot.sh
+#!/usr/bin/env bash
+
 PARAM=$(aws ssm get-parameters \
 --region eu-west-2 \
 --with-decryption --name \
@@ -128,10 +130,6 @@ ansible-playbook ~/bootstrap_db.yml \
 "oradb_asmsnmp_password":"\$oradb_asmsnmp_password", \
 ' \
 -vvvv
-if [[ $? -eq 0 ]]
-then
-   /sbin/shutdown -r now
-fi
 EOF
 chmod u+x ~/runboot.sh
 
@@ -167,5 +165,6 @@ CONFIGURE_SWAP=true SELF_REGISTER=true ansible-playbook ~/bootstrap_users.yml \
 -v
 if [[ $? -eq 0 ]]
 then
-   /sbin/shutdown -r now
+    ## allow Ansible jobs polling for readyness time to disconnect
+   /sbin/shutdown -r +1 "Rebooting in 1 minute"
 fi
