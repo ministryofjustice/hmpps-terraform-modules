@@ -163,6 +163,7 @@ data "template_file" "user_data" {
     self_signed_key         = "${var.self_signed_ssm["key"]}"
     ssm_get_command         = "aws --region ${var.region} ssm get-parameters --names"
     messaging_broker_url    = "${var.messaging_broker_url}"
+    logstash_host_fqdn      = "${var.logstash_host_fqdn}"
 
     #s3 config data
     bucket_name         = "${var.alfresco_s3bucket}"
@@ -287,15 +288,4 @@ module "auto_scale_az3" {
   launch_configuration = "${module.launch_cfg_az3.launch_name}"
   load_balancers       = ["${module.create_app_elb.environment_elb_name}"]
   tags                 = "${local.tags}"
-}
-
-############################################
-# UPLOAD TO S3
-############################################
-
-resource "aws_s3_bucket_object" "nginx_bucket_object" {
-  key    = "${local.common_name}/config/nginx.conf"
-  bucket = "${local.config_bucket}"
-  source = "./templates/nginx.conf"
-  etag   = "${md5(file("./templates/nginx.conf"))}"
 }
