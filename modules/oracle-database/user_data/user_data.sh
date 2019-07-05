@@ -105,14 +105,14 @@ EOF
 cat << EOF > ~/runboot.sh
 #!/usr/bin/env bash
 
-PARAM=$(aws ssm get-parameters \
+PARAM=\$(aws ssm get-parameters \
 --region eu-west-2 \
 --with-decryption --name \
-"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_sys_password" \
-"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_system_password" \
-"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_sysman_password" \
-"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_dbsnmp_password" \
-"/\${route53_sub_domain}/\${project_name}/\${app_name}-database/db/oradb_asmsnmp_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_sys_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_system_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_sysman_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_dbsnmp_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_asmsnmp_password" \
 --query Parameters)
 oradb_sys_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_sys_password")) | .Value' --raw-output)"
 oradb_system_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_system_password")) | .Value' --raw-output)"
