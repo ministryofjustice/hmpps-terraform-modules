@@ -1,12 +1,39 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -x
-exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
-echo BEGIN
-date '+%Y-%m-%d %H:%M:%S'
 
 yum install -y wget git python-pip
 pip install -U pip
 pip install ansible
+
+cat << EOF > ~/getcreds
+#!/usr/bin/env bash
+
+PARAM=\$(aws ssm get-parameters \
+--region eu-west-2 \
+--with-decryption --name \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_sys_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_system_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_sysman_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_dbsnmp_password" \
+"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_asmsnmp_password" \
+--query Parameters)
+export oradb_sys_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_sys_password")) | .Value' --raw-output)"
+export oradb_system_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_system_password")) | .Value' --raw-output)"
+export oradb_sysman_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_sysman_password")) | .Value' --raw-output)"
+export oradb_dbsnmp_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_dbsnmp_password")) | .Value' --raw-output)"
+export oradb_asmsnmp_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_asmsnmp_password")) | .Value' --raw-output)"
+
+EOF
+chmod u+x ~/getcreds
+
+# get ssm parameters for bootstrap ansible
+. ~/getcreds
+
+# log bootstrap after creds obtained
+exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
+
+echo BEGIN
+date '+%Y-%m-%d %H:%M:%S'
 
 cat << EOF >> /etc/environment
 export HMPPS_ROLE="${app_name}"
@@ -132,24 +159,6 @@ ansible-playbook ~/bootstrap_db.yml \
 -vvvv
 EOF
 chmod u+x ~/runboot.sh
-
-# get ssm parmaeters
-PARAM=$(aws ssm get-parameters \
---region eu-west-2 \
---with-decryption --name \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_sys_password" \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_system_password" \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_sysman_password" \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_dbsnmp_password" \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_asmsnmp_password" \
---query Parameters)
-
-# set parameter values
-oradb_sys_password="$(echo $PARAM | jq '.[] | select(.Name | test("oradb_sys_password")) | .Value' --raw-output)"
-oradb_system_password="$(echo $PARAM | jq '.[] | select(.Name | test("oradb_system_password")) | .Value' --raw-output)"
-oradb_sysman_password="$(echo $PARAM | jq '.[] | select(.Name | test("oradb_sysman_password")) | .Value' --raw-output)"
-oradb_dbsnmp_password="$(echo $PARAM | jq '.[] | select(.Name | test("oradb_dbsnmp_password")) | .Value' --raw-output)"
-oradb_asmsnmp_password="$(echo $PARAM | jq '.[] | select(.Name | test("oradb_asmsnmp_password")) | .Value' --raw-output)"
 
 export ANSIBLE_LOG_PATH=$HOME/.ansible.log
 
