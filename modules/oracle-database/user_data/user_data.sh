@@ -30,6 +30,8 @@ chmod u+x ~/getcreds
 . ~/getcreds
 
 # log bootstrap after creds obtained
+touch /var/log/user-data.log
+chmod 600 /var/log/user-data.log
 exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
 
 echo BEGIN
