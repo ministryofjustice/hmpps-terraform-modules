@@ -30,6 +30,8 @@ chmod u+x ~/getcreds
 . ~/getcreds
 
 # log bootstrap after creds obtained
+touch /var/log/user-data.log
+chmod 600 /var/log/user-data.log
 exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
 
 echo BEGIN
@@ -132,30 +134,18 @@ EOF
 cat << EOF > ~/runboot.sh
 #!/usr/bin/env bash
 
-PARAM=\$(aws ssm get-parameters \
---region eu-west-2 \
---with-decryption --name \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_sys_password" \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_system_password" \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_sysman_password" \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_dbsnmp_password" \
-"/${route53_sub_domain}/${project_name}/${app_name}-database/db/oradb_asmsnmp_password" \
---query Parameters)
-oradb_sys_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_sys_password")) | .Value' --raw-output)"
-oradb_system_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_system_password")) | .Value' --raw-output)"
-oradb_sysman_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_sysman_password")) | .Value' --raw-output)"
-oradb_dbsnmp_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_dbsnmp_password")) | .Value' --raw-output)"
-oradb_asmsnmp_password="\$(echo \$PARAM | jq '.[] | select(.Name | test("oradb_asmsnmp_password")) | .Value' --raw-output)"
+. ~/getcreds
+
 export ANSIBLE_LOG_PATH=\$HOME/.ansible.log
 ansible-galaxy install -f -r ~/requirements_db.yml
 ansible-playbook ~/bootstrap_db.yml \
---extra-vars '\
-"oradb_sys_password":"\$oradb_sys_password", \
-"oradb_system_password":"\$oradb_system_password", \
-"oradb_sysman_password":"\$oradb_sysman_password", \
-"oradb_dbsnmp_password":"\$oradb_dbsnmp_password", \
-"oradb_asmsnmp_password":"\$oradb_asmsnmp_password", \
-' \
+--extra-vars "{\
+'oradb_sys_password':'\$oradb_sys_password', \
+'oradb_system_password':'\$oradb_system_password', \
+'oradb_sysman_password':'\$oradb_sysman_password', \
+'oradb_dbsnmp_password':'\$oradb_dbsnmp_password', \
+'oradb_asmsnmp_password':'\$oradb_asmsnmp_password', \
+}" \
 -vvvv
 EOF
 chmod u+x ~/runboot.sh
@@ -164,14 +154,15 @@ export ANSIBLE_LOG_PATH=$HOME/.ansible.log
 
 ansible-galaxy install -f -r ~/requirements.yml
 CONFIGURE_SWAP=true SELF_REGISTER=true ansible-playbook ~/bootstrap_users.yml \
---extra-vars '\
-"oradb_sys_password":"$oradb_sys_password", \
-"oradb_system_password":"$oradb_system_password", \
-"oradb_sysman_password":"$oradb_sysman_password", \
-"oradb_dbsnmp_password":"$oradb_dbsnmp_password", \
-"oradb_asmsnmp_password":"$oradb_asmsnmp_password", \
-' \
+--extra-vars "{\
+'oradb_sys_password':'$oradb_sys_password', \
+'oradb_system_password':'$oradb_system_password', \
+'oradb_sysman_password':'$oradb_sysman_password', \
+'oradb_dbsnmp_password':'$oradb_dbsnmp_password', \
+'oradb_asmsnmp_password':'$oradb_asmsnmp_password', \
+}" \
 -v
+
 if [[ $? -eq 0 ]]
 then
     ## allow Ansible jobs polling for readyness time to disconnect
