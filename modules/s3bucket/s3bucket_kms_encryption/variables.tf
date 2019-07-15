@@ -15,3 +15,11 @@ variable "kms_master_key_id" {
 variable "sse_algorithm" {
   default = "aws:kms"
 }
+
+variable versioning {
+  default = false
+}
+
+variable prevent_destroy {
+  default = false
+}

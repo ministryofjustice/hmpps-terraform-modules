@@ -3,11 +3,11 @@ resource "aws_s3_bucket" "environment" {
   acl    = "${var.acl}"
 
   versioning {
-    enabled = false
+    enabled = var.versioning
   }
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = var.prevent_destroy
   }
 
   server_side_encryption_configuration {
