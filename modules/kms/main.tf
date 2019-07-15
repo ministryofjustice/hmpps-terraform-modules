@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 data "template_file" "kms_policy" {
-  template = "${file("policies/kms-policy.json")}"
+  template = "${file(${var.kms_policy_location})}"
 
   vars {
     accountID = "${data.aws_caller_identity.current.account_id}"
