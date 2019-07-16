@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "environment" {
   acl    = "${var.acl}"
 
   versioning {
-    enabled = false
+    enabled = "${var.versioning}"
   }
 
   lifecycle {

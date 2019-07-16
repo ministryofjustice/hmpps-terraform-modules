@@ -12,8 +12,7 @@ variable "enable_key_rotation" {
   default = "true"
 }
 
-variable "kms_policy_location" {
-  default = "policies/kms-policy.json"
+variable "policy" {
 }
 
 
