@@ -19,7 +19,3 @@ variable "sse_algorithm" {
 variable "versioning" {
   default = false
 }
-
-variable "prevent_destroy" {
-  default = false
-}
