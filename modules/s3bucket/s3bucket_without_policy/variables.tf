@@ -11,3 +11,7 @@ variable "tags" {
 variable "versioning" {
   default = true
 }
+
+variable "prevent_destroy" {
+  default = false
+}
