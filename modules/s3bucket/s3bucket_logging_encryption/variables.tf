@@ -25,10 +25,10 @@ variable "sse_algorithm" {
   default = "aws:kms"
 }
 
-variable versioning {
+variable "versioning" {
   default = false
 }
 
-variable prevent_destroy {
+variable "prevent_destroy" {
   default = false
 }
