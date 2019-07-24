@@ -13,7 +13,7 @@ resource "aws_security_group_rule" "nfs_sg_outbound_global_http" {
   security_group_id = "${aws_security_group.nfs_sg.id}"
   to_port = 80
   type = "egress"
-  description = "${var.environment_identifier}-nfs-sg-global-outbound-http"
+  description = "${var.environment_identifier}-${var.app_name}-nfs-sg-global-outbound-http"
 
   cidr_blocks = ["0.0.0.0/0"]
 }
@@ -24,7 +24,7 @@ resource "aws_security_group_rule" "nfs_sg_outbound_global_https" {
   security_group_id = "${aws_security_group.nfs_sg.id}"
   to_port = 443
   type = "egress"
-  description = "${var.environment_identifier}-nfs-sg-global-outbound-https"
+  description = "${var.environment_identifier}-${var.app_name}-nfs-sg-global-outbound-https"
 
   cidr_blocks = ["0.0.0.0/0"]
 }
@@ -35,16 +35,16 @@ resource "aws_security_group_rule" "nfs_sg_vpc_outbound_all_protocols" {
   security_group_id = "${aws_security_group.nfs_sg.id}"
   to_port =0
   type = "egress"
-  description = "${var.environment_identifier}-nfs-sg-vpc-outbound-all"
+  description = "${var.environment_identifier}-${var.app_name}-nfs-sg-vpc-outbound-all"
   cidr_blocks = ["${data.terraform_remote_state.vpc.vpc_cidr_block}"]
 }
 
 resource "aws_security_group" "nfs_sg" {
-  name        = "${var.environment_identifier}-nfs-sg"
+  name        = "${var.environment_identifier}-${var.app_name}-nfs-sg"
   description = "security group for ${var.environment_identifier}-vpc-nfs"
   vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
 
-  tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-nfs-sg"))}"
+  tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-${var.app_name}-nfs-sg"))}"
 }
 
 #-------------------------------------------------------------
@@ -57,7 +57,7 @@ resource "aws_security_group_rule" "nfs_client_sg_in" {
   security_group_id = "${aws_security_group.nfs_client_sg.id}"
   to_port = 0
   type = "ingress"
-  description = "${var.environment_identifier}-nfs-client-sg-in"
+  description = "${var.environment_identifier}-${var.app_name}-nfs-client-sg-in"
 
   source_security_group_id = "${aws_security_group.nfs_sg.id}"
 }
@@ -68,7 +68,7 @@ resource "aws_security_group_rule" "nfs_client_sg_out" {
   security_group_id = "${aws_security_group.nfs_client_sg.id}"
   to_port = 0
   type = "egress"
-  description = "${var.environment_identifier}-nfs-client-sg-in"
+  description = "${var.environment_identifier}-${var.app_name}-nfs-client-sg-in"
 
   source_security_group_id = "${aws_security_group.nfs_sg.id}"
 }
@@ -79,7 +79,7 @@ resource "aws_security_group_rule" "nfs_client_sg_in_self" {
   security_group_id = "${aws_security_group.nfs_client_sg.id}"
   to_port = 0
   type = "ingress"
-  description = "${var.environment_identifier}-nfs-client-sg-in"
+  description = "${var.environment_identifier}-${var.app_name}-nfs-client-sg-in"
   self = true
 }
 
@@ -89,14 +89,14 @@ resource "aws_security_group_rule" "nfs_client_sg_out_self" {
   security_group_id = "${aws_security_group.nfs_client_sg.id}"
   to_port = 0
   type = "egress"
-  description = "${var.environment_identifier}-nfs-client-sg-in"
+  description = "${var.environment_identifier}-${var.app_name}-nfs-client-sg-in"
   self = true
 }
 
 resource "aws_security_group" "nfs_client_sg" {
-  name        = "${var.environment_identifier}-nfs-client-sg"
+  name        = "${var.environment_identifier}-${var.app_name}-nfs-client-sg"
   description = "security group for ${var.environment_identifier}-vpc-nfs-access"
   vpc_id      = "${data.terraform_remote_state.vpc.vpc_id}"
 
-  tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-nfs-client-sg"))}"
+  tags = "${merge(var.tags, map("Name", "${var.environment_identifier}-${var.app_name}-nfs-client-sg"))}"
 }
