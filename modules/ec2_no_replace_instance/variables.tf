@@ -31,3 +31,10 @@ variable "tags" {
 variable "root_device_size" {
   default = "8"
 }
+
+# whether to deploy an instance of this module
+# Allow overriding for diff envs when the code base uses static definitions of the number of ec2 instances to deploy
+# and we don't want to replace running instances
+variable "deploy" {
+  default = true
+}
