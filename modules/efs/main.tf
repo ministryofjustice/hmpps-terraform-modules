@@ -8,11 +8,12 @@ locals {
 # Create EFS
 ###############################################
 resource "aws_efs_file_system" "efs" {
-  creation_token   = "${local.environment_identifier}"
-  kms_key_id       = "${var.kms_key_id}"
-  encrypted        = "${var.encrypted}"
-  performance_mode = "${var.performance_mode}"
-  throughput_mode  = "${var.throughput_mode}"
+  creation_token                  = "${local.environment_identifier}"
+  kms_key_id                      = "${var.kms_key_id}"
+  encrypted                       = "${var.encrypted}"
+  performance_mode                = "${var.performance_mode}"
+  provisioned_throughput_in_mibps = "${var.provisioned_throughput_in_mibps}"
+  throughput_mode                 = "${var.throughput_mode}"
 
   tags = "${merge(
     var.tags,
