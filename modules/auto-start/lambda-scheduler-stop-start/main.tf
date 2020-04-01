@@ -188,32 +188,6 @@ resource "aws_lambda_function" "scheduler" {
 
 ################################################
 #
-#            CLOUDWATCH EVENT
-#
-################################################
-
-resource "aws_cloudwatch_event_rule" "scheduler" {
-  name                = "${var.name}-trigger-lambda-scheduler"
-  description         = "Daily Auto Start/Stop of EC2 Instances"
-  schedule_expression = "${var.cloudwatch_schedule_expression}"
-  is_enabled          = "${var.event_rule_enabled}"
-}
-
-resource "aws_cloudwatch_event_target" "scheduler" {
-  arn  = "${aws_lambda_function.scheduler.arn}"
-  rule = "${aws_cloudwatch_event_rule.scheduler.name}"
-}
-
-resource "aws_lambda_permission" "scheduler" {
-  statement_id  = "AllowExecutionFromCloudWatch"
-  action        = "lambda:InvokeFunction"
-  principal     = "events.amazonaws.com"
-  function_name = "${aws_lambda_function.scheduler.function_name}"
-  source_arn    = "${aws_cloudwatch_event_rule.scheduler.arn}"
-}
-
-################################################
-#
 #            CLOUDWATCH LOG
 #
 ################################################

@@ -89,6 +89,7 @@ resource "aws_iam_policy" "assume" {
           "ec2:CreateTags",
           "ec2:DeleteTags",
           "ec2:DescribeTags",
+          "ec2:DescribeInstances",
           "cloudformation:CreateStack",
           "cloudformation:DescribeStackEvents",
           "cloudformation:DescribeStacks",
