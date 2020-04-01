@@ -39,7 +39,7 @@ resource "aws_ssm_document" "start" {
     - name: "sleep"
       action: "aws:sleep"
       inputs:
-        Duration: "PT2M"
+        Duration: "PT10M"
       nextStep: startInstancesPhase2
     - name: startInstancesPhase2
       action: 'aws:invokeLambdaFunction'
