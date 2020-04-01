@@ -3,6 +3,11 @@ variable "name" {
   type        = "string"
 }
 
+variable "environment_name" {
+  description = "Environment Name"
+  type        = "string"
+}
+
 variable "aws_regions" {
   description = "A list of one or more aws regions where the lambda will be apply, default use the current region"
   type        = "string"

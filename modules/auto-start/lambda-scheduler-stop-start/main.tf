@@ -1,4 +1,10 @@
 data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
+
+locals {
+  account_id     = "${data.aws_caller_identity.current.account_id}"
+}
 
 
 ################################################
@@ -195,4 +201,13 @@ resource "aws_lambda_function" "scheduler" {
 resource "aws_cloudwatch_log_group" "scheduler" {
   name              = "/aws/lambda/${var.name}"
   retention_in_days = 14
+}
+
+####Lambda permission
+resource "aws_lambda_permission" "scheduler" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  principal     = "events.amazonaws.com"
+  function_name = "${aws_lambda_function.scheduler.function_name}"
+  source_arn    = "arn:aws:events:${var.aws_regions}:${local.account_id}:rule/${var.environment_name}-${var.schedule_action}-ec2"
 }
