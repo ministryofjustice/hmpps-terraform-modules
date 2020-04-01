@@ -77,7 +77,6 @@ resource "aws_ssm_document" "stop" {
         DesiredValues:
           - OPEN
       nextStep: stopInstancesPhase2
-
     - name: stopInstancesPhase2
       action: 'aws:invokeLambdaFunction'
       onFailure: Abort
