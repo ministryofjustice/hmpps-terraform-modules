@@ -27,14 +27,27 @@ resource "aws_ssm_document" "start" {
         PropertySelector: $.State
         DesiredValues:
           - CLOSED
-      nextStep: startInstances
-    - name: startInstances
+      nextStep: startInstancesPhase1
+    - name: startInstancesPhase1
       action: 'aws:invokeLambdaFunction'
       onFailure: Abort
       timeoutSeconds: 120
       inputs:
         InvocationType: RequestResponse
-        FunctionName: "${var.environment_name}-start-ec2"
+        FunctionName: "${var.environment_name}-start-ec2-phase1"
+      nextStep: sleep
+    - name: "sleep"
+      action: "aws:sleep"
+      inputs:
+        Duration: "PT10M"
+      nextStep: startInstancesPhase2
+    - name: startInstancesPhase2
+      action: 'aws:invokeLambdaFunction'
+      onFailure: Abort
+      timeoutSeconds: 120
+      inputs:
+        InvocationType: RequestResponse
+        FunctionName: "${var.environment_name}-start-ec2-phase2"
 DOC
 }
 
@@ -63,14 +76,22 @@ resource "aws_ssm_document" "stop" {
         PropertySelector: $.State
         DesiredValues:
           - OPEN
-      nextStep: stopInstances
-    - name: stopInstances
+      nextStep: stopInstancesPhase2
+    - name: stopInstancesPhase2
       action: 'aws:invokeLambdaFunction'
       onFailure: Abort
       timeoutSeconds: 120
       inputs:
         InvocationType: RequestResponse
-        FunctionName: "${var.environment_name}-stop-ec2"
+        FunctionName: "${var.environment_name}-stop-ec2-phase2"
+      nextStep: stopInstancesPhase1
+    - name: stopInstancesPhase1
+      action: 'aws:invokeLambdaFunction'
+      onFailure: Abort
+      timeoutSeconds: 120
+      inputs:
+        InvocationType: RequestResponse
+        FunctionName: "${var.environment_name}-stop-ec2-phase1"
 DOC
 }
 

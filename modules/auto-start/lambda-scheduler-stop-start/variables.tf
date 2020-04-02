@@ -1,11 +1,10 @@
-variable "cloudwatch_schedule_expression" {
-  description = "Define the aws cloudwatch event rule schedule expression"
-  type        = "string"
-  default     = "cron(0 22 ? * MON-FRI *)"
-}
-
 variable "name" {
   description = "Define name to use for lambda function, cloudwatch event and iam role"
+  type        = "string"
+}
+
+variable "environment_name" {
+  description = "Environment Name"
   type        = "string"
 }
 
@@ -53,8 +52,4 @@ variable "rds_schedule" {
   description = "Enable scheduling on rds resources"
   type        = "string"
   default     = "false"
-}
-
-variable "event_rule_enabled" {
-  description = "Whether the rule should be enabled"
 }
