@@ -38,7 +38,7 @@ resource "aws_lambda_function" "auto-stop-notification" {
     variables = {
       ENVIRONMENT_TYPE  = "${var.name}"
       CHANNEL           = "$var.channel"
-      URL_PATH          = ${var.url_path}
+      URL_PATH          = "${var.url_path}"
     }
   }
 }
