@@ -9,3 +9,11 @@ variable "cloudwatch_schedule_expression" {
 variable "event_rule_enabled" {
   description = "Whether the rule should be enabled"
 }
+
+variable "channel" {
+  description = "Slack channel to send notification"
+}
+
+variable "url_path" {
+  description = "Slack url path"
+}
