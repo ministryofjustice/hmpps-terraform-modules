@@ -11,6 +11,9 @@ exports.handler = function(event, context) {
         var channel= process.env.CHANNEL;
         var url_path = process.env.URL_PATH;
         var icon_emoji=":sign-warning:";
+        const tagged_user = process.env.TAGGED_USER;
+
+        tagged_user="tagged_user"; //Izzy
 
 
 
@@ -25,6 +28,7 @@ exports.handler = function(event, context) {
                        + "\nInfo: "  + heading
                        + "\nDetails: "  + bodytext
                        + "\nEnvironment: "  + environment
+                       + "\nTagging: "  + tagged_user
 
                        ,
                        "icon_emoji": icon_emoji,

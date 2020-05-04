@@ -39,6 +39,7 @@ resource "aws_lambda_function" "auto-stop-notification" {
       ENVIRONMENT_TYPE  = "${var.name}"
       CHANNEL           = "${var.channel}"
       URL_PATH          = "${var.url_path}"
+      TAGGED_USER       = "${var.tagged_user}"
     }
   }
 }

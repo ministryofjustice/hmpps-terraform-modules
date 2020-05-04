@@ -17,3 +17,7 @@ variable "channel" {
 variable "url_path" {
   description = "Slack url path"
 }
+
+variable "tagged_user" {
+  description = "Users to be tagged in alerts"
+}
