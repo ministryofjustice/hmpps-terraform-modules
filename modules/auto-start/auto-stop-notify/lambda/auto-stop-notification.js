@@ -13,12 +13,6 @@ exports.handler = function(event, context) {
         var icon_emoji=":sign-warning:";
         const tagged_user = process.env.TAGGED_USER;
 
-        tagged_user="tagged_user"; //Izzy
-
-
-
- //environment	service	    tier	metric	severity	resolvergroup(s)
-
             console.log("Slack channel: " + channel);
 
                var postData = {
