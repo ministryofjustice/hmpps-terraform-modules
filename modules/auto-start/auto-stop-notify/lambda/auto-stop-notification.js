@@ -22,7 +22,7 @@ exports.handler = function(event, context) {
                        + "\nInfo: "  + heading
                        + "\nDetails: "  + bodytext
                        + "\nEnvironment: "  + environment
-                       + "\nTagging: "  + tagged_user
+                       + "\n" + tagged_user
 
                        ,
                        "icon_emoji": icon_emoji,
