@@ -3,12 +3,19 @@ variable "map_public_ip_on_launch" {
   default     = false
 }
 
-variable "subnet_cidr_block" {}
+variable "subnet_cidr_block" {
+}
 
-variable "availability_zone" {}
-variable "subnet_name" {}
-variable "vpc_id" {}
+variable "availability_zone" {
+}
+
+variable "subnet_name" {
+}
+
+variable "vpc_id" {
+}
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
+
