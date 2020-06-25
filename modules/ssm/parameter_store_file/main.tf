@@ -1,8 +1,14 @@
 resource "aws_ssm_parameter" "param" {
-  name        = "${var.parameter_name}"
-  description = "${var.description}"
-  type        = "${var.type}"
-  value       = "${var.value}"
+  name        = var.parameter_name
+  description = var.description
+  type        = var.type
+  value       = var.value
 
-  tags = "${merge(var.tags, map("Name", "${var.parameter_name}"))}"
+  tags = merge(
+    var.tags,
+    {
+      "Name" = var.parameter_name
+    },
+  )
 }
+

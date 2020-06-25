@@ -1,11 +1,16 @@
-variable "parameter_name" {}
-
-variable "type" {}
-
-variable "value" {}
-
-variable "tags" {
-  type = "map"
+variable "parameter_name" {
 }
 
-variable "description" {}
+variable "type" {
+}
+
+variable "value" {
+}
+
+variable "tags" {
+  type = map(string)
+}
+
+variable "description" {
+}
+
