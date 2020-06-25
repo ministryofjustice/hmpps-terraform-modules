@@ -16,12 +16,14 @@ variable "vpc_dns_hosts" {
   description = "A list of Availability zones in the region"
 }
 
-variable "route53_domain_private" {}
+variable "route53_domain_private" {
+}
 
 variable "cidr_block" {
   description = "The CIDR of the VPC."
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
+
