@@ -1,7 +1,10 @@
-variable "vpc_id" {}
+variable "vpc_id" {
+}
 
-variable "gateway_name" {}
+variable "gateway_name" {
+}
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
+
