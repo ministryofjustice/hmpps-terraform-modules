@@ -1,11 +1,12 @@
-variable "lb_name" {}
+variable "lb_name" {
+}
 
 variable "internal" {
   default = "true"
 }
 
 variable "subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "enable_deletion_protection" {
@@ -13,10 +14,11 @@ variable "enable_deletion_protection" {
 }
 
 variable "security_groups" {
-  type = "list"
+  type = list(string)
 }
 
-variable "s3_bucket_name" {}
+variable "s3_bucket_name" {
+}
 
 variable "logs_enabled" {
   default = "true"
@@ -27,5 +29,6 @@ variable "load_balancer_type" {
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
+

@@ -1,17 +1,25 @@
-variable "image_id" {}
-variable "instance_type" {}
-variable "instance_profile" {}
-variable "key_name" {}
+variable "image_id" {
+}
+
+variable "instance_type" {
+}
+
+variable "instance_profile" {
+}
+
+variable "key_name" {
+}
 
 variable "security_groups" {
-  type = "list"
+  type = list(string)
 }
 
 variable "associate_public_ip_address" {
   default = "false"
 }
 
-variable "user_data" {}
+variable "user_data" {
+}
 
 variable "enable_monitoring" {
   default = "true"
@@ -32,3 +40,4 @@ variable "volume_size" {
 variable "launch_configuration_name" {
   description = "launch configuration name"
 }
+

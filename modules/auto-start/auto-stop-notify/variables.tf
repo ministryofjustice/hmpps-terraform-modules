@@ -21,3 +21,4 @@ variable "url_path" {
 variable "tagged_user" {
   description = "Users to be tagged in alerts"
 }
+

@@ -1,2 +1,6 @@
-variable "policyfile" {}
-variable "rolename" {}
+variable "policyfile" {
+}
+
+variable "rolename" {
+}
+

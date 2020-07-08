@@ -8,19 +8,19 @@ locals {
 }
 
 resource "aws_elasticache_cluster" "default" {
-  cluster_id             = "${var.cluster_id}"
+  cluster_id             = var.cluster_id
   engine                 = "memcached"
-  engine_version         = "${var.engine_version}"
-  node_type              = "${var.instance_type}"
-  parameter_group_name   = "${var.parameter_group_name}"
-  subnet_group_name      = "${var.subnet_group_name}"
-  security_group_ids     = ["${var.security_group_ids}"]
-  maintenance_window     = "${var.maintenance_window}"
-  notification_topic_arn = "${var.notification_topic_arn}"
-  port                   = "${local.port}"
-  az_mode                = "${var.cluster_size == 1 ? "single-az" : "cross-az" }"
-  num_cache_nodes        = "${var.cluster_size}"
-  tags                   = "${var.tags}"
+  engine_version         = var.engine_version
+  node_type              = var.instance_type
+  parameter_group_name   = var.parameter_group_name
+  subnet_group_name      = var.subnet_group_name
+  security_group_ids     = var.security_group_ids
+  maintenance_window     = var.maintenance_window
+  notification_topic_arn = var.notification_topic_arn
+  port                   = local.port
+  az_mode                = var.cluster_size == 1 ? "single-az" : "cross-az"
+  num_cache_nodes        = var.cluster_size
+  tags                   = var.tags
 }
 
 ###############################################
@@ -28,10 +28,11 @@ resource "aws_elasticache_cluster" "default" {
 ###############################################
 
 resource "aws_route53_record" "dns_entry" {
-  name    = "${local.dns_name}"
+  name    = local.dns_name
   type    = "CNAME"
-  zone_id = "${var.zone_id}"
+  zone_id = var.zone_id
   ttl     = 300
 
-  records = ["${aws_elasticache_cluster.default.cluster_address}"]
+  records = [aws_elasticache_cluster.default.cluster_address]
 }
+

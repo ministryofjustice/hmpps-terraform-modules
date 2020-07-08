@@ -1,5 +1,5 @@
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "environment_identifier" {
@@ -22,21 +22,24 @@ variable "provisioned_throughput_in_mibps" {
   default = 0
 }
 
-
 variable "throughput_mode" {
   default = "bursting"
 }
 
-variable "share_name" {}
+variable "share_name" {
+}
 
-variable "zone_id" {}
+variable "zone_id" {
+}
 
-variable "domain" {}
+variable "domain" {
+}
 
 variable "security_groups" {
-  type = "list"
+  type = list(string)
 }
 
 variable "subnets" {
-  type = "list"
+  type = list(string)
 }
+

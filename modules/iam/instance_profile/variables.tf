@@ -1,1 +1,3 @@
-variable "role" {}
+variable "role" {
+}
+

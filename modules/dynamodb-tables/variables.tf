@@ -2,7 +2,8 @@ variable "table_name" {
   description = "resource label or name"
 }
 
-variable "hash_key" {}
+variable "hash_key" {
+}
 
 variable "read_capacity" {
   default = "10"
@@ -13,5 +14,6 @@ variable "write_capacity" {
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
+

@@ -1,13 +1,13 @@
 # app repository
 
 resource "aws_ecr_repository" "repo" {
-  count = "${length(var.app_name)}"
-  name  = "tf-${var.region}-terraform-${var.business_unit}-${var.project}-${var.environment}-${element(var.app_name,count.index)}-ecr"
+  count = length(var.app_name)
+  name  = "tf-${var.region}-terraform-${var.business_unit}-${var.project}-${var.environment}-${element(var.app_name, count.index)}-ecr"
 }
 
 resource "aws_ecr_repository_policy" "repo" {
-  count      = "${length(var.app_name)}"
-  repository = "${element(aws_ecr_repository.repo.*.name,count.index)}"
+  count      = length(var.app_name)
+  repository = element(aws_ecr_repository.repo.*.name, count.index)
 
   policy = <<EOF
 {
@@ -40,5 +40,7 @@ resource "aws_ecr_repository_policy" "repo" {
   }
 EOF
 
-  depends_on = ["aws_ecr_repository.repo"]
+
+  depends_on = [aws_ecr_repository.repo]
 }
+

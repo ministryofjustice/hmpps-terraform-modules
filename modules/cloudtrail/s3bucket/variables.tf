@@ -1,13 +1,17 @@
-variable "s3_bucket_name" {}
+variable "s3_bucket_name" {
+}
 
-variable "globalevents" {}
+variable "globalevents" {
+}
 
-variable "cloudtrailname" {}
+variable "cloudtrailname" {
+}
 
-variable "multiregion" {}
+variable "multiregion" {
+}
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "enable_logging" {
@@ -17,3 +21,4 @@ variable "enable_logging" {
 variable "s3_bucket_arn" {
   description = "S3bucket to log"
 }
+

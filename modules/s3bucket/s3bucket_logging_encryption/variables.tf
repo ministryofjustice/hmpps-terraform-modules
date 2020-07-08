@@ -1,11 +1,12 @@
-variable "s3_bucket_name" {}
+variable "s3_bucket_name" {
+}
 
 variable "acl" {
   default = "private"
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "target_bucket" {
@@ -28,3 +29,4 @@ variable "sse_algorithm" {
 variable "versioning" {
   default = false
 }
+

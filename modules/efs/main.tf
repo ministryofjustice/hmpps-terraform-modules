@@ -1,6 +1,6 @@
 locals {
   environment_identifier = "${var.environment_identifier}-${var.share_name}"
-  tags                   = "${var.tags}"
+  tags                   = var.tags
   dns_host               = "${var.share_name}.${var.domain}"
 }
 
@@ -8,17 +8,19 @@ locals {
 # Create EFS
 ###############################################
 resource "aws_efs_file_system" "efs" {
-  creation_token                  = "${local.environment_identifier}"
-  kms_key_id                      = "${var.kms_key_id}"
-  encrypted                       = "${var.encrypted}"
-  performance_mode                = "${var.performance_mode}"
-  provisioned_throughput_in_mibps = "${var.provisioned_throughput_in_mibps}"
-  throughput_mode                 = "${var.throughput_mode}"
+  creation_token                  = local.environment_identifier
+  kms_key_id                      = var.kms_key_id
+  encrypted                       = var.encrypted
+  performance_mode                = var.performance_mode
+  provisioned_throughput_in_mibps = var.provisioned_throughput_in_mibps
+  throughput_mode                 = var.throughput_mode
 
-  tags = "${merge(
+  tags = merge(
     var.tags,
-    map("Name", "${local.environment_identifier}")
-  )}"
+    {
+      "Name" = local.environment_identifier
+    },
+  )
 }
 
 ###############################################
@@ -26,19 +28,20 @@ resource "aws_efs_file_system" "efs" {
 ###############################################
 
 resource "aws_route53_record" "dns_entry" {
-  name    = "${local.dns_host}"
+  name    = local.dns_host
   type    = "CNAME"
-  zone_id = "${var.zone_id}"
+  zone_id = var.zone_id
   ttl     = 300
-  records = ["${aws_efs_file_system.efs.dns_name}"]
+  records = [aws_efs_file_system.efs.dns_name]
 }
 
 ###############################################
 # Create efs mount target
 ###############################################
 resource "aws_efs_mount_target" "efs" {
-  count           = "${length(var.subnets)}"
-  file_system_id  = "${aws_efs_file_system.efs.id}"
-  subnet_id       = "${element(compact(var.subnets), count.index)}"
-  security_groups = ["${var.security_groups}"]
+  count           = length(var.subnets)
+  file_system_id  = aws_efs_file_system.efs.id
+  subnet_id       = element(compact(var.subnets), count.index)
+  security_groups = var.security_groups
 }
+

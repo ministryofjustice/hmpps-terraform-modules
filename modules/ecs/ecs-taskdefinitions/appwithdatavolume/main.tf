@@ -1,6 +1,6 @@
 resource "aws_ecs_task_definition" "environment" {
   family                = "${var.app_name}-task-definition"
-  container_definitions = "${var.container_definitions}"
+  container_definitions = var.container_definitions
 
   volume {
     name      = "log"
@@ -8,12 +8,13 @@ resource "aws_ecs_task_definition" "environment" {
   }
 
   volume {
-    name = "${var.data_volume_name}"
-    host_path = "${var.data_volume_host_path}"
+    name      = var.data_volume_name
+    host_path = var.data_volume_host_path
   }
 
   volume {
-    name = "${var.keys_volume_name}"
-    host_path = "${var.keys_volume_host_path}"
-  }  
+    name      = var.keys_volume_name
+    host_path = var.keys_volume_host_path
+  }
 }
+

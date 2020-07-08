@@ -1,11 +1,12 @@
-variable "s3_bucket_name" {}
+variable "s3_bucket_name" {
+}
 
 variable "acl" {
   default = "private"
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "kms_master_key_id" {
@@ -19,3 +20,4 @@ variable "sse_algorithm" {
 variable "versioning" {
   default = false
 }
+

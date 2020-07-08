@@ -2,7 +2,7 @@
 ### Create instance and user data
 #-------------------------------------------------------------
 module "create-ec2-instance" {
-  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//ec2_no_replace_instance"
+  source                      = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git//modules/ec2_no_replace_instance?ref=terraform-0.12"
   app_name                    = "${var.environment_identifier}-${local.app_name}"
   ami_id                      = "${data.aws_ami.amazon_ami.id}"
   instance_type               = "${var.instance_type}"

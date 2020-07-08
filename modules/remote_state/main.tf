@@ -16,17 +16,23 @@ resource "aws_iam_role_policy" "remote_state" {
   ]
 }
 EOF
+
 }
 
 resource "aws_s3_bucket" "remote_state" {
-  bucket = "${var.remote_state_bucket_name}"
+  bucket = var.remote_state_bucket_name
   acl    = "private"
-  tags   = "${merge(var.tags, map("Name", "${var.remote_state_bucket_name}"))}"
+  tags = merge(
+    var.tags,
+    {
+      "Name" = var.remote_state_bucket_name
+    },
+  )
 
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = "${var.kms_key_arn}"
+        kms_master_key_id = var.kms_key_arn
         sse_algorithm     = "aws:kms"
       }
     }
@@ -40,3 +46,4 @@ resource "aws_s3_bucket" "remote_state" {
     prevent_destroy = true
   }
 }
+

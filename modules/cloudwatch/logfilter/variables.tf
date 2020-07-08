@@ -1,9 +1,20 @@
-variable "environment" {}
-variable "project" {}
-variable "pattern" {}
-variable "log_group_name" {}
-variable "metricname" {}
-variable "metric_namespace" {}
+variable "environment" {
+}
+
+variable "project" {
+}
+
+variable "pattern" {
+}
+
+variable "log_group_name" {
+}
+
+variable "metricname" {
+}
+
+variable "metric_namespace" {
+}
 
 variable "metric_value" {
   default = "1"
@@ -20,3 +31,4 @@ variable "business_unit" {
 variable "region" {
   description = "The AWS region."
 }
+

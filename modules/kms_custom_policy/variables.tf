@@ -1,4 +1,5 @@
-variable "kms_key_name" {}
+variable "kms_key_name" {
+}
 
 variable "deletion_window_in_days" {
   default = "7"
@@ -15,7 +16,7 @@ variable "enable_key_rotation" {
 variable "policy" {
 }
 
-
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
+

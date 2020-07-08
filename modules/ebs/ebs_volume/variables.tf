@@ -1,13 +1,19 @@
-variable "availability_zone" {}
-
-variable "volume_size" {}
-
-variable "encrypted" {}
-
-variable "tags" {
-  type = "map"
+variable "availability_zone" {
 }
 
-variable "app_name" {}
+variable "volume_size" {
+}
 
-variable "CreateSnapshot" {}
+variable "encrypted" {
+}
+
+variable "tags" {
+  type = map(string)
+}
+
+variable "app_name" {
+}
+
+variable "CreateSnapshot" {
+}
+

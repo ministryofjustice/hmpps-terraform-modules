@@ -1,13 +1,19 @@
-variable "environment_name" {}
-
-variable "tags" {
-  type     = "map"
+variable "environment_name" {
 }
 
-variable "region" {}
+variable "tags" {
+  type = map(string)
+}
 
-variable "is_enabled" {}
+variable "region" {
+}
 
-variable "schedule_expression" {}
+variable "is_enabled" {
+}
 
-variable "calender_content_doc" {}
+variable "schedule_expression" {
+}
+
+variable "calender_content_doc" {
+}
+

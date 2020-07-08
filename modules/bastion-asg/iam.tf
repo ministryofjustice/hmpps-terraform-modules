@@ -12,7 +12,7 @@ data "template_file" "create_bastion_ec2_role" {
 }
 
 module "create_bastion_app_role" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//role"
+  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git//modules/iam/role?ref=terraform-0.12"
   rolename   = "${var.short_environment_identifier}-${var.app_name}"
   policyfile = "${local.policy_file}"
 }
@@ -25,7 +25,7 @@ module "create_bastion_instance_profile" {
 
 
 module "create_bastion_iam_app_policy" {
-  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git?ref=master//modules//iam//rolepolicy"
+  source     = "git::https://github.com/ministryofjustice/hmpps-terraform-modules.git//modules/iam/rolepolicy?ref=terraform-0.12"
   policyfile = "${data.template_file.create_bastion_ec2_role.rendered}"
   rolename   = "${module.create_bastion_app_role.iamrole_name}"
 }

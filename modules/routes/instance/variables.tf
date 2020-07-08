@@ -1,8 +1,10 @@
 variable "route_table_id" {
-   type = "list"
+  type = list(string)
 }
 
-variable "instance_id" {}
+variable "instance_id" {
+}
 
+variable "destination_cidr_block" {
+}
 
-variable "destination_cidr_block" {}

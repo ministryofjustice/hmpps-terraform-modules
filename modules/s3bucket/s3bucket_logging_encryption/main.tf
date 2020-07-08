@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "environment" {
   bucket = "${var.s3_bucket_name}-s3bucket"
-  acl    = "${var.acl}"
+  acl    = var.acl
 
   versioning {
-    enabled = "${var.versioning}"
+    enabled = var.versioning
   }
 
   lifecycle {
@@ -11,18 +11,24 @@ resource "aws_s3_bucket" "environment" {
   }
 
   logging {
-    target_bucket = "${var.target_bucket}"
-    target_prefix = "${var.target_prefix}"
+    target_bucket = var.target_bucket
+    target_prefix = var.target_prefix
   }
 
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = "${var.kms_master_key_id}"
-        sse_algorithm     = "${var.sse_algorithm}"
+        kms_master_key_id = var.kms_master_key_id
+        sse_algorithm     = var.sse_algorithm
       }
     }
   }
 
-  tags = "${merge(var.tags, map("Name", "${var.s3_bucket_name}-s3-bucket"))}"
+  tags = merge(
+    var.tags,
+    {
+      "Name" = "${var.s3_bucket_name}-s3-bucket"
+    },
+  )
 }
+

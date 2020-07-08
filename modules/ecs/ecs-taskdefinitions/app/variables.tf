@@ -1,4 +1,9 @@
-variable "app_name" {}
-variable "container_definitions" {}
+variable "app_name" {
+}
 
-variable "container_name" {}
+variable "container_definitions" {
+}
+
+variable "container_name" {
+}
+

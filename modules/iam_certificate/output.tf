@@ -1,15 +1,16 @@
 output "name" {
-  value = "${aws_iam_server_certificate.iam_cert.name}"
+  value = aws_iam_server_certificate.iam_cert.name
 }
 
 output "id" {
-  value = "${aws_iam_server_certificate.iam_cert.id}"
+  value = aws_iam_server_certificate.iam_cert.id
 }
 
 output "arn" {
-  value = "${aws_iam_server_certificate.iam_cert.arn}"
+  value = aws_iam_server_certificate.iam_cert.arn
 }
 
 output "path" {
-  value = "${var.path}"
+  value = var.path
 }
+

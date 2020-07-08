@@ -1,11 +1,12 @@
-data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
-
-
-locals {
-  account_id     = "${data.aws_caller_identity.current.account_id}"
+data "aws_region" "current" {
 }
 
+data "aws_caller_identity" "current" {
+}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
 
 ################################################
 #
@@ -32,11 +33,12 @@ resource "aws_iam_role" "scheduler" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "schedule_autoscaling" {
-  name  = "${var.name}-autoscaling-custom-policy-scheduler"
-  role  = "${aws_iam_role.scheduler.id}"
+  name = "${var.name}-autoscaling-custom-policy-scheduler"
+  role = aws_iam_role.scheduler.id
 
   policy = <<EOF
 {
@@ -60,11 +62,12 @@ resource "aws_iam_role_policy" "schedule_autoscaling" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "schedule_spot" {
-  name  = "${var.name}-spot-custom-policy-scheduler"
-  role  = "${aws_iam_role.scheduler.id}"
+  name = "${var.name}-spot-custom-policy-scheduler"
+  role = aws_iam_role.scheduler.id
 
   policy = <<EOF
 {
@@ -80,11 +83,12 @@ resource "aws_iam_role_policy" "schedule_spot" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "schedule_ec2" {
-  name  = "${var.name}-ec2-custom-policy-scheduler"
-  role  = "${aws_iam_role.scheduler.id}"
+  name = "${var.name}-ec2-custom-policy-scheduler"
+  role = aws_iam_role.scheduler.id
 
   policy = <<EOF
 {
@@ -105,11 +109,12 @@ resource "aws_iam_role_policy" "schedule_ec2" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "schedule_rds" {
-  name  = "${var.name}-rds-custom-policy-scheduler"
-  role  = "${aws_iam_role.scheduler.id}"
+  name = "${var.name}-rds-custom-policy-scheduler"
+  role = aws_iam_role.scheduler.id
 
   policy = <<EOF
 {
@@ -131,11 +136,12 @@ resource "aws_iam_role_policy" "schedule_rds" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "lambda_logging" {
-  name  = "${var.name}-lambda-logging"
-  role  = "${aws_iam_role.scheduler.id}"
+  name = "${var.name}-lambda-logging"
+  role = aws_iam_role.scheduler.id
 
   policy = <<EOF
 {
@@ -153,6 +159,7 @@ resource "aws_iam_role_policy" "lambda_logging" {
     ]
 }
 EOF
+
 }
 
 ################################################
@@ -170,24 +177,24 @@ data "archive_file" "scheduler" {
 
 # Create Lambda function for stop or start aws resources
 resource "aws_lambda_function" "scheduler" {
-  filename         = "${data.archive_file.scheduler.output_path}"
-  function_name    = "${var.name}"
-  role             = "${aws_iam_role.scheduler.arn}"
+  filename         = data.archive_file.scheduler.output_path
+  function_name    = var.name
+  role             = aws_iam_role.scheduler.arn
   handler          = "scheduler.main.lambda_handler"
-  source_code_hash = "${data.archive_file.scheduler.output_base64sha256}"
+  source_code_hash = data.archive_file.scheduler.output_base64sha256
   runtime          = "python3.7"
   timeout          = "600"
 
   environment {
     variables = {
-      AWS_REGIONS          = "${var.aws_regions}"
-      SCHEDULE_ACTION      = "${var.schedule_action}"
-      TAG_KEY              = "${var.resources_tag["key"]}"
-      TAG_VALUE            = "${var.resources_tag["value"]}"
-      EC2_SCHEDULE         = "${var.ec2_schedule}"
-      RDS_SCHEDULE         = "${var.rds_schedule}"
-      AUTOSCALING_SCHEDULE = "${var.autoscaling_schedule}"
-      SPOT_SCHEDULE        = "${var.spot_schedule}"
+      AWS_REGIONS          = var.aws_regions
+      SCHEDULE_ACTION      = var.schedule_action
+      TAG_KEY              = var.resources_tag["key"]
+      TAG_VALUE            = var.resources_tag["value"]
+      EC2_SCHEDULE         = var.ec2_schedule
+      RDS_SCHEDULE         = var.rds_schedule
+      AUTOSCALING_SCHEDULE = var.autoscaling_schedule
+      SPOT_SCHEDULE        = var.spot_schedule
     }
   }
 }
@@ -208,6 +215,7 @@ resource "aws_lambda_permission" "scheduler" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   principal     = "events.amazonaws.com"
-  function_name = "${aws_lambda_function.scheduler.function_name}"
+  function_name = aws_lambda_function.scheduler.function_name
   source_arn    = "arn:aws:events:${var.aws_regions}:${local.account_id}:rule/${var.environment_name}-${var.schedule_action}-ec2"
 }
+

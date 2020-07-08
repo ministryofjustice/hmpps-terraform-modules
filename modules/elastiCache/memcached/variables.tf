@@ -1,18 +1,24 @@
-variable "cluster_id" {}
+variable "cluster_id" {
+}
 
-variable "domain" {}
+variable "domain" {
+}
 
-variable "zone_id" {}
+variable "zone_id" {
+}
 
-variable "parameter_group_name" {}
-variable "subnet_group_name" {}
+variable "parameter_group_name" {
+}
+
+variable "subnet_group_name" {
+}
 
 variable "security_group_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "maintenance_window" {
@@ -52,7 +58,7 @@ variable "alarm_memory_threshold_bytes" {
 }
 
 variable "alarm_actions" {
-  type        = "list"
+  type        = list(string)
   default     = []
   description = "Alarm actions"
 }
@@ -61,3 +67,4 @@ variable "apply_immediately" {
   default     = "true"
   description = "Specifies whether any database modifications are applied immediately, or during the next maintenance window"
 }
+

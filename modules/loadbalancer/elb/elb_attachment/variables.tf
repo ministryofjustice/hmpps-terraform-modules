@@ -8,5 +8,6 @@ variable "elb" {
 
 variable "instances" {
   description = "List of instances ID to place in the ELB pool"
-  type        = "list"
+  type        = list(string)
 }
+

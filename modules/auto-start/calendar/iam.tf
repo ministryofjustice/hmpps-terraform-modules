@@ -1,4 +1,3 @@
-
 #-------------------------------------------------------------
 ### IAM
 #-------------------------------------------------------------
@@ -22,6 +21,7 @@ resource "aws_iam_policy" "event" {
    ]
 }
 EOF
+
 }
 
 resource "aws_iam_policy" "assume" {
@@ -135,13 +135,13 @@ resource "aws_iam_policy" "assume" {
 ]
 }
 EOF
-}
 
+}
 
 #IAM Roles
 
 resource "aws_iam_role" "assume" {
-  name = "${local.assume_role}"
+  name = local.assume_role
 
   assume_role_policy = <<EOF
 {
@@ -158,11 +158,11 @@ resource "aws_iam_role" "assume" {
     ]
 }
 EOF
+
 }
 
-
 resource "aws_iam_role" "event" {
-  name = "${local.event_role}"
+  name               = local.event_role
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -178,16 +178,18 @@ resource "aws_iam_role" "event" {
     ]
 }
 EOF
+
 }
 
 #IAM Policy attachment
 
 resource "aws_iam_role_policy_attachment" "assume" {
-  role       = "${aws_iam_role.assume.name}"
-  policy_arn = "${aws_iam_policy.assume.arn}"
+  role       = aws_iam_role.assume.name
+  policy_arn = aws_iam_policy.assume.arn
 }
 
 resource "aws_iam_role_policy_attachment" "event" {
-  role       = "${aws_iam_role.event.name}"
-  policy_arn = "${aws_iam_policy.event.arn}"
+  role       = aws_iam_role.event.name
+  policy_arn = aws_iam_policy.event.arn
 }
+

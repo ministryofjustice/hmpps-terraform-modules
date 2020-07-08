@@ -4,11 +4,11 @@
 
 #Start SSM Document
 resource "aws_ssm_document" "start" {
-  name              = "${var.environment_name}-start-ec2"
-  document_type     = "Automation"
-  document_format   = "YAML"
-  target_type       = "/AWS::Lambda::Function"
-  tags              = "${var.tags}"
+  name            = "${var.environment_name}-start-ec2"
+  document_type   = "Automation"
+  document_format = "YAML"
+  target_type     = "/AWS::Lambda::Function"
+  tags            = var.tags
 
   content = <<DOC
   description: '## Starts EC2 instances based on Calendar State'
@@ -49,15 +49,16 @@ resource "aws_ssm_document" "start" {
         InvocationType: RequestResponse
         FunctionName: "${var.environment_name}-start-ec2-phase2"
 DOC
+
 }
 
 #Stop SSM Document
 resource "aws_ssm_document" "stop" {
-  name              = "${var.environment_name}-stop-ec2"
-  document_type     = "Automation"
-  document_format   = "YAML"
-  target_type       = "/AWS::Lambda::Function"
-  tags              = "${var.tags}"
+  name            = "${var.environment_name}-stop-ec2"
+  document_type   = "Automation"
+  document_format = "YAML"
+  target_type     = "/AWS::Lambda::Function"
+  tags            = var.tags
 
   content = <<DOC
   description: '## Stops EC2 instances based on Calendar State'
@@ -93,6 +94,7 @@ resource "aws_ssm_document" "stop" {
         InvocationType: RequestResponse
         FunctionName: "${var.environment_name}-stop-ec2-phase1"
 DOC
+
 }
 
 #Change Calendar SSM Document
@@ -102,9 +104,10 @@ DOC
 
 resource "null_resource" "create_calendar" {
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
   provisioner "local-exec" {
     command = "sh scripts/create_calendar.sh ${var.calender_content_doc} ${local.calendar_name} ${var.region}"
   }
 }
+

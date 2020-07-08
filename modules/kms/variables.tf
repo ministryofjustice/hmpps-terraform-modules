@@ -1,4 +1,5 @@
-variable "kms_key_name" {}
+variable "kms_key_name" {
+}
 
 variable "deletion_window_in_days" {
   default = "7"
@@ -16,7 +17,7 @@ variable "kms_policy_location" {
   default = "policies/kms-policy.json"
 }
 
-
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
+

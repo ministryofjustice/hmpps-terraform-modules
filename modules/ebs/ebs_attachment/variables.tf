@@ -1,5 +1,9 @@
-variable "device_name" {}
+variable "device_name" {
+}
 
-variable "instance_id" {}
+variable "instance_id" {
+}
 
-variable "volume_id" {}
+variable "volume_id" {
+}
+
