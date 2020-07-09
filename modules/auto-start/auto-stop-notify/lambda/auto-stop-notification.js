@@ -6,7 +6,7 @@ exports.handler = function(event, context) {
 
         const environment = process.env.ENVIRONMENT_TYPE;
         var heading = "EC2 Instance Auto-Stop Notification";
-        var bodytext = "Please be advised EC2 Instances are scheduled to stop in approximately 60 mins.";
+        var bodytext = "Please be advised EC2 Instances are scheduled to stop in approximately 60 mins. This message can be ignored if the Calendar has been adjusted to Override the daily schedule";
         var channel= process.env.CHANNEL;
         var url_path = process.env.URL_PATH;
         var icon_emoji=":sign-warning:";
