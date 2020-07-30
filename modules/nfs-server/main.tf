@@ -16,6 +16,7 @@ provider "aws" {
 ### Getting the latest amazon ami
 #-------------------------------------------------------------
 data "aws_ami" "amazon_ami" {
+  owners      = ["895523100917"]
   most_recent = true
 
   filter {
@@ -93,6 +94,3 @@ locals {
   mount_point         =  "/data"
   volume_group_name   = "${local.app_name}.vg"
 }
-
-
-
