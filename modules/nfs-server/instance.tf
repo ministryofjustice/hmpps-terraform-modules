@@ -17,7 +17,6 @@ module "create-ec2-instance" {
 
   vpc_security_group_ids = "${concat(
         var.bastion_origin_sgs,
-        list(data.terraform_remote_state.monitoring.monitoring_server_client_sg_id),
         list(aws_security_group.nfs_sg.id),
         list(aws_security_group.nfs_client_sg.id)
       )
@@ -37,7 +36,6 @@ data "template_file" "nfs_user_data" {
     account_id            = "${data.terraform_remote_state.vpc.vpc_account_id}"
     internal_domain       = "${data.terraform_remote_state.vpc.private_zone_name}"
     bastion_inventory     = "${var.bastion_inventory}"
-    monitoring_server_url = "${data.terraform_remote_state.monitoring.monitoring_server_internal_url}"
 
     // LVM data
     device_list           = "'${join("', '", local.device_list)}'"
