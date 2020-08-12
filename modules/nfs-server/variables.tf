@@ -12,7 +12,7 @@ variable "environment_identifier" {
 
 variable "app_name" {
   description = "name for the nfs server"
-  default = "nfs"
+  default     = "nfs"
 }
 
 variable "short_environment_identifier" {
@@ -20,11 +20,11 @@ variable "short_environment_identifier" {
 }
 
 variable "tags" {
-  type = "map"
+  type = map(string)
 }
 
 variable "availability_zones" {
-  type = "list"
+  type = list(string)
 }
 
 variable "instance_type" {
@@ -42,25 +42,26 @@ variable "nfs_encrypted" {
 variable "ec2_policy_file" {
   default = "ec2_policy.json"
 }
+
 variable "ec2_role_policy_file" {
   default = "policies/ec2_role_policy.json"
 }
 
 variable "private-cidr" {
-  type = "list"
+  type = list(string)
 }
 
 variable "bastion_origin_sgs" {
-  type = "list"
+  type = list(string)
 }
 
 variable "private_subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "bastion_inventory" {
   description = "Bastion environment inventory"
-  type        = "string"
+  type        = string
   default     = "dev"
 }
 
@@ -68,4 +69,6 @@ variable "volume_count" {
   default = "3"
 }
 
-variable "route53_sub_domain" {}
+variable "route53_sub_domain" {
+}
+

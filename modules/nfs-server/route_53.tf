@@ -3,9 +3,10 @@
 #-------------------------------------------------------------
 
 resource "aws_route53_record" "internal_dns" {
-  name    = "${local.app_name}.${data.terraform_remote_state.vpc.private_zone_name}"
+  name    = "${local.app_name}.${data.terraform_remote_state.vpc.outputs.private_zone_name}"
   type    = "A"
-  zone_id = "${data.terraform_remote_state.vpc.private_zone_id}"
+  zone_id = data.terraform_remote_state.vpc.outputs.private_zone_id
   ttl     = 300
-  records = ["${module.create-ec2-instance.private_ip}"]
+  records = [module.create-ec2-instance.private_ip]
 }
+

@@ -1,13 +1,3 @@
-terraform {
-  # The configuration for this backend will be filled in by Terragrunt
-  backend "s3" {}
-}
-
-provider "aws" {
-  region  = "${var.region}"
-  version = "~> 1.16"
-}
-
 ####################################################
 # DATA SOURCE MODULES FROM OTHER TERRAFORM BACKENDS
 ####################################################
@@ -17,6 +7,7 @@ provider "aws" {
 #-------------------------------------------------------------
 data "aws_ami" "amazon_ami" {
   most_recent = true
+  owners      = ["895523100917"]
 
   filter {
     name   = "name"
@@ -34,7 +25,7 @@ data "aws_ami" "amazon_ami" {
   }
 
   filter {
-    name = "root-device-type"
+    name   = "root-device-type"
     values = ["ebs"]
   }
 }
@@ -45,10 +36,10 @@ data "aws_ami" "amazon_ami" {
 data "terraform_remote_state" "vpc" {
   backend = "s3"
 
-  config {
-    bucket = "${var.remote_state_bucket_name}"
+  config = {
+    bucket = var.remote_state_bucket_name
     key    = "vpc/terraform.tfstate"
-    region = "${var.region}"
+    region = var.region
   }
 }
 
@@ -58,10 +49,10 @@ data "terraform_remote_state" "vpc" {
 data "terraform_remote_state" "bastion" {
   backend = "s3"
 
-  config {
-    bucket = "${var.remote_state_bucket_name}"
+  config = {
+    bucket = var.remote_state_bucket_name
     key    = "bastion/terraform.tfstate"
-    region = "${var.region}"
+    region = var.region
   }
 }
 
@@ -69,17 +60,15 @@ data "terraform_remote_state" "bastion" {
 ### Declare our local variables
 #-------------------------------------------------------------
 locals {
-  app_name            = "${var.app_name}"
-  bucket_list         = "${concat(
-    list("arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket"),
-    list("arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket/*")
-  )}"
+  app_name = var.app_name
+  bucket_list = [
+    "arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket",
+    "arn:aws:s3:::tf-eu-west-2-hmpps-eng-${var.bastion_inventory}-config-s3bucket/*"
+  ]
 
   device_list         = ["/dev/xvdc", "/dev/xvdd", "/dev/xvde"]
   logical_volume_name = "${local.app_name}_data"
-  mount_point         =  "/data"
+  mount_point         = "/data"
   volume_group_name   = "${local.app_name}.vg"
 }
-
-
 
