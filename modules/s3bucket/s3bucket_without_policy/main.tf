@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "environment" {
   bucket = "${var.s3_bucket_name}-s3bucket"
-  acl    = "${var.acl}"
+  acl    = var.acl
 
   versioning {
     enabled = true
@@ -18,5 +18,11 @@ resource "aws_s3_bucket" "environment" {
     }
   }
 
-  tags = "${merge(var.tags, map("Name", "${var.s3_bucket_name}-s3-bucket"))}"
+  tags = merge(
+    var.tags,
+    {
+      "Name" = "${var.s3_bucket_name}-s3-bucket"
+    },
+  )
 }
+
