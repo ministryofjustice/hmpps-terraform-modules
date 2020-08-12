@@ -44,19 +44,6 @@ data "terraform_remote_state" "vpc" {
 }
 
 #-------------------------------------------------------------
-### Getting the bastion
-#-------------------------------------------------------------
-data "terraform_remote_state" "bastion" {
-  backend = "s3"
-
-  config = {
-    bucket = var.remote_state_bucket_name
-    key    = "bastion/terraform.tfstate"
-    region = var.region
-  }
-}
-
-#-------------------------------------------------------------
 ### Declare our local variables
 #-------------------------------------------------------------
 locals {
