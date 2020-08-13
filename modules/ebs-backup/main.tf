@@ -19,34 +19,26 @@ data "template_file" "vars" {
   }
 }
 
-resource "null_resource" "build_ebs_lambdazip" {
-  triggers = {
-    key = format(
-      "%s%s%s",
-      lower(filemd5("${path.module}/lambda/ebs_backup.py")),
-      lower(filemd5("${path.module}/lambda/clean_old_volumes.py")),
-      lower(filemd5("${path.module}/files/vars.ini")),
-    )
-  }
-  provisioner "local-exec" {
-    command = <<EOF
-    cp ${path.module}/lambda/ebs_backup.py ${path.module}/tmp/ebs_backup.py
-    cp ${path.module}/lambda/clean_old_volumes.py ${path.module}/tmp/clean_old_volumes.py
-    echo "${data.template_file.vars.rendered}" > ${path.module}/tmp/vars.ini
-EOF
-
-  }
-}
-
 data "archive_file" "ebs_lambda_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}/tmp"
-  output_path = "${path.module}/lambda/${null_resource.build_ebs_lambdazip.id}/${var.stack_prefix}-${var.unique_name}.zip"
+  type = "zip"
+  source {
+    filename = "ebs_backup.py"
+    content  = file("${path.module}/lambda/ebs_backup.py")
+  }
+  source {
+    filename = "clean_old_volumes.py"
+    content  = file("${path.module}/lambda/clean_old_volumes.py")
+  }
+  source {
+    filename = "vars.ini"
+    content  = data.template_file.vars.rendered
+  }
+  output_path = "${path.module}/lambda/${var.stack_prefix}-${var.unique_name}.zip"
 }
 
 resource "aws_lambda_function" "ebs_backup_lambda" {
   function_name    = "${var.stack_prefix}_snapshot_${var.unique_name}"
-  filename         = "${path.module}/lambda/${null_resource.build_ebs_lambdazip.id}/${var.stack_prefix}-${var.unique_name}.zip"
+  filename         = data.archive_file.ebs_lambda_zip.output_path
   source_code_hash = data.archive_file.ebs_lambda_zip.output_base64sha256
   role             = module.ebs_backup_iam_role.iamrole_arn
   runtime          = "python3.6"
@@ -57,7 +49,7 @@ resource "aws_lambda_function" "ebs_backup_lambda" {
 
 resource "aws_lambda_function" "ebs_prune_lambda" {
   function_name    = "${var.stack_prefix}_prune_${var.unique_name}"
-  filename         = "${path.module}/lambda/${null_resource.build_ebs_lambdazip.id}/${var.stack_prefix}-${var.unique_name}.zip"
+  filename         = data.archive_file.ebs_lambda_zip.output_path
   source_code_hash = data.archive_file.ebs_lambda_zip.output_base64sha256
   role             = module.ebs_backup_iam_role.iamrole_arn
   runtime          = "python3.6"
