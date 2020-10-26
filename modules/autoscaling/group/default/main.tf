@@ -2,16 +2,6 @@ locals {
   tags = var.tags
 }
 
-data "null_data_source" "tags" {
-  count = length(keys(local.tags))
-
-  inputs = {
-    key                 = element(keys(local.tags), count.index)
-    value               = element(values(local.tags), count.index)
-    propagate_at_launch = true
-  }
-}
-
 resource "aws_autoscaling_group" "environment" {
   name                 = var.asg_name
   vpc_zone_identifier  = var.subnet_ids
