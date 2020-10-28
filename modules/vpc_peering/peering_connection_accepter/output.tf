@@ -10,7 +10,6 @@ output "accepter" {
   value = aws_vpc_peering_connection_accepter.peer.*.accepter
 }
 
-output "requester " {
+output "requester" {
   value = aws_vpc_peering_connection_accepter.peer.*.requester
 }
-
