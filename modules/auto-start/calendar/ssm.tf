@@ -104,7 +104,10 @@ DOC
 
 resource "null_resource" "create_calendar" {
   triggers = {
-    always_run = timestamp()
+    # Trigger an update only when the input values change:
+    region               = var.region
+    calendar_name        = local.calendar_name
+    calender_content_doc = var.calender_content_doc
   }
   provisioner "local-exec" {
     command = "sh scripts/create_calendar.sh ${var.calender_content_doc} ${local.calendar_name} ${var.region}"
