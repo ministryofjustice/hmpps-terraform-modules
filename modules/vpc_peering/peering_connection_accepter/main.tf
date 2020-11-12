@@ -18,9 +18,4 @@ resource "aws_vpc_peering_connection_accepter" "peer" {
       "Name" = "${var.peering_connection_name}-peer-connection"
     },
   )
-
-  # There is no AWS EC2 API for reading auto_accept
-  lifecycle {
-    ignore_changes = [auto_accept]
-  }
 }
