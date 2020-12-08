@@ -5,12 +5,25 @@ resource "aws_db_parameter_group" "this" {
   description = "Database parameter group for ${var.identifier}"
   family      = var.family
 
-  # parameter = var.parameters
+  
 
-  #parameter {
-  #  name  = "character_set_server"
-  #  value = "utf8"
-  #}
+  # creates a list of:
+  
+  #  parameter {
+  #    name  = "character_set_server"
+  #    value = "utf8"
+  #  }
+
+  dynamic "parameter" {
+      
+      for_each = var.parameters
+    
+      content {
+          name  = parameter.key
+          value = parameter.value
+      }
+  }
+
 
   tags = merge(var.tags, map("Name", format("%s", var.identifier)))
 

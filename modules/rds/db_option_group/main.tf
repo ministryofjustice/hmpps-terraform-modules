@@ -4,16 +4,17 @@ resource "aws_db_option_group" "this" {
   option_group_description = var.option_group_description == "" ? format("Option group for %s", var.identifier) : var.option_group_description
   engine_name              = var.engine_name
   major_engine_version     = var.major_engine_version
-  #option                   = var.options
-
-  #option {
-  #  option_name = "Timezone"
+ 
+  # creates a list of:
+  
+  #  option {
+  #    option_name = "Timezone"
   #
-  #  option_settings {
-  #    name  = "TIME_ZONE"
-  #    value = "UTC"
+  #    option_settings {
+  #      name  = "TIME_ZONE"
+  #      value = "UTC"
+  #    }
   #  }
-  #}
 
   dynamic "option" {
       
