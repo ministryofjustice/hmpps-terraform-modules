@@ -25,6 +25,7 @@ resource "aws_db_option_group" "this" {
         option_settings {
           name  = option.key
           value = option.value
+        }
       }
   }
       
