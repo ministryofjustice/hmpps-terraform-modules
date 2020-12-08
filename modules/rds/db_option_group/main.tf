@@ -15,5 +15,18 @@ resource "aws_db_option_group" "this" {
   #  }
   #}
 
+  dynamic "option" {
+      
+      for_each = var.options
+    
+      content {
+        option_name = "${var.name_prefix}-${option.key}"
+
+        option_settings {
+          name  = option.key
+          value = option.value
+      }
+  }
+      
   tags                     = merge(var.tags, map("Name", format("%s", var.identifier)))
 }
