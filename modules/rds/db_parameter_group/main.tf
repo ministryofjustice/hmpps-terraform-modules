@@ -5,8 +5,6 @@ resource "aws_db_parameter_group" "this" {
   description = "Database parameter group for ${var.identifier}"
   family      = var.family
 
-  
-
   # creates a list of:
   
   #  parameter {
@@ -23,7 +21,6 @@ resource "aws_db_parameter_group" "this" {
           value = parameter.value
       }
   }
-
 
   tags = merge(var.tags, map("Name", format("%s", var.identifier)))
 
