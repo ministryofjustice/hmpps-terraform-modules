@@ -6,6 +6,14 @@ resource "aws_db_option_group" "this" {
   major_engine_version     = var.major_engine_version
   #option                   = var.options
 
+  #option {
+  #  option_name = "Timezone"
+  #
+  #  option_settings {
+  #    name  = "TIME_ZONE"
+  #    value = "UTC"
+  #  }
+  #}
 
   tags                     = merge(var.tags, map("Name", format("%s", var.identifier)))
 }
