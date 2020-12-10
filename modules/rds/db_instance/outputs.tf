@@ -10,7 +10,7 @@ locals {
   )
   db_instance_arn = element(
     concat(
-      coalescelist(aws_db_instance.inst.*.arn, aws_db_instance.inst.*.arn),
+      coalescelist(aws_db_instance.inst.*.arn),
       [""],
     ),
     0,
@@ -44,7 +44,7 @@ locals {
   )
   db_instance_id = element(
     concat(
-      coalescelist(aws_db_instance.inst.*.id, aws_db_instance.inst.*.id),
+      coalescelist(aws_db_instance.inst.*.id),
       [""],
     ),
     0,
