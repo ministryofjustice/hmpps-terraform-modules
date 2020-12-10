@@ -89,7 +89,6 @@ locals {
     concat(
       coalescelist(
         aws_db_instance.inst.*.password,
-        aws_db_instance.inst.*.password,
       ),
       [""],
     ),
