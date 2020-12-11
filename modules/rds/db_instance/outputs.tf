@@ -2,7 +2,6 @@ locals {
   db_instance_address = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.address,
         aws_db_instance.inst.*.address,
       ),
       [""],
@@ -11,7 +10,7 @@ locals {
   )
   db_instance_arn = element(
     concat(
-      coalescelist(aws_db_instance.inst_mssql.*.arn, aws_db_instance.inst.*.arn),
+      coalescelist(aws_db_instance.inst.*.arn),
       [""],
     ),
     0,
@@ -19,7 +18,6 @@ locals {
   db_instance_availability_zone = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.availability_zone,
         aws_db_instance.inst.*.availability_zone,
       ),
       [""],
@@ -29,7 +27,6 @@ locals {
   db_instance_endpoint = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.endpoint,
         aws_db_instance.inst.*.endpoint,
       ),
       [""],
@@ -39,7 +36,6 @@ locals {
   db_instance_hosted_zone_id = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.hosted_zone_id,
         aws_db_instance.inst.*.hosted_zone_id,
       ),
       [""],
@@ -48,7 +44,7 @@ locals {
   )
   db_instance_id = element(
     concat(
-      coalescelist(aws_db_instance.inst_mssql.*.id, aws_db_instance.inst.*.id),
+      coalescelist(aws_db_instance.inst.*.id),
       [""],
     ),
     0,
@@ -56,7 +52,6 @@ locals {
   db_instance_resource_id = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.resource_id,
         aws_db_instance.inst.*.resource_id,
       ),
       [""],
@@ -66,7 +61,6 @@ locals {
   db_instance_status = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.status,
         aws_db_instance.inst.*.status,
       ),
       [""],
@@ -76,7 +70,6 @@ locals {
   db_instance_name = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.name,
         aws_db_instance.inst.*.name,
       ),
       [""],
@@ -86,7 +79,6 @@ locals {
   db_instance_username = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.username,
         aws_db_instance.inst.*.username,
       ),
       [""],
@@ -96,7 +88,6 @@ locals {
   db_instance_password = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.password,
         aws_db_instance.inst.*.password,
       ),
       [""],
@@ -106,7 +97,6 @@ locals {
   db_instance_port = element(
     concat(
       coalescelist(
-        aws_db_instance.inst_mssql.*.port,
         aws_db_instance.inst.*.port,
       ),
       [""],

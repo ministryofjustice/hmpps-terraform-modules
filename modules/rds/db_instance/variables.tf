@@ -193,3 +193,10 @@ variable "character_set_name" {
   default     = ""
 }
 
+variable "enabled_cloudwatch_logs_exports" {
+  type    = list
+  default = []
+}
+
+
+

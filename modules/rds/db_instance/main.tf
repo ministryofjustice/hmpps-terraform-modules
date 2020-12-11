@@ -47,6 +47,8 @@ resource "aws_db_instance" "inst" {
 
   character_set_name = var.character_set_name
 
+  enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
+
   tags = merge(
     var.tags,
     {

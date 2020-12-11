@@ -21,7 +21,7 @@ variable "parameters" {
 }
 
 variable "tags" {
-  type        = "map"
+  type        = map
   description = "A mapping of tags to assign to the resource"
   default     = {}
 }
