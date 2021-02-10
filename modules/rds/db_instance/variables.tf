@@ -199,4 +199,8 @@ variable "enabled_cloudwatch_logs_exports" {
 }
 
 
+variable "db_snapshot_identifier" {
+  description = "(Optional) The DB Snapshot Id for the snapshot to create this instance from."
+  default     = ""
+}
 

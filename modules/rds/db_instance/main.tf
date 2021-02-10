@@ -18,7 +18,8 @@ resource "aws_db_instance" "inst" {
   port                                = var.port
   iam_database_authentication_enabled = var.iam_database_authentication_enabled
 
-  replicate_source_db = var.replicate_source_db
+  db_snapshot_identifier = var.db_snapshot_identifier
+  replicate_source_db    = var.replicate_source_db
 
   snapshot_identifier = var.snapshot_identifier
 
