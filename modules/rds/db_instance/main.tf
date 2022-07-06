@@ -49,7 +49,9 @@ resource "aws_db_instance" "inst" {
 
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
-
+  lifecycle {
+    ignore_changes = [password]
+  }
 
   tags = merge(
     var.tags,
