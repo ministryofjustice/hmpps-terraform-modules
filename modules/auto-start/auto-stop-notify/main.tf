@@ -32,7 +32,7 @@ resource "aws_lambda_function" "auto-stop-notification" {
   role               = "${data.aws_iam_role.auto-stop-notification-role.arn}"
   handler            = "${local.auto_stop_notification}.handler"
   source_code_hash   = "${base64sha256(file("${data.archive_file.auto-stop-notification.output_path}"))}"
-  runtime            = "nodejs12.x"
+  runtime            = "nodejs16.x"
 
   environment {
     variables = {
