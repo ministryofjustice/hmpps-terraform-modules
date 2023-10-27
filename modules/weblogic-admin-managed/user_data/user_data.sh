@@ -34,7 +34,7 @@ cat << EOF > ~/requirements.yml
 # - name: elasticbeats
 #   src: https://github.com/ministryofjustice/hmpps-beats-monitoring
 - name: users
-  src: singleplatform-eng.users
+  src: https://github.com/singleplatform-eng/ansible-users
 EOF
 
 /usr/bin/curl -o ~/users.yml https://raw.githubusercontent.com/ministryofjustice/hmpps-delius-ansible/master/group_vars/${bastion_inventory}.yml

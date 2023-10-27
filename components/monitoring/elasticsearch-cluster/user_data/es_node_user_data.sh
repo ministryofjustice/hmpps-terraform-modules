@@ -34,7 +34,7 @@ cat << EOF > ~/requirements.yml
 - name: elasticbeats
   src: https://github.com/ministryofjustice/hmpps-beats-monitoring
 - name: users
-  src: singleplatform-eng.users
+  src: https://github.com/singleplatform-eng/ansible-users
 EOF
 
 cat << EOF > ~/bootstrap_vars.yml
