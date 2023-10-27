@@ -182,7 +182,7 @@ resource "aws_lambda_function" "scheduler" {
   role             = aws_iam_role.scheduler.arn
   handler          = "scheduler.main.lambda_handler"
   source_code_hash = data.archive_file.scheduler.output_base64sha256
-  runtime          = "python3.7"
+  runtime          = "python3.9"
   timeout          = "600"
 
   environment {
