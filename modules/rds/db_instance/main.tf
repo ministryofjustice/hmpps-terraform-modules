@@ -51,4 +51,8 @@ resource "aws_db_instance" "inst" {
  
   enabled_cloudwatch_logs_exports = ["alert", "audit", "listener", "trace"]
 
+  lifecycle {
+    ignore_changes = [password]
+  }
+
 }
